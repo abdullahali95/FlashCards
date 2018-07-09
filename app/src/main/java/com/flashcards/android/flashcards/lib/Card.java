@@ -1,6 +1,6 @@
 package com.flashcards.android.flashcards.lib;
 
-import android.support.annotation.NonNull;
+//import android.support.annotation.NonNull;
 
 public class Card implements Comparable<Card> {
     private int id;
@@ -56,11 +56,22 @@ public class Card implements Comparable<Card> {
      * @return integer corresponding to the comparison of the two cards
      */
     @Override
-    public int compareTo(@NonNull Card o) {
+    public int compareTo(Card o) {
         Integer thisScore = this.progress.getLearntScore();
         Integer otherScore = o.progress.getLearntScore();
 
         return thisScore.compareTo(otherScore);
+    }
+    
+    @Override
+    public boolean equals(Object o) {
+		if (o == null) {
+			return false;
+		} else {
+			return ((Integer) this.id).equals(((Card) o).getId());
+			
+			
+		}
     }
 
 

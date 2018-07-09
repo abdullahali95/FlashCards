@@ -13,6 +13,7 @@ public class Deck {
 
     public Deck(String name) {
         this.name = name;
+        cards = new ArrayList<Card>();
         initialiseDates();
         stats = new Stats();
 
@@ -20,9 +21,9 @@ public class Deck {
     }
 
     private void initialiseDates() {
-        SimpleDateFormat sf = new SimpleDateFormat("dd-MM-YYYY");
+        SimpleDateFormat sf = new SimpleDateFormat("dd-MM-yyyy");
         Calendar cal = Calendar.getInstance();
-        String date = sf.format(cal);
+        String date = sf.format(cal.getTime());
         created = date;
         lastUsed = date;
     }
@@ -41,6 +42,10 @@ public class Deck {
 
     public String getLastUsed() {
         return lastUsed;
+    }
+    
+    public int getSize() {
+    	return cards.size();
     }
 
     /**

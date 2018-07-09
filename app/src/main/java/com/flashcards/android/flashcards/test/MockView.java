@@ -7,27 +7,31 @@ import com.flashcards.android.flashcards.repo.MockDeck;
 
 public class MockView {
     private Deck mock;
-    private static TestModel model;
+    private TestModel model;
 
-    public MockView(Deck mock, TestModel model) {
+    public MockView() {
         this.mock = MockDeck.getFakeDeck();
-        this.model = new TestModel(mock);
+        model = new TestModel(mock);
     }
     
     public static void main (String[] args) {
-        Card card;
-        for (int i = 0; i < 10; i++) {
+        MockView mv = new MockView();
+    	Card card;
+        for (int i = 0; i < 50; i++) {
             // Generate random cards
-            card = model.getCard();
+            card = mv.model.getCard();
             System.out.println(card);
+            System.out.println("Learnt Score before: " + card.getProgress().getLearntScore());
 
             // Randomly mark them correct/incorrect
             if (Math.random() < 0.5) {
-                model.markCorrect(card);
+                mv.model.markCorrect(card);
                 System.out.println("Correct Answer!");
+                System.out.println("Learnt Score after: " + card.getProgress().getLearntScore());
             } else {
-                model.markIncorrect(card);
-                System.out.println("Inorrect Answer!");
+                mv.model.markIncorrect(card);
+                System.out.println("Incorrect Answer!");
+                System.out.println("Learnt Score after: " + card.getProgress().getLearntScore());
             }
         }
     }

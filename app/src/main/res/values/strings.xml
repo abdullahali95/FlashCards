@@ -8,4 +8,7 @@
     <string name="section_format">Hello World from section: %1$d</string>
     <string name="question_tab_title">QUESTION</string>
     <string name="answer_tab_title">ANSWER</string>
+    <string name="rec_deck_name">psychiatry</string>
+    <string name="card_count">13 cards</string>
+    <string name="days_last_used">last used: 10 days ago</string>
 </resources>

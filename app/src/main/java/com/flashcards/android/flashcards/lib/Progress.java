@@ -21,7 +21,7 @@ public class Progress {
         this.attempts = 0;
         this.correct = 0;
         this.lastTen = EvictingQueue.create(10);
-        this.learntScore = 500;
+        this.learntScore = 100;
     }
 
     public int getAttempts() {
@@ -76,13 +76,18 @@ public class Progress {
      * @return Ratio of correct answers.
      */
     public double ratioCorrect() {
-        int attempts = 10 - lastTen.remainingCapacity();
-        int correct = 0;
-        for (Iterator i = lastTen.iterator(); i.hasNext(); ) {
-            if(i.next() == TRUE) correct++;
+        // Score inaccurate for 0-1 attempts
+    	if (attempts < 2) return 0.5;
+    	
+        else {
+	    	int attempts = 10 - lastTen.remainingCapacity();
+	        int correct = 0;
+	        for (Iterator<Boolean> i = lastTen.iterator(); i.hasNext(); ) {
+	            if(i.next() == TRUE) correct++;
+	        }
+	
+	        return ((double) correct)/attempts;
         }
-
-        return ((double) correct)/attempts;
     }
 
 
@@ -94,9 +99,13 @@ public class Progress {
      * @return The reflex score, between 0 and 1 (inclusive)
      */
     public double reflexScore() {
-        int x = attempts;
-        double score = 1 - ( (double) 1/x+1);
-        return score;
+    	if (attempts == 0) {
+            return 500;
+        } else {
+	    	int x = attempts;
+	        double score = 1 - ( (double) 1/(x+1));
+	        return score;
+        }
     }
 
     //TODO: test the learntScore and it's initialisd value
@@ -104,18 +113,29 @@ public class Progress {
      *
      * @return Learnt score
      */
-    public int generateLearntScore() {
+    public int generateLearntScore(int size) {
         if (attempts == 0) {
             return 500;
         } else {
 
             double rand = Math.random();
+            
             double m = reflexScore();
-            double l = ratioCorrect();
-
-            double s = (2 * l * m) + rand / (double) 3;
-            int score = (int) Math.round(s * 1000);
-
+            
+            double l = ratioCorrect();            
+            
+            // The effect of random function should vary depending on size of deck
+            // The smaller the deck, the more random the deck should be shuffled.
+            // The effect is determined by function y = (1.5/x)+0.25
+            
+            double randWeight = (1.5/size) + 0.25;
+            
+            double s = ((l * m * (1-randWeight)) + (rand * randWeight))/2;
+            
+            // 200 is chosen as a reasonable size for deck. Too large a number may cause
+            // Too big a variation in the deck and may cause card to keep showing/never show.
+            int score = (int) Math.round(s * 2 * 1000);
+            
             learntScore = score;
             return score;
         }
