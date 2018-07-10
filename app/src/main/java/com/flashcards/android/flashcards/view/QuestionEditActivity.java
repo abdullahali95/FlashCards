@@ -6,6 +6,9 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import com.flashcards.android.flashcards.R;
+import com.flashcards.android.flashcards.lib.Card;
+import com.flashcards.android.flashcards.lib.Deck;
+import com.flashcards.android.flashcards.model.TestModel;
 
 import jp.wasabeef.richeditor.RichEditor;
 
@@ -20,11 +23,17 @@ public class QuestionEditActivity extends AppCompatActivity {
     Button undoButton;
     Button redoButton;
 
+    Deck deck;
+    Card currentCard;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_question);
+
+        Bundle bundle = getIntent().getExtras();
+        deck = bundle.getParcelable("Deck");
 
         //TODO: Add justify, strikethrough, highlight buttons
 
@@ -100,5 +109,11 @@ public class QuestionEditActivity extends AppCompatActivity {
         });
 
 
+        // Load card
+
+        currentCard = deck.getCards().get(0);
+        editor.setHtml(currentCard.getQuestion());
+
+        // TODO: save changes to edited card
     }
 }

@@ -11,7 +11,7 @@ public class MockDeck {
         Card fakeCard;
         for (int i = 0; i < 20; i++) {
             fakeCard = new Card(i,
-                    "What is my name?",
+                    "Am I card # " + i + "?",
                     "Card #: " + i + "");
             fakeDeck.addCard(fakeCard);
         }
@@ -25,7 +25,7 @@ public class MockDeck {
         Card fakeCard;
         for (int i = 0; i < deckSize; i++) {
             fakeCard = new Card(i,
-                    "What is my name?",
+                    "Am I card # " + i + "?",
                     "Card #: " + i + "");
             fakeDeck.addCard(fakeCard);
         }

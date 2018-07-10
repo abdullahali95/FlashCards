@@ -7,6 +7,18 @@ import java.util.Iterator;
 import java.util.List;
 
 import static java.lang.Boolean.TRUE;
+import static java.lang.Math.random;
+
+/**
+ * Created by Abdullah Ali
+ *
+ * Allows the performance of the cards to be measured.
+ * Used to calculate the next most appropriate card to test.
+ *
+ * Ideally should implement Parcellable, but since it contains EvictingQueue, this is difficult to do.
+ * Therefore, Serializable is implemented.
+ * This should not alter/compromise the performance in any way.
+ */
 
 public class Progress implements Serializable{
 
@@ -116,10 +128,13 @@ public class Progress implements Serializable{
      */
     public int generateLearntScore(int size) {
         if (attempts == 0) {
-            return 500;
+
+            int initialVal =(int) ( ((double) Math.random() * 200) + 400);
+            learntScore = initialVal;
+            return initialVal;
         } else {
 
-            double rand = Math.random();
+            double rand = random();
             
             double m = reflexScore();
             
