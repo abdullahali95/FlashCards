@@ -1,14 +1,18 @@
 package com.flashcards.android.flashcards.model;
 
+import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.flashcards.android.flashcards.R;
 import com.flashcards.android.flashcards.lib.Deck;
+import com.flashcards.android.flashcards.view.TestQuestionActivity;
 
 import java.util.List;
 
@@ -17,16 +21,18 @@ import java.util.List;
  */
 public class DeckAdapter extends RecyclerView.Adapter<DeckAdapter.ViewHolder> {
     private List<Deck> decks;
+    private Context context;
 
-    public DeckAdapter(List<Deck> decks) {
+    public DeckAdapter(List<Deck> decks, Context context) {
         this.decks = decks;
+        this.context = context;
     }
 
     @NonNull
     @Override
     public DeckAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.main_rec_deck, parent, false);
-        return new ViewHolder(view);
+        return new ViewHolder(view,context);
     }
 
     @Override
@@ -46,18 +52,39 @@ public class DeckAdapter extends RecyclerView.Adapter<DeckAdapter.ViewHolder> {
         return decks.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
-        public TextView deckName;
-        public TextView lastUsed;
-        public TextView cardCount;
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+        private TextView deckName;
+        private TextView lastUsed;
+        private TextView cardCount;
+        private Button testButton;
+        private Deck deck;
+        private Context context;
 
-        public ViewHolder(View itemView) {
+        public ViewHolder(View itemView, Context context) {
             super(itemView);
             deckName = itemView.findViewById(R.id.title_rec_deck);
             lastUsed = itemView.findViewById(R.id.days_rec_deck);
             cardCount = itemView.findViewById(R.id.cards_rec_deck);
+            testButton = itemView.findViewById(R.id.test_button_rec_deck);
+            this.context = context;
 
+            itemView.setOnClickListener(this);
+            testButton.setOnClickListener(this);
+        }
 
+        @Override
+        public void onClick(View v) {
+            if(v.getId() == testButton.getId()) {
+                deck = decks.get(getAdapterPosition());
+
+                //Switch view
+//                Intent intent = new Intent(this.context, TestQuestionActivity.class);
+//                intent.putExtra();
+//                intent.
+                testButton.setText("Clicked");
+            } else {
+                deckName.setText("Clicked!");
+            }
 
         }
     }

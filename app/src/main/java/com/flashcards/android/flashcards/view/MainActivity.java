@@ -38,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new DeckAdapter(decks);
+        adapter = new DeckAdapter(decks, this);
         recyclerView.setAdapter(adapter);
 
 

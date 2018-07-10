@@ -1,10 +1,13 @@
 package com.flashcards.android.flashcards.lib;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 
-public class Deck {
+public class Deck implements Parcelable {
     private String name;
     private String created;
     private String lastUsed;
@@ -43,9 +46,9 @@ public class Deck {
     public String getLastUsed() {
         return lastUsed;
     }
-    
+
     public int getSize() {
-    	return cards.size();
+        return cards.size();
     }
 
     /**
@@ -85,4 +88,49 @@ public class Deck {
     }
 
     // TODO (1): Add removeCard()
+
+    protected Deck(Parcel in) {
+        name = in.readString();
+        created = in.readString();
+        lastUsed = in.readString();
+        stats = (Stats) in.readValue(Stats.class.getClassLoader());
+        if (in.readByte() == 0x01) {
+            cards = new ArrayList<Card>();
+            in.readList(cards, Card.class.getClassLoader());
+        } else {
+            cards = null;
+        }
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(name);
+        dest.writeString(created);
+        dest.writeString(lastUsed);
+        dest.writeValue(stats);
+        if (cards == null) {
+            dest.writeByte((byte) (0x00));
+        } else {
+            dest.writeByte((byte) (0x01));
+            dest.writeList(cards);
+        }
+    }
+
+    @SuppressWarnings("unused")
+    public static final Parcelable.Creator<Deck> CREATOR = new Parcelable.Creator<Deck>() {
+        @Override
+        public Deck createFromParcel(Parcel in) {
+            return new Deck(in);
+        }
+
+        @Override
+        public Deck[] newArray(int size) {
+            return new Deck[size];
+        }
+    };
 }

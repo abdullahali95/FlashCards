@@ -2,7 +2,10 @@ package com.flashcards.android.flashcards.lib;
 
 //import android.support.annotation.NonNull;
 
-public class Card implements Comparable<Card> {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class Card implements Comparable<Card>, Parcelable {
     private int id;
     private String question;
     private String answer;
@@ -62,16 +65,16 @@ public class Card implements Comparable<Card> {
 
         return thisScore.compareTo(otherScore);
     }
-    
+
     @Override
     public boolean equals(Object o) {
-		if (o == null) {
-			return false;
-		} else {
-			return ((Integer) this.id).equals(((Card) o).getId());
-			
-			
-		}
+        if (o == null) {
+            return false;
+        } else {
+            return ((Integer) this.id).equals(((Card) o).getId());
+
+
+        }
     }
 
 
@@ -80,4 +83,37 @@ public class Card implements Comparable<Card> {
         return "Question='" + question + '\'' +
                 ", Answer='" + answer + '\'';
     }
+
+    protected Card(Parcel in) {
+        id = in.readInt();
+        question = in.readString();
+        answer = in.readString();
+        progress = (Progress) in.readValue(Progress.class.getClassLoader());
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(id);
+        dest.writeString(question);
+        dest.writeString(answer);
+        dest.writeValue(progress);
+    }
+
+    @SuppressWarnings("unused")
+    public static final Parcelable.Creator<Card> CREATOR = new Parcelable.Creator<Card>() {
+        @Override
+        public Card createFromParcel(Parcel in) {
+            return new Card(in);
+        }
+
+        @Override
+        public Card[] newArray(int size) {
+            return new Card[size];
+        }
+    };
 }
