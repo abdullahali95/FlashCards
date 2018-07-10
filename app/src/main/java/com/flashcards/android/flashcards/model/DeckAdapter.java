@@ -78,10 +78,11 @@ public class DeckAdapter extends RecyclerView.Adapter<DeckAdapter.ViewHolder> {
                 deck = decks.get(getAdapterPosition());
 
                 //Switch view
-//                Intent intent = new Intent(this.context, TestQuestionActivity.class);
-//                intent.putExtra();
-//                intent.
-                testButton.setText("Clicked");
+
+                Intent intent = new Intent(this.context, TestQuestionActivity.class);
+                intent.putExtra("Test Deck", deck);
+                this.context.startActivity(intent);
+                //testButton.setText("Clicked");
             } else {
                 deckName.setText("Clicked!");
             }

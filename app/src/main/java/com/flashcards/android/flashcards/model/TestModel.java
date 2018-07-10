@@ -23,7 +23,7 @@ public class TestModel {
         this.deckSize = testQueue.size();
 
         //Set the date of last use to today's date.
-        SimpleDateFormat sf = new SimpleDateFormat("dd-MM-YYYY");
+        SimpleDateFormat sf = new SimpleDateFormat("dd-MM-yyyy");
         Calendar cal = Calendar.getInstance();
         String date = sf.format(cal.getTime());
         deck.setLastUsed(date);

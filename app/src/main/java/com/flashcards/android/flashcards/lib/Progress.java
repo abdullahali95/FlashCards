@@ -2,12 +2,13 @@ package com.flashcards.android.flashcards.lib;
 
 import com.google.common.collect.EvictingQueue;
 
+import java.io.Serializable;
 import java.util.Iterator;
 import java.util.List;
 
 import static java.lang.Boolean.TRUE;
 
-public class Progress {
+public class Progress implements Serializable{
 
     //Invariant: must always stay positive
     private int attempts;
