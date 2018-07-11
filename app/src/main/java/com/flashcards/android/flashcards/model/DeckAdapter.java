@@ -12,8 +12,8 @@ import android.widget.TextView;
 
 import com.flashcards.android.flashcards.R;
 import com.flashcards.android.flashcards.lib.Deck;
-import com.flashcards.android.flashcards.view.QuestionEditActivity;
-import com.flashcards.android.flashcards.view.TestQuestionActivity;
+import com.flashcards.android.flashcards.view.CardEditActivity;
+import com.flashcards.android.flashcards.view.TestCardActivity;
 
 import java.util.List;
 
@@ -79,12 +79,12 @@ public class DeckAdapter extends RecyclerView.Adapter<DeckAdapter.ViewHolder> {
 
             //Switch view
             if(v.getId() == testButton.getId()) {
-                Intent intent = new Intent(this.context, TestQuestionActivity.class);
+                Intent intent = new Intent(this.context, TestCardActivity.class);
                 intent.putExtra("Test Deck", deck);
                 this.context.startActivity(intent);
 
             } else {
-                Intent intent = new Intent(this.context, QuestionEditActivity.class);
+                Intent intent = new Intent(this.context, CardEditActivity.class);
                 intent.putExtra("Deck", deck);
                 this.context.startActivity(intent);
 

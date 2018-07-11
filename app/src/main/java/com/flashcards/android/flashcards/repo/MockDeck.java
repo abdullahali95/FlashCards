@@ -11,7 +11,7 @@ public class MockDeck {
         Card fakeCard;
         for (int i = 0; i < 20; i++) {
             fakeCard = new Card(i,
-                    "Am I card # " + i + "?",
+                    "<span style=\"color: rgb(90, 155, 1);\">Am</span> <b>I card</b> # " + i + "?",
                     "Card #: " + i + "");
             fakeDeck.addCard(fakeCard);
         }
@@ -25,7 +25,7 @@ public class MockDeck {
         Card fakeCard;
         for (int i = 0; i < deckSize; i++) {
             fakeCard = new Card(i,
-                    "Am I card # " + i + "?",
+                    "<span style=\"color: rgb(90, 155, 1);\">Am</span> <b>I card</b> # " + i + "?",
                     "Card #: " + i + "");
             fakeDeck.addCard(fakeCard);
         }

@@ -8,11 +8,10 @@ import android.widget.Button;
 import com.flashcards.android.flashcards.R;
 import com.flashcards.android.flashcards.lib.Card;
 import com.flashcards.android.flashcards.lib.Deck;
-import com.flashcards.android.flashcards.model.TestModel;
 
 import jp.wasabeef.richeditor.RichEditor;
 
-public class QuestionEditActivity extends AppCompatActivity {
+public class CardEditActivity extends AppCompatActivity {
     RichEditor editor;
     Button boldButton;
     Button italicButton;
@@ -30,7 +29,7 @@ public class QuestionEditActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_edit_question);
+        setContentView(R.layout.activity_edit_card);
 
         Bundle bundle = getIntent().getExtras();
         deck = bundle.getParcelable("Deck");

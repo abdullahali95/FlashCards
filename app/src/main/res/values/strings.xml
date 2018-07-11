@@ -6,8 +6,8 @@
     <string name="tab_text_2">Tab 2</string>
     <string name="tab_text_3">Tab 3</string>
     <string name="section_format">Hello World from section: %1$d</string>
-    <string name="question_tab_title">QUESTION</string>
-    <string name="answer_tab_title">ANSWER</string>
+    <string name="edit_tab_title">Deck Name: Question</string>
+    <string name="flip_btn">flip</string>
     <string name="rec_deck_name">psychiatry</string>
     <string name="card_count">13 cards</string>
     <string name="days_last_used">last used: 10 days ago</string>

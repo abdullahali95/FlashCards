@@ -6,16 +6,16 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorPrimaryDark"
-    tools:context=".view.TestQuestionActivity">
+    tools:context=".view.TestCardActivity">
 
-    <TextView
-        android:id="@+id/tv_question_test"
-        android:scrollbars="vertical"
-        android:textSize="24sp"
-        android:padding="16dp"
+
+    <LinearLayout
+        android:id="@+id/ll_card_test"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:gravity="center"
         android:background="@color/cardBackground"
+        android:padding="15dp"
         android:layout_marginBottom="100dp"
         android:layout_marginEnd="24dp"
         android:layout_marginStart="24dp"
@@ -23,14 +23,14 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-        sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-        Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-        aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in
-        voluptate velit esse cillum dolore eu fugiat nulla pariatur.
-        Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia
-        deserunt mollit anim id est laborum."
-        />
+        android:orientation="horizontal">
+
+        <WebView
+            android:id="@+id/tv_question_test"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+    </LinearLayout>
 
     <Button
         android:id="@+id/btn_skip_test"
@@ -44,7 +44,7 @@
         android:layout_marginStart="24dp"
         android:text="skip"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/tv_question_test" />
+        app:layout_constraintStart_toStartOf="@+id/ll_card_test" />
 
     <Button
         android:id="@+id/btn_flip_test"
@@ -58,6 +58,6 @@
         android:layout_marginEnd="24dp"
         android:text="flip"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/tv_question_test" />
+        app:layout_constraintEnd_toEndOf="@+id/ll_card_test" />
 
 </android.support.constraint.ConstraintLayout>
