@@ -29,4 +29,5 @@ dependencies {
 
     implementation 'jp.wasabeef:richeditor-android:1.2.2'
     api 'com.google.guava:guava:25.1-android'
+    implementation "com.andkulikov:transitionseverywhere:1.8.0"
 }
