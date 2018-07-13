@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.widget.Button;
 
 import com.flashcards.android.flashcards.R;
 import com.flashcards.android.flashcards.lib.Deck;
@@ -21,6 +22,7 @@ public class DeckInfoActivity extends AppCompatActivity {
     private Deck deck;
     private static int columns = 2;
     private FloatingActionButton fab;
+    private Button testButton;
     private StaggeredGridLayoutManager staggeredGridLayoutManager;
 
     @Override
@@ -29,6 +31,7 @@ public class DeckInfoActivity extends AppCompatActivity {
         setContentView(R.layout.activity_deck_info_floating);
 
         fab = (FloatingActionButton) findViewById(R.id.fab_deck_info);
+        testButton = (Button) findViewById(R.id.btn_test_deck_info);
 
         deck = getFakeDeck();
 
