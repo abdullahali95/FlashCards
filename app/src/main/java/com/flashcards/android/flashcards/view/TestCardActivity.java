@@ -1,32 +1,23 @@
 package com.flashcards.android.flashcards.view;
 
-import android.content.Context;
-import android.support.constraint.ConstraintLayout;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.text.Html;
-import android.util.Log;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.widget.Button;
-import android.widget.TextView;
-
 import com.flashcards.android.flashcards.R;
 import com.flashcards.android.flashcards.lib.Card;
 import com.flashcards.android.flashcards.lib.Deck;
 import com.flashcards.android.flashcards.model.TestModel;
-import com.transitionseverywhere.ChangeBounds;
-import com.transitionseverywhere.ChangeText;
-import com.transitionseverywhere.Recolor;
-import com.transitionseverywhere.TransitionManager;
-import com.transitionseverywhere.TransitionSet;
+import com.transitionseverywhere.*;
+import static com.flashcards.android.flashcards.R.color.*;
 
-import static com.flashcards.android.flashcards.R.color.cardBackground;
-import static com.flashcards.android.flashcards.R.color.colorAccent;
-import static com.flashcards.android.flashcards.R.color.green;
-import static com.flashcards.android.flashcards.R.color.red;
-
+/**
+ * Created by Abdullah Ali *
+ *
+ *
+ */
 public class TestCardActivity extends AppCompatActivity {
     ViewGroup transitionsContainer;
     Deck testDeck;
@@ -38,6 +29,7 @@ public class TestCardActivity extends AppCompatActivity {
 
     Button skipButton;
     Button flipButton;
+    View cardView;
 
     Button correctButton;
     Button incorrectButton;
@@ -51,25 +43,20 @@ public class TestCardActivity extends AppCompatActivity {
 
         currentCard = model.getCard();
 
+        // TODO: add method to look through webview String for '#' and replace it with '%23'
         question = currentCard.getQuestion();
         card.loadUrl("about:blank");
         card.loadData(question, "text/html", "utf-8");
-
 
         // Add Event listeners to buttons
         skipButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 skip();
-
             }
         });
 
-
-        // TODO: combine question and answer activities into 1
-        // TODO: when first clicked, should change the buttons
         flipButton.setOnClickListener(new View.OnClickListener() {
-
             @Override
             public void onClick(View v) {
                 flipToAnswer();
@@ -78,12 +65,17 @@ public class TestCardActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * Loads layout components
+     */
+    public void loadViews() {
+        transitionsContainer = (ViewGroup) findViewById(R.id.root_question_test);
+        skipButton = (Button) findViewById(R.id.btn_skip_test);
+        flipButton = (Button) findViewById(R.id.btn_flip_test);
+        cardView = (View) findViewById(R.id.ll_card_test);
 
-    private void loadViews() {
-        transitionsContainer = findViewById(R.id.root_question_test);
-        skipButton = findViewById(R.id.btn_skip_test);
-        flipButton = findViewById(R.id.btn_flip_test);
-        card = findViewById(R.id.tv_question_test);
+        //TODO: Test if WebView scrolls
+        card = (WebView) findViewById(R.id.tv_question_test);
 
         // Set Editor
         card.setBackgroundColor(getResources().getColor(cardBackground));
@@ -94,7 +86,14 @@ public class TestCardActivity extends AppCompatActivity {
         model = new TestModel(testDeck);
     }
 
-    private void getNewCard () {
+    /**
+     * Loads a new card from the model, and displays its question,
+     * Used for skip, correct, and incorrect buttons
+     */
+    public void getNewCard () {
+
+        // TODO: Add slide animation for card
+
         currentCard = model.getCard();
         question = currentCard.getQuestion();
         card.loadUrl("about:blank");
@@ -102,12 +101,43 @@ public class TestCardActivity extends AppCompatActivity {
 
     }
 
-    private void skip () {
+
+
+    /**
+     * Gets a new card from the model
+     */
+    public void skip () {
         model.skip(currentCard);
         getNewCard();
     }
 
-    private void flipToQuestion() {
+    /**
+     * Marks the card incorrect and moves to next card.
+     */
+    public void incorrect() {
+        model.markIncorrect(currentCard);
+        getNewCard();
+        flipToQuestion();
+    }
+
+    /**
+     * Marks the card correct and moves to next card.
+     */
+    public void correct () {
+        model.markCorrect(currentCard);
+        getNewCard();
+        flipToQuestion();
+    }
+
+
+    /**
+     * Changes the buttons from:
+     *      Incorrect --> FLIP
+     *      Correct --> SKIP
+     * Used when an answer has been marked correct/incorrect,
+     * and we are resestting the view for a new question
+     */
+    public void flipToQuestion() {
 
         // Change Incorrect --> FLIP Button
         TransitionManager.beginDelayedTransition(transitionsContainer, new TransitionSet()
@@ -159,7 +189,10 @@ public class TestCardActivity extends AppCompatActivity {
     }
 
 
-    private void flipToAnswer() {
+    /**
+     *  Flips the view from question to answer.
+     */
+    public void flipToAnswer() {
 
         final View cardView = (findViewById(R.id.ll_card_test));
 
@@ -238,16 +271,6 @@ public class TestCardActivity extends AppCompatActivity {
 
     }
 
-    private void incorrect() {
-        model.markIncorrect(currentCard);
-        getNewCard();
-        flipToQuestion();
-    }
 
-    private void correct () {
-        model.markCorrect(currentCard);
-        getNewCard();
-        flipToQuestion();
-    }
 
 }

@@ -44,6 +44,7 @@
         android:textColor="@color/white_teal"
         android:textSize="18sp"
         android:textStyle="bold"
+
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/btn_flip_test"
         app:layout_constraintHorizontal_bias="0.5"

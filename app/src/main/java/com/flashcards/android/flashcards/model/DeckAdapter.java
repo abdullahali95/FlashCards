@@ -18,7 +18,7 @@ import com.flashcards.android.flashcards.view.TestCardActivity;
 import java.util.List;
 
 /**
- * Created by abdul on 09/07/2018
+ * Created by Abdullah Ali on 09/07/2018
  */
 public class DeckAdapter extends RecyclerView.Adapter<DeckAdapter.ViewHolder> {
     private List<Deck> decks;
@@ -63,10 +63,10 @@ public class DeckAdapter extends RecyclerView.Adapter<DeckAdapter.ViewHolder> {
 
         public ViewHolder(View itemView, Context context) {
             super(itemView);
-            deckName = itemView.findViewById(R.id.title_rec_deck);
-            lastUsed = itemView.findViewById(R.id.days_rec_deck);
-            cardCount = itemView.findViewById(R.id.cards_rec_deck);
-            testButton = itemView.findViewById(R.id.test_button_rec_deck);
+            deckName = (TextView) itemView.findViewById(R.id.title_rec_deck);
+            lastUsed = (TextView) itemView.findViewById(R.id.days_rec_deck);
+            cardCount = (TextView) itemView.findViewById(R.id.cards_rec_deck);
+            testButton = (Button) itemView.findViewById(R.id.test_button_rec_deck);
             this.context = context;
 
             itemView.setOnClickListener(this);
@@ -85,7 +85,7 @@ public class DeckAdapter extends RecyclerView.Adapter<DeckAdapter.ViewHolder> {
 
             } else {
                 Intent intent = new Intent(this.context, CardEditActivity.class);
-                intent.putExtra("Deck", deck);
+                intent.putExtra("Deck", deck.getUuid());
                 this.context.startActivity(intent);
 
             }

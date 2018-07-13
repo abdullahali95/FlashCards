@@ -25,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        recyclerView = findViewById(R.id.rec_main_activity);
+        recyclerView = (RecyclerView) findViewById(R.id.rec_main_activity);
 
         // Populate mock decks
         decks = new ArrayList<>();

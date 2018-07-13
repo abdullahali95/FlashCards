@@ -6,15 +6,20 @@ import android.os.Parcelable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.UUID;
 
 public class Deck implements Parcelable {
+    private String uuid;
     private String name;
     private String created;
     private String lastUsed;
     private Stats stats;
     private ArrayList<Card> cards;
 
+
     public Deck(String name) {
+        this.uuid = UUID.randomUUID().toString();
+
         this.name = name;
         cards = new ArrayList<Card>();
         initialiseDates();
@@ -30,6 +35,10 @@ public class Deck implements Parcelable {
         created = date;
         lastUsed = date;
     }
+
+    public String getUuid() { return uuid; }
+
+    public void setUuid(String uuid) { this.uuid = uuid; }
 
     public String getName() {
         return name;
@@ -53,7 +62,7 @@ public class Deck implements Parcelable {
 
     /**
      *
-     * @param lastUsed: date of last use of deck. must be in the format: 'dd-MM-YYYY'
+     * @param lastUsed: date of last use of deck. must be in the format: 'dd-MM-yyyy'
      */
     public void setLastUsed(String lastUsed) {
         this.lastUsed = lastUsed;

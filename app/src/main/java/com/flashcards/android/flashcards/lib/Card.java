@@ -7,6 +7,7 @@ import android.os.Parcelable;
 
 public class Card implements Comparable<Card>, Parcelable {
     private int id;
+    private String deckId;  //TODO: set this up
     private String question;
     private String answer;
     private Progress progress;
