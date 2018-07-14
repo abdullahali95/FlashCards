@@ -4,7 +4,7 @@ import com.flashcards.android.flashcards.lib.Card;
 import com.flashcards.android.flashcards.lib.Deck;
 
 /**
- * Created by abdul on 12/07/2018
+ * Created by Abdullah Ali on 12/07/2018
  */
 public class EditModel {
     private Deck deck;
@@ -13,11 +13,61 @@ public class EditModel {
     private String answer;
 
     public EditModel (String uuid) {
-        getDeck(uuid);
+        this.deck = findDeck(uuid);
 
     }
 
-    private void getDeck(String uuid) {
+    public Deck findDeck(String uuid) {
+        return null;
+    }
 
+    public void addCard(Card card) {
+
+    }
+
+    public void viewCard(Card currentCard) {
+        this.currentCard = currentCard;
+        this.question = currentCard.getQuestion();
+        this.answer = currentCard.getAnswer();
+    }
+
+    public void updateQuestion(int id, String question) {
+
+    }
+
+    public void updateAnswer (int id, String question) {
+
+    }
+
+    public Deck getDeck() {
+        return deck;
+    }
+
+    public void setDeck(Deck deck) {
+        this.deck = deck;
+    }
+
+    public Card getCurrentCard() {
+        return currentCard;
+    }
+
+    public void setCurrentCard(Card currentCard) {
+        this.currentCard = currentCard;
+    }
+
+    public String getQuestion() {
+        return question;
+    }
+
+    public void setQuestion(String question) {
+        this.question = question;
+    }
+
+    public String getAnswer() {
+        return answer;
+    }
+
+    public void setAnswer(String answer) {
+        this.answer = answer;
     }
 }

@@ -7,13 +7,14 @@ import android.os.Parcelable;
 
 public class Card implements Comparable<Card>, Parcelable {
     private int id;
-    private String deckId;  //TODO: set this up
+    private String deckId;
     private String question;
     private String answer;
     private Progress progress;
 
-    public Card(int id, String question, String answer) {
+    public Card(int id, String deckId, String question, String answer) {
         this.id = id;
+        this.deckId = deckId;
         this.question = question;
         this.answer = answer;
         this.progress = new Progress();
@@ -25,6 +26,14 @@ public class Card implements Comparable<Card>, Parcelable {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public String getDeckId() {
+        return deckId;
+    }
+
+    public void setDeckId(String deckId) {
+        this.deckId = deckId;
     }
 
     public String getQuestion() {
