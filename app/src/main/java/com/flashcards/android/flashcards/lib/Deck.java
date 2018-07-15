@@ -1,5 +1,6 @@
 package com.flashcards.android.flashcards.lib;
 
+import android.arch.persistence.room.Entity;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -8,12 +9,12 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.UUID;
 
+@Entity
 public class Deck implements Parcelable {
     private String uuid;
     private String name;
     private String created;
     private String lastUsed;
-    private Stats stats;
     private ArrayList<Card> cards;
 
 
@@ -23,9 +24,7 @@ public class Deck implements Parcelable {
         this.name = name;
         cards = new ArrayList<Card>();
         initialiseDates();
-        stats = new Stats();
 
-        //TODO (1): initialise other variables. Dates as current dates etc
     }
 
     private void initialiseDates() {
@@ -68,14 +67,6 @@ public class Deck implements Parcelable {
         this.lastUsed = lastUsed;
     }
 
-    public Stats getStats() {
-        return stats;
-    }
-
-    public void setStats(Stats stats) {
-        this.stats = stats;
-    }
-
     public ArrayList<Card> getCards() {
         return cards;
     }
@@ -86,14 +77,9 @@ public class Deck implements Parcelable {
 
     public boolean addCard (Card card) {
         cards.add(card);
-        stats.incCards();
         //TODO: update db
 
         return true;
-    }
-
-    public void incAttempts() {
-        stats.incAttempts();
     }
 
     // TODO (1): Add removeCard()
@@ -102,7 +88,6 @@ public class Deck implements Parcelable {
         name = in.readString();
         created = in.readString();
         lastUsed = in.readString();
-        stats = (Stats) in.readValue(Stats.class.getClassLoader());
         if (in.readByte() == 0x01) {
             cards = new ArrayList<Card>();
             in.readList(cards, Card.class.getClassLoader());
@@ -121,7 +106,6 @@ public class Deck implements Parcelable {
         dest.writeString(name);
         dest.writeString(created);
         dest.writeString(lastUsed);
-        dest.writeValue(stats);
         if (cards == null) {
             dest.writeByte((byte) (0x00));
         } else {

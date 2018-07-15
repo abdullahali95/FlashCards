@@ -10,7 +10,7 @@ public class MockDeck {
 
         Card fakeCard;
         for (int i = 0; i < 30; i++) {
-            fakeCard = new Card(i,
+            fakeCard = new Card("blah",
                     "<span style=\"color: rgb(90, 155, 1);\">Am</span> <b>I A person, or am I a human? describe this pheonmeonon" +
                             "in as much details as you can</b> %23 " + i + "?",
                     "Card %23: " + i + "");
@@ -25,7 +25,7 @@ public class MockDeck {
 
         Card fakeCard;
         for (int i = 0; i < deckSize; i++) {
-            fakeCard = new Card(i,
+            fakeCard = new Card("blah",
                     "<span style=\"color: rgb(90, 155, 1);\">Am</span> <b>I card</b> %23 " + i + "?",
                     "Card %23: " + i + "");
             fakeDeck.addCard(fakeCard);

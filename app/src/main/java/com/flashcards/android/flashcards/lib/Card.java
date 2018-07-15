@@ -2,23 +2,48 @@ package com.flashcards.android.flashcards.lib;
 
 //import android.support.annotation.NonNull;
 
+import android.arch.persistence.room.Embedded;
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.ForeignKey;
+import android.arch.persistence.room.PrimaryKey;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import static android.arch.persistence.room.ForeignKey.CASCADE;
+
+@Entity (foreignKeys = @ForeignKey(entity = Deck.class,
+        parentColumns = "uuid",
+        childColumns = "id",
+        onDelete = CASCADE),
+        primaryKeys = {"id", "deckId"})
 public class Card implements Comparable<Card>, Parcelable {
+
+    @PrimaryKey(autoGenerate = true)
     private int id;
+
+    @PrimaryKey
     private String deckId;
     private String question;
     private String answer;
+
+    @Embedded
     private Progress progress;
 
-    public Card(int id, String deckId, String question, String answer) {
-        this.id = id;
+    /**
+     * A class to store Flash cards objects.
+     * A corresponding Progress Object must be setup after a Card is created.
+     * @param deckId
+     * @param question
+     * @param answer
+     *
+     */
+    public Card(String deckId, String question, String answer) {
         this.deckId = deckId;
         this.question = question;
         this.answer = answer;
-        this.progress = new Progress();
     }
+
+    //TODO: progress has to be manually set once the card is created
 
     public int getId() {
         return id;

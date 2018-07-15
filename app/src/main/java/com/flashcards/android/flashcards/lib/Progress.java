@@ -1,5 +1,10 @@
 package com.flashcards.android.flashcards.lib;
 
+import android.arch.persistence.room.Dao;
+import android.arch.persistence.room.Embedded;
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.PrimaryKey;
+
 import com.google.common.collect.EvictingQueue;
 
 import java.io.Serializable;
@@ -20,21 +25,44 @@ import static java.lang.Math.random;
  * This should not alter/compromise the performance in any way.
  */
 
+@Entity (primaryKeys = {"cardId", "deckId"})
 public class Progress implements Serializable{
 
-    //Invariant: must always stay positive
-    private int attempts;
-
+    @PrimaryKey
+    private int cardId;
+    @PrimaryKey
+    private String deckId;
+    private int attempts;   //Invariant: must always stay positive
     private int correct;
+
+    //TODO: handle storing this in db
     private EvictingQueue<Boolean> lastTen;     // Pushes out old elements if size exceeds 10
     private int learntScore;
 
 
-    public Progress() {
+    public Progress(int cardId, String deckId) {
+        this.cardId = cardId;
+        this.deckId = deckId;
         this.attempts = 0;
         this.correct = 0;
         this.lastTen = EvictingQueue.create(10);
         this.learntScore = 100;
+    }
+
+    public int getCardId() {
+        return cardId;
+    }
+
+    public void setCardId(int cardId) {
+        this.cardId = cardId;
+    }
+
+    public String getDeckId() {
+        return deckId;
+    }
+
+    public void setDeckId(String deckId) {
+        this.deckId = deckId;
     }
 
     public int getAttempts() {

@@ -22,7 +22,7 @@ public class EditModel {
     }
 
     public void addCard(Card card) {
-
+        //TODO: progress has to be manually set once the card is created
     }
 
     public void viewCard(Card currentCard) {
