@@ -16,6 +16,7 @@ import android.support.v7.widget.RecyclerView;
 import android.text.InputType;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.flashcards.android.flashcards.R;
@@ -50,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
         // Link View with ViewModel
         mainModel = ViewModelProviders.of(this).get(MainModel.class);
 
-//        // Add observer for changes to decks
+        // Add observer for changes to decks
         mainModel.getAllDecks().observe(this, new Observer<List<Deck>>() {
             @Override
             public void onChanged(@Nullable final List<Deck> decks) {
@@ -81,7 +82,6 @@ public class MainActivity extends AppCompatActivity {
 
         // Set up the input
         final EditText input = new EditText(this);
-        input.setPadding(10,10,10,10);
         input.setHint("Please enter the deck name");
         input.setInputType(InputType.TYPE_CLASS_TEXT);
         builder.setView(input);

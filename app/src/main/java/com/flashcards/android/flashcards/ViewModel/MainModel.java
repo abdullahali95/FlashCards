@@ -55,5 +55,9 @@ public class MainModel extends AndroidViewModel{
         }
     }
 
+    public LiveData<Integer> getDeckSize (String deckId) {
+        return repo.getDeckSize(deckId);
+    }
+
 
 }

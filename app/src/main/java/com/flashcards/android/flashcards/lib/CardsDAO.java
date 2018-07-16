@@ -19,9 +19,6 @@ import java.util.List;
 @Dao
 public interface CardsDAO {
 
-    @Query("SELECT 'deckId' FROM CARD WHERE 'id' = :id ")
-    public LiveData<String> getDeckId(int id);
-
     @Query("UPDATE Card SET deckId = :newDeckId WHERE 'id' =:id AND 'deckId' = :oldDeckId")
     public void changeDeck(int id, String oldDeckId, String newDeckId);
 

@@ -46,6 +46,17 @@ public class Card implements Comparable<Card>, Parcelable {
         this.answer = answer;
     }
 
+    /**
+     * For creating an empty card
+     * @param deckId
+     */
+    @Ignore
+    public Card (String deckId) {
+        this.deckId = deckId;
+        this.question = "";
+        this.answer = "";
+    }
+
     //TODO: progress has to be manually set once the card is created
 
     public int getId() {

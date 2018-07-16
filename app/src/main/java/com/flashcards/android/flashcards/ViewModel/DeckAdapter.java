@@ -16,6 +16,7 @@ import android.widget.Toast;
 import com.flashcards.android.flashcards.R;
 import com.flashcards.android.flashcards.lib.Deck;
 import com.flashcards.android.flashcards.view.CardEditActivity;
+import com.flashcards.android.flashcards.view.DeckInfoActivity;
 import com.flashcards.android.flashcards.view.TestCardActivity;
 
 import java.util.List;
@@ -52,6 +53,7 @@ public class DeckAdapter extends RecyclerView.Adapter<DeckAdapter.DeckViewHolder
         //TODO: format last used date properly
         holder.lastUsed.setText(decks.get(position).getLastUsed());
 
+        //TODO: this probably needs data from model
         String totalCard = decks.get(position).getSize() + " cards";
         holder.cardCount.setText(totalCard);
 
@@ -94,11 +96,11 @@ public class DeckAdapter extends RecyclerView.Adapter<DeckAdapter.DeckViewHolder
             //Switch view
             if(v.getId() == testButton.getId()) {
                 Intent intent = new Intent(this.context, TestCardActivity.class);
-                intent.putExtra("Test Deck", deck);
+                intent.putExtra("Test Deck", deck.getUuid());
                 this.context.startActivity(intent);
 
             } else {
-                Intent intent = new Intent(this.context, CardEditActivity.class);
+                Intent intent = new Intent(this.context, DeckInfoActivity.class);
                 intent.putExtra("Deck", deck.getUuid());
                 this.context.startActivity(intent);
 

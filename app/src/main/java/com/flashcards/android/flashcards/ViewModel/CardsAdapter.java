@@ -1,6 +1,8 @@
 package com.flashcards.android.flashcards.ViewModel;
 
+import android.arch.lifecycle.Observer;
 import android.content.Context;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,18 +13,28 @@ import com.flashcards.android.flashcards.R;
 import com.flashcards.android.flashcards.lib.Card;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
- * Created by abdul on 12/07/2018
+ * This class is for the individual cards displayed on the Deck Info Activity recycler view.
+ *
+ * Created by Abdullah Ali on 12/07/2018
  */
 public class CardsAdapter extends RecyclerView.Adapter<CardsAdapter.ViewHolder> {
 
-    private ArrayList<Card> cards;
+    private List<Card> cards;
+    private DeckInfoModel model;
     private Context context;
 
-    public CardsAdapter(ArrayList<Card> cards, Context context) {
+    public CardsAdapter(DeckInfoModel model, ArrayList<Card> cards, Context context) {
+        this.model = model;
         this.cards = cards;
         this.context = context;
+
+    }
+
+    public void setCards(List<Card> cards) {
+        this.cards = cards;
     }
 
     @Override
@@ -41,7 +53,8 @@ public class CardsAdapter extends RecyclerView.Adapter<CardsAdapter.ViewHolder> 
 
     @Override
     public int getItemCount() {
-        return cards.size();
+        if (cards == null) return 0;
+        else return cards.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

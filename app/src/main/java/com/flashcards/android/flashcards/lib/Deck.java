@@ -14,7 +14,7 @@ import java.util.Calendar;
 import java.util.UUID;
 
 @Entity(indices = @Index(value = "uuid", name = "deckId"))
-public class Deck implements Parcelable {
+public class Deck {
     @PrimaryKey
     @NonNull
     private String uuid;
@@ -24,15 +24,30 @@ public class Deck implements Parcelable {
     @Ignore
     private ArrayList<Card> cards;
 
-
+    // Constructor for creating a deck in app
+    @Ignore
     public Deck(String name) {
         this.uuid = UUID.randomUUID().toString();
-
         this.name = name;
         cards = new ArrayList<Card>();
         initialiseDates();
 
     }
+
+    /**
+     * Constructor for Room db to create objects
+     * @param uuid
+     * @param name
+     * @param created
+     * @param lastUsed
+     */
+    public Deck(@NonNull String uuid, String name, String created, String lastUsed) {
+        this.uuid = uuid;
+        this.name = name;
+        this.created = created;
+        this.lastUsed = lastUsed;
+    }
+
 
     private void initialiseDates() {
         SimpleDateFormat sf = new SimpleDateFormat("dd-MM-yyyy");
@@ -67,7 +82,8 @@ public class Deck implements Parcelable {
     }
 
     public int getSize() {
-        return cards.size();
+        if (cards == null) return 0;
+        else return cards.size();
     }
 
     /**
@@ -95,46 +111,5 @@ public class Deck implements Parcelable {
 
     // TODO (1): Add removeCard()
 
-    protected Deck(Parcel in) {
-        name = in.readString();
-        created = in.readString();
-        lastUsed = in.readString();
-        if (in.readByte() == 0x01) {
-            cards = new ArrayList<Card>();
-            in.readList(cards, Card.class.getClassLoader());
-        } else {
-            cards = null;
-        }
-    }
 
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(name);
-        dest.writeString(created);
-        dest.writeString(lastUsed);
-        if (cards == null) {
-            dest.writeByte((byte) (0x00));
-        } else {
-            dest.writeByte((byte) (0x01));
-            dest.writeList(cards);
-        }
-    }
-
-    @SuppressWarnings("unused")
-    public static final Parcelable.Creator<Deck> CREATOR = new Parcelable.Creator<Deck>() {
-        @Override
-        public Deck createFromParcel(Parcel in) {
-            return new Deck(in);
-        }
-
-        @Override
-        public Deck[] newArray(int size) {
-            return new Deck[size];
-        }
-    };
 }

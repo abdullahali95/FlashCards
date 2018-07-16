@@ -64,10 +64,10 @@ public abstract class FlashCardsDatabase extends RoomDatabase {
 //     */
 //    private static class PopulateDbAsync extends AsyncTask<Void, Void, Void> {
 //
-//        private final DeckDAO deckDAO;
+//        private final CardsDAO cardsDAO;
 //
 //        PopulateDbAsync(FlashCardsDatabase db) {
-//            deckDAO = db.deckDAO();
+//            cardsDAO = db.cardsDAO();
 //        }
 //
 //        @Override
@@ -76,10 +76,8 @@ public abstract class FlashCardsDatabase extends RoomDatabase {
 //            // Not needed if you only populate on creation.
 //            // deckDAO.deleteAll();
 //
-//            Deck deck = new Deck("Hello");
-//            deckDAO.addDeck(deck);
-//            deck = new Deck("Psychology");
-//            deckDAO.addDeck(deck);
+//            Card card = new Card("717374d8-4be7-47c1-8890-ba3940838105");
+//            cardsDAO.createCard(card);
 //            return null;
 //        }
 //    }
