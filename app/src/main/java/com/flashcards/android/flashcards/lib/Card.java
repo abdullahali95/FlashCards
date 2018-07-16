@@ -5,28 +5,31 @@ package com.flashcards.android.flashcards.lib;
 import android.arch.persistence.room.Embedded;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.ForeignKey;
+import android.arch.persistence.room.Ignore;
+import android.arch.persistence.room.Index;
 import android.arch.persistence.room.PrimaryKey;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.annotation.NonNull;
 
 import static android.arch.persistence.room.ForeignKey.CASCADE;
 
 @Entity (foreignKeys = @ForeignKey(entity = Deck.class,
         parentColumns = "uuid",
-        childColumns = "id",
+        childColumns = "deckId",
         onDelete = CASCADE),
-        primaryKeys = {"id", "deckId"})
+        indices = @Index(value = "id", name = "cardId"))
 public class Card implements Comparable<Card>, Parcelable {
 
     @PrimaryKey(autoGenerate = true)
+    @NonNull
     private int id;
-
-    @PrimaryKey
+    @NonNull
     private String deckId;
     private String question;
     private String answer;
 
-    @Embedded
+    @Ignore         //TODO: check if this is the best way to handle this
     private Progress progress;
 
     /**

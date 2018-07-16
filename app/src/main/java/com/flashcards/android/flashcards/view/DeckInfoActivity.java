@@ -11,9 +11,9 @@ import android.widget.Button;
 
 import com.flashcards.android.flashcards.R;
 import com.flashcards.android.flashcards.lib.Deck;
-import com.flashcards.android.flashcards.model.CardsAdapter;
+import com.flashcards.android.flashcards.ViewModel.CardsAdapter;
 
-import static com.flashcards.android.flashcards.repo.MockDeck.getFakeDeck;
+import static com.flashcards.android.flashcards.data.MockDeck.getFakeDeck;
 
 public class DeckInfoActivity extends AppCompatActivity {
 

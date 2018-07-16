@@ -1,14 +1,17 @@
-package com.flashcards.android.flashcards.model;
+package com.flashcards.android.flashcards.ViewModel;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.flashcards.android.flashcards.R;
 import com.flashcards.android.flashcards.lib.Deck;
@@ -20,24 +23,30 @@ import java.util.List;
 /**
  * Created by Abdullah Ali on 09/07/2018
  */
-public class DeckAdapter extends RecyclerView.Adapter<DeckAdapter.ViewHolder> {
+public class DeckAdapter extends RecyclerView.Adapter<DeckAdapter.DeckViewHolder> {
     private List<Deck> decks;
+    private MainModel model;
     private Context context;
 
-    public DeckAdapter(List<Deck> decks, Context context) {
+    public DeckAdapter(List<Deck> decks, MainModel mainModel, Context context) {
         this.decks = decks;
+        this.model = mainModel;
         this.context = context;
+    }
+
+    public void setDecks(List<Deck> decks) {
+        this.decks = decks;
     }
 
     @NonNull
     @Override
-    public DeckAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public DeckViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.main_rec_deck, parent, false);
-        return new ViewHolder(view,context);
+        return new DeckViewHolder(view, model, context);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull DeckAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull DeckViewHolder holder, int position) {
         holder.deckName.setText(decks.get(position).getName());
 
         //TODO: format last used date properly
@@ -50,26 +59,31 @@ public class DeckAdapter extends RecyclerView.Adapter<DeckAdapter.ViewHolder> {
 
     @Override
     public int getItemCount() {
-        return decks.size();
+        if (decks == null) {
+            return 0;
+        } else return decks.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    public class DeckViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
         private TextView deckName;
         private TextView lastUsed;
         private TextView cardCount;
         private Button testButton;
         private Deck deck;
+        private MainModel model;
         private Context context;
 
-        public ViewHolder(View itemView, Context context) {
+        public DeckViewHolder(View itemView, MainModel model, Context context) {
             super(itemView);
             deckName = (TextView) itemView.findViewById(R.id.title_rec_deck);
             lastUsed = (TextView) itemView.findViewById(R.id.days_rec_deck);
             cardCount = (TextView) itemView.findViewById(R.id.cards_rec_deck);
             testButton = (Button) itemView.findViewById(R.id.test_button_rec_deck);
+            this.model = model;
             this.context = context;
 
             itemView.setOnClickListener(this);
+            itemView.setOnLongClickListener(this);
             testButton.setOnClickListener(this);
         }
 
@@ -90,6 +104,36 @@ public class DeckAdapter extends RecyclerView.Adapter<DeckAdapter.ViewHolder> {
 
             }
 
+        }
+
+        @Override
+        public boolean onLongClick(View view) {
+            deck = decks.get(getAdapterPosition());
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(context);
+            builder.setTitle("Are you sure you want to delete the deck: " + deck.getName() + "?");
+
+            // Set up the buttons
+            builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    model.deleteDeck(deck);
+
+                    // TODO: this should show up as a confirmation from Room db
+                    String alert = "Deck: " + deck.getName() + " deleted";
+                    Toast.makeText(context, alert, Toast.LENGTH_SHORT).show();
+                }
+            });
+            builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.cancel();
+                }
+            });
+
+            builder.show();
+
+            return true;
         }
     }
 }

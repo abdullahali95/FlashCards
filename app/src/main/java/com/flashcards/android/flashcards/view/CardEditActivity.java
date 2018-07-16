@@ -12,7 +12,7 @@ import com.flashcards.android.flashcards.lib.Deck;
 
 import jp.wasabeef.richeditor.RichEditor;
 
-import static com.flashcards.android.flashcards.repo.MockDeck.getFakeDeck;
+import static com.flashcards.android.flashcards.data.MockDeck.getFakeDeck;
 
 public class CardEditActivity extends AppCompatActivity {
     RichEditor editor;

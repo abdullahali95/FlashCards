@@ -1,23 +1,16 @@
-package com.flashcards.android.flashcards.model;
+package com.flashcards.android.flashcards.ViewModel;
 
 import android.content.Context;
-import android.os.Build;
-import android.support.v7.view.menu.MenuView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.WebSettings;
 import android.webkit.WebView;
 
 import com.flashcards.android.flashcards.R;
 import com.flashcards.android.flashcards.lib.Card;
-import com.flashcards.android.flashcards.lib.Deck;
-import com.flashcards.android.flashcards.view.DeckInfoActivity;
 
 import java.util.ArrayList;
-
-import static com.flashcards.android.flashcards.R.color.cardBackground;
 
 /**
  * Created by abdul on 12/07/2018

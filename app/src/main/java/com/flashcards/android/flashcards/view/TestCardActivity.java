@@ -9,7 +9,7 @@ import android.widget.Button;
 import com.flashcards.android.flashcards.R;
 import com.flashcards.android.flashcards.lib.Card;
 import com.flashcards.android.flashcards.lib.Deck;
-import com.flashcards.android.flashcards.model.TestModel;
+import com.flashcards.android.flashcards.ViewModel.TestModel;
 import com.transitionseverywhere.*;
 import static com.flashcards.android.flashcards.R.color.*;
 
@@ -81,9 +81,6 @@ public class TestCardActivity extends AppCompatActivity {
         card.setBackgroundColor(getResources().getColor(cardBackground));
         card.getSettings().setTextZoom(200);
 
-        Bundle bundle = getIntent().getExtras();
-        testDeck = bundle.getParcelable("Test Deck");
-        model = new TestModel(testDeck);
     }
 
     /**

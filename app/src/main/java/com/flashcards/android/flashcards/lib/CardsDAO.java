@@ -1,4 +1,4 @@
-package com.flashcards.android.flashcards.repo;
+package com.flashcards.android.flashcards.lib;
 
 import android.arch.lifecycle.LiveData;
 import android.arch.persistence.room.Dao;
@@ -38,16 +38,15 @@ public interface CardsDAO {
     public void setCard(Card card);
 
     @Delete
-    public void deleteCard(int id, String deckid);
+    public void deleteCard(Card card);
 
     @Insert (onConflict = OnConflictStrategy.REPLACE)
-    public void createCard(String deckId, String question, String answer);
+    public void createCard(Card card);
 
     @Query("UPDATE Card SET question = :question WHERE 'id' =:id AND 'deckId' = :deckId")
     public void setQuestion(int id, String deckId, String question);
 
     @Query("UPDATE Card SET answer = :answer WHERE 'id' =:id AND 'deckId' = :deckId")
     public void setAnswer(int id, String deckId, String answer);
-
 
 }

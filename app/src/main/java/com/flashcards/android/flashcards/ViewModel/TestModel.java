@@ -1,8 +1,10 @@
-package com.flashcards.android.flashcards.model;
+package com.flashcards.android.flashcards.ViewModel;
 
+import android.arch.lifecycle.ViewModel;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.flashcards.android.flashcards.data.TestRepo;
 import com.flashcards.android.flashcards.lib.Card;
 import com.flashcards.android.flashcards.lib.Deck;
 
@@ -10,7 +12,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.PriorityQueue;
 
-public class TestModel implements Parcelable {
+public class TestModel extends ViewModel implements Parcelable {
     /*
      * Created by Abdullah Ali
      */
@@ -19,8 +21,11 @@ public class TestModel implements Parcelable {
     private PriorityQueue<Card> testQueue;
     private Card lastCard;
     private int deckSize;
+    private TestRepo repo;
 
-    public TestModel(Deck deck) {
+    // TODO: remove deck from constructor arguments
+    public TestModel(TestRepo repo, Deck deck) {
+        this.repo = repo;
         testQueue = new PriorityQueue<Card>();
         makeQueue(deck);
         this.deckSize = testQueue.size();
@@ -35,8 +40,6 @@ public class TestModel implements Parcelable {
         String date = sf.format(cal.getTime());
         deck.setLastUsed(date);
 
-        //Update deck usage stats
-        deck.incAttempts();
     }
 
     private void initialiseLearntScores() {

@@ -1,20 +1,27 @@
 package com.flashcards.android.flashcards.lib;
 
 import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.Ignore;
+import android.arch.persistence.room.Index;
+import android.arch.persistence.room.PrimaryKey;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.annotation.NonNull;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.UUID;
 
-@Entity
+@Entity(indices = @Index(value = "uuid", name = "deckId"))
 public class Deck implements Parcelable {
+    @PrimaryKey
+    @NonNull
     private String uuid;
     private String name;
     private String created;
     private String lastUsed;
+    @Ignore
     private ArrayList<Card> cards;
 
 
@@ -49,6 +56,10 @@ public class Deck implements Parcelable {
 
     public String getCreated() {
         return created;
+    }
+
+    public void setCreated(String created) {
+        this.created = created;
     }
 
     public String getLastUsed() {

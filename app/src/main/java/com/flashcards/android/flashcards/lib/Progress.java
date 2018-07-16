@@ -3,7 +3,10 @@ package com.flashcards.android.flashcards.lib;
 import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Embedded;
 import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.ForeignKey;
+import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
+import android.support.annotation.NonNull;
 
 import com.google.common.collect.EvictingQueue;
 
@@ -11,6 +14,7 @@ import java.io.Serializable;
 import java.util.Iterator;
 import java.util.List;
 
+import static android.arch.persistence.room.ForeignKey.CASCADE;
 import static java.lang.Boolean.TRUE;
 import static java.lang.Math.random;
 
@@ -25,17 +29,29 @@ import static java.lang.Math.random;
  * This should not alter/compromise the performance in any way.
  */
 
-@Entity (primaryKeys = {"cardId", "deckId"})
-public class Progress implements Serializable{
+@Entity (foreignKeys = {
+            @ForeignKey(
+                entity = Deck.class,
+                parentColumns = "uuid",
+                childColumns = "deckId",
+                onDelete = CASCADE),
+            @ForeignKey(
+                    entity = Card.class,
+                    parentColumns = "id",
+                    childColumns = "cardId",
+                    onDelete = CASCADE)},
+            primaryKeys = {"cardId", "deckId"})
+public class Progress {
 
-    @PrimaryKey
+    @NonNull
     private int cardId;
-    @PrimaryKey
+    @NonNull
     private String deckId;
     private int attempts;   //Invariant: must always stay positive
     private int correct;
 
     //TODO: handle storing this in db
+    @Ignore
     private EvictingQueue<Boolean> lastTen;     // Pushes out old elements if size exceeds 10
     private int learntScore;
 
@@ -69,10 +85,7 @@ public class Progress implements Serializable{
         return attempts;
     }
 
-    public void setAttempts(int attempts) throws IllegalAccessException {
-        if (attempts < 0) {
-            throw new IllegalAccessException("Attempts must be a positive integer");
-        }
+    public void setAttempts(int attempts) {
         this.attempts = attempts;
     }
 

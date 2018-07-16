@@ -1,4 +1,4 @@
-package com.flashcards.android.flashcards.repo;
+package com.flashcards.android.flashcards.data;
 
 import com.flashcards.android.flashcards.lib.Card;
 import com.flashcards.android.flashcards.lib.Deck;
