@@ -19,7 +19,7 @@ import com.flashcards.android.flashcards.lib.ProgressDAO;
  * Created by Abdullah Ali on 15/07/2018
  */
 
-@Database(entities = {Card.class, Deck.class, Progress.class}, version = 1, exportSchema = false)
+@Database(entities = {Card.class, Deck.class, Progress.class}, version = 2, exportSchema = false)
 public abstract class FlashCardsDatabase extends RoomDatabase {
 
     public abstract CardsDAO cardsDAO();
@@ -76,7 +76,7 @@ public abstract class FlashCardsDatabase extends RoomDatabase {
 //            // Not needed if you only populate on creation.
 //            // deckDAO.deleteAll();
 //
-//            Card card = new Card("717374d8-4be7-47c1-8890-ba3940838105");
+//            Card card = new Card("d317109d-1f52-4bdb-86ef-112245e1fc95");
 //            cardsDAO.createCard(card);
 //            return null;
 //        }

@@ -9,10 +9,7 @@ import android.util.Log;
 
 import com.flashcards.android.flashcards.data.DeckInfoRepo;
 import com.flashcards.android.flashcards.lib.Card;
-import com.flashcards.android.flashcards.lib.CardsDAO;
 import com.flashcards.android.flashcards.lib.Deck;
-import com.flashcards.android.flashcards.lib.DeckDAO;
-import com.flashcards.android.flashcards.lib.ProgressDAO;
 
 import java.util.List;
 
@@ -21,13 +18,13 @@ import java.util.List;
  */
 public class DeckInfoModel extends AndroidViewModel {
     private DeckInfoRepo repo;
-    private LiveData<Deck> currentDeck;
+    private Deck currentDeck;
     private LiveData<List<Card>> cards;
 
     public DeckInfoModel(@NonNull Application application) {
         super(application);
         this.repo = new DeckInfoRepo(application);
-
+        cards = repo.getAllCards("d317109d-1f52-4bdb-86ef-112245e1fc95");
     }
 
     /**
@@ -36,13 +33,13 @@ public class DeckInfoModel extends AndroidViewModel {
      * @return current Deck
      */
     public LiveData<Deck> getDeck (String deckId) {
-        currentDeck = repo.getDeck(deckId);
+        currentDeck = repo.getDeck(deckId).getValue();
         cards = repo.getAllCards(deckId);
-        return currentDeck;
+        return repo.getDeck(deckId);
     }
 
     public void createCard() {
-        String deckId = currentDeck.getValue().getUuid();
+        String deckId = currentDeck.getDeckId();
         CreateCardTask task = new CreateCardTask();
         task.execute(deckId);
     }
@@ -62,11 +59,11 @@ public class DeckInfoModel extends AndroidViewModel {
 
     // DAO independant methods
 
-    public LiveData<Deck> getCurrentDeck() {
+    public Deck getCurrentDeck() {
         return currentDeck;
     }
 
-    public void setCurrentDeck(LiveData<Deck> currentDeck) {
+    public void setCurrentDeck(Deck currentDeck) {
         this.currentDeck = currentDeck;
     }
 

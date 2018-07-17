@@ -2,7 +2,6 @@ package com.flashcards.android.flashcards.lib;
 
 //import android.support.annotation.NonNull;
 
-import android.arch.persistence.room.Embedded;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.ForeignKey;
 import android.arch.persistence.room.Ignore;
@@ -15,15 +14,14 @@ import android.support.annotation.NonNull;
 import static android.arch.persistence.room.ForeignKey.CASCADE;
 
 @Entity (foreignKeys = @ForeignKey(entity = Deck.class,
-        parentColumns = "uuid",
+        parentColumns = "deckId",
         childColumns = "deckId",
-        onDelete = CASCADE),
-        indices = @Index(value = "id", name = "cardId"))
+        onDelete = CASCADE))
 public class Card implements Comparable<Card>, Parcelable {
 
     @PrimaryKey(autoGenerate = true)
     @NonNull
-    private int id;
+    private int cardId;
     @NonNull
     private String deckId;
     private String question;
@@ -59,12 +57,12 @@ public class Card implements Comparable<Card>, Parcelable {
 
     //TODO: progress has to be manually set once the card is created
 
-    public int getId() {
-        return id;
+    public int getCardId() {
+        return cardId;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setCardId(int cardId) {
+        this.cardId = cardId;
     }
 
     public String getDeckId() {
@@ -120,7 +118,7 @@ public class Card implements Comparable<Card>, Parcelable {
         if (o == null) {
             return false;
         } else {
-            return ((Integer) this.id).equals(((Card) o).getId());
+            return ((Integer) this.cardId).equals(((Card) o).getCardId());
 
 
         }
@@ -134,7 +132,7 @@ public class Card implements Comparable<Card>, Parcelable {
     }
 
     protected Card(Parcel in) {
-        id = in.readInt();
+        cardId = in.readInt();
         question = in.readString();
         answer = in.readString();
         progress = (Progress) in.readValue(Progress.class.getClassLoader());
@@ -147,7 +145,7 @@ public class Card implements Comparable<Card>, Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(id);
+        dest.writeInt(cardId);
         dest.writeString(question);
         dest.writeString(answer);
         dest.writeValue(progress);

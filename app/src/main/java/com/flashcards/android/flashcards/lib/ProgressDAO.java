@@ -25,25 +25,25 @@ public interface ProgressDAO {
     @Delete
     public void deleteProgress (Progress progress);
 
-    @Query("SELECT * FROM 'progress' WHERE 'deckId' =:deckId ")
+    @Query("SELECT * FROM Progress WHERE deckId =:deckId ")
     LiveData<List<Progress>> getAllProgress(String deckId);
 
-    @Query("SELECT * FROM 'Progress' WHERE 'cardId' = :cardId AND 'deckId' = :deckId")
+    @Query("SELECT * FROM Progress WHERE cardId = :cardId AND deckId = :deckId")
     public LiveData<Progress> getProgress(int cardId, String deckId);
 
-    @Query("UPDATE Card SET deckId = :newDeckId WHERE 'cardId' =:cardId AND 'deckId' = :oldDeckId")
+    @Query("UPDATE Card SET deckId = :newDeckId WHERE cardId =:cardId AND deckId = :oldDeckId")
     public void setDeckId(int cardId, String oldDeckId, String newDeckId);
 
-    @Query("UPDATE Progress SET attempts = :attempts WHERE 'cardId' =:cardId AND 'deckId' = :deckId")
+    @Query("UPDATE Progress SET attempts = :attempts WHERE cardId =:cardId AND deckId = :deckId")
     public void setAttempts(int cardId, String deckId, int attempts);
 
-    @Query("UPDATE Progress SET attempts = attempts + 1 WHERE 'cardId' =:cardId AND 'deckId' = :deckId")
+    @Query("UPDATE Progress SET attempts = attempts + 1 WHERE cardId =:cardId AND deckId = :deckId")
     public void incAttempts(int cardId, String deckId);
 
-    @Query("UPDATE Progress SET correct = :correct WHERE 'cardId' =:cardId AND 'deckId' = :deckId")
+    @Query("UPDATE Progress SET correct = :correct WHERE cardId =:cardId AND deckId = :deckId")
     public void setCorrect(int cardId, String deckId, int correct);
 
-    @Query("UPDATE Progress SET correct = correct + 1 WHERE 'cardId' =:cardId AND 'deckId' = :deckId")
+    @Query("UPDATE Progress SET correct = correct + 1 WHERE cardId =:cardId AND deckId = :deckId")
     public void incCorrect(int cardId, String deckId);
 
     //TODO: fix the storage of these

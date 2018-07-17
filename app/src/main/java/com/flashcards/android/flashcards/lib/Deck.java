@@ -2,10 +2,7 @@ package com.flashcards.android.flashcards.lib;
 
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.Ignore;
-import android.arch.persistence.room.Index;
 import android.arch.persistence.room.PrimaryKey;
-import android.os.Parcel;
-import android.os.Parcelable;
 import android.support.annotation.NonNull;
 
 import java.text.SimpleDateFormat;
@@ -13,11 +10,11 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.UUID;
 
-@Entity(indices = @Index(value = "uuid", name = "deckId"))
+@Entity
 public class Deck {
     @PrimaryKey
     @NonNull
-    private String uuid;
+    private String deckId;
     private String name;
     private String created;
     private String lastUsed;
@@ -27,7 +24,7 @@ public class Deck {
     // Constructor for creating a deck in app
     @Ignore
     public Deck(String name) {
-        this.uuid = UUID.randomUUID().toString();
+        this.deckId = UUID.randomUUID().toString();
         this.name = name;
         cards = new ArrayList<Card>();
         initialiseDates();
@@ -36,13 +33,13 @@ public class Deck {
 
     /**
      * Constructor for Room db to create objects
-     * @param uuid
+     * @param deckId
      * @param name
      * @param created
      * @param lastUsed
      */
-    public Deck(@NonNull String uuid, String name, String created, String lastUsed) {
-        this.uuid = uuid;
+    public Deck(@NonNull String deckId, String name, String created, String lastUsed) {
+        this.deckId = deckId;
         this.name = name;
         this.created = created;
         this.lastUsed = lastUsed;
@@ -57,9 +54,9 @@ public class Deck {
         lastUsed = date;
     }
 
-    public String getUuid() { return uuid; }
+    public String getDeckId() { return deckId; }
 
-    public void setUuid(String uuid) { this.uuid = uuid; }
+    public void setDeckId(String deckId) { this.deckId = deckId; }
 
     public String getName() {
         return name;

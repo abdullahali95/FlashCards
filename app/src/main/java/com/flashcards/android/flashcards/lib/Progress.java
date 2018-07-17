@@ -32,12 +32,12 @@ import static java.lang.Math.random;
 @Entity (foreignKeys = {
             @ForeignKey(
                 entity = Deck.class,
-                parentColumns = "uuid",
+                parentColumns = "deckId",
                 childColumns = "deckId",
                 onDelete = CASCADE),
             @ForeignKey(
                     entity = Card.class,
-                    parentColumns = "id",
+                    parentColumns = "cardId",
                     childColumns = "cardId",
                     onDelete = CASCADE)},
             primaryKeys = {"cardId", "deckId"})

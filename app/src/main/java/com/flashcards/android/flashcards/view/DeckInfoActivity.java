@@ -56,17 +56,26 @@ public class DeckInfoActivity extends AppCompatActivity {
         // Add model
         deckInfoModel = ViewModelProviders.of(this).get(DeckInfoModel.class);
 
+
         // Get info of clicked deck
         Bundle bundle = getIntent().getExtras();
         String deckId = bundle.getString("Deck");
 
-        Toast.makeText(this, deckId, Toast.LENGTH_SHORT).show();
+        final Context context = this;
+
+//        String test = deckInfoModel.getDeck(deckId).getValue().getName();
+//        Toast.makeText(this, test, Toast.LENGTH_SHORT).show();
+        Log.d(deckId, "onCreate: ");
 
         // Add observer for changes to decks
         deckInfoModel.getDeck(deckId).observe(this, new Observer<Deck>() {
             @Override
             public void onChanged(@Nullable Deck deck) {
                 setDeck(deck);
+                if (deck != null) {
+                    String test = deck.getName();
+                    Toast.makeText(context, test, Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -114,6 +123,7 @@ public class DeckInfoActivity extends AppCompatActivity {
         if (this.deck == null) {
             return;
         } else {
+            deckInfoModel.setCurrentDeck(deck);
             deckName.setText(deck.getName());
             //TODO: add deck info and graph
         }

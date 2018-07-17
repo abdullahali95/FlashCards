@@ -15,7 +15,6 @@ import android.widget.Toast;
 
 import com.flashcards.android.flashcards.R;
 import com.flashcards.android.flashcards.lib.Deck;
-import com.flashcards.android.flashcards.view.CardEditActivity;
 import com.flashcards.android.flashcards.view.DeckInfoActivity;
 import com.flashcards.android.flashcards.view.TestCardActivity;
 
@@ -96,12 +95,12 @@ public class DeckAdapter extends RecyclerView.Adapter<DeckAdapter.DeckViewHolder
             //Switch view
             if(v.getId() == testButton.getId()) {
                 Intent intent = new Intent(this.context, TestCardActivity.class);
-                intent.putExtra("Test Deck", deck.getUuid());
+                intent.putExtra("Test Deck", deck.getDeckId());
                 this.context.startActivity(intent);
 
             } else {
                 Intent intent = new Intent(this.context, DeckInfoActivity.class);
-                intent.putExtra("Deck", deck.getUuid());
+                intent.putExtra("Deck", deck.getDeckId());
                 this.context.startActivity(intent);
 
             }

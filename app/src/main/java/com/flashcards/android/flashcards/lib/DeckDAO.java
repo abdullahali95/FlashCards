@@ -7,8 +7,6 @@ import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.OnConflictStrategy;
 import android.arch.persistence.room.Query;
 
-import com.flashcards.android.flashcards.lib.Deck;
-
 import java.util.List;
 
 /**
@@ -24,22 +22,23 @@ public interface DeckDAO {
     @Delete
     public void deleteDeck(Deck deck);
 
-    @Query("UPDATE Deck SET 'uuid' = :newUuid WHERE 'uuid' =:oldUuid")
+    @Query("UPDATE Deck SET deckId = :newUuid WHERE deckId =:oldUuid")
     public void setUuid(String oldUuid, String newUuid);
 
     @Query("SELECT * FROM Deck")
     public LiveData<List<Deck>> getAllDecks ();
 
-    @Query("SELECT * FROM Deck WHERE 'uuid' = :deckId")
+//   @Query("SELECT * FROM Deck WHERE lastUsed NOT LIKE :deckId LIMIT 1")
+   @Query("SELECT * FROM Deck WHERE deckId = :deckId")
     public LiveData<Deck> getDeck (String deckId);
 
-    @Query("SELECT 'name' FROM 'Deck' WHERE 'uuid' = :uuid")
+    @Query("SELECT name FROM Deck WHERE deckId = :uuid")
     public LiveData<String> getName(String uuid);
 
-    @Query("UPDATE Deck SET name = :name WHERE 'uuid' =:uuid")
+    @Query("UPDATE Deck SET name = :name WHERE deckId =:uuid")
     public void setName(String uuid, String name);
 
-    @Query("UPDATE Deck SET lastUsed = :lastUsed WHERE 'uuid' =:uuid")
+    @Query("UPDATE Deck SET lastUsed = :lastUsed WHERE deckId =:uuid")
     public void setLastUsed(String uuid, String lastUsed);
 
 
