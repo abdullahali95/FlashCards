@@ -1,16 +1,24 @@
 package com.flashcards.android.flashcards.view;
 
+import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.widget.Button;
 import com.flashcards.android.flashcards.R;
+import com.flashcards.android.flashcards.ViewModel.MainModel;
 import com.flashcards.android.flashcards.lib.Card;
 import com.flashcards.android.flashcards.lib.Deck;
 import com.flashcards.android.flashcards.ViewModel.TestModel;
 import com.transitionseverywhere.*;
+
+import java.util.List;
+
 import static com.flashcards.android.flashcards.R.color.*;
 
 /**
@@ -41,12 +49,34 @@ public class TestCardActivity extends AppCompatActivity {
 
         loadViews();
 
-        currentCard = model.getCard();
+        // Get info of clicked deck
+        Bundle bundle = getIntent().getExtras();
+        String deckId = bundle.getString("deckId");
+        Log.d(deckId, "onCreate: ");
+
+        model = ViewModelProviders.of(this).get(TestModel.class);
+
+        model.setTestDeck(deckId);
+
+        model.getAllCards(deckId).observe(this, new Observer<List<Card>>() {
+            @Override
+            public void onChanged(@Nullable List<Card> cards) {
+                if (cards.size() > 0) {
+                    model.initQueue(cards);
+                    if (currentCard == null) {
+                        model.setTestCards(cards);
+                        currentCard = model.getCurrentCard();
+                        question = currentCard.getQuestion();
+                        card.loadUrl("about:blank");
+                        card.loadData(question, "text/html", "utf-8");
+                    }
+                }
+            }
+        });
+
 
         // TODO: add method to look through webview String for '#' and replace it with '%23'
-        question = currentCard.getQuestion();
-        card.loadUrl("about:blank");
-        card.loadData(question, "text/html", "utf-8");
+
 
         // Add Event listeners to buttons
         skipButton.setOnClickListener(new View.OnClickListener() {
@@ -104,7 +134,7 @@ public class TestCardActivity extends AppCompatActivity {
      * Gets a new card from the model
      */
     public void skip () {
-        model.skip(currentCard);
+        model.skip();
         getNewCard();
     }
 
@@ -112,7 +142,7 @@ public class TestCardActivity extends AppCompatActivity {
      * Marks the card incorrect and moves to next card.
      */
     public void incorrect() {
-        model.markIncorrect(currentCard);
+        model.markIncorrect();
         getNewCard();
         flipToQuestion();
     }
@@ -121,7 +151,7 @@ public class TestCardActivity extends AppCompatActivity {
      * Marks the card correct and moves to next card.
      */
     public void correct () {
-        model.markCorrect(currentCard);
+        model.markCorrect();
         getNewCard();
         flipToQuestion();
     }

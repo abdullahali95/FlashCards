@@ -1,5 +1,7 @@
 package com.flashcards.android.flashcards.ViewModel;
 
+import android.app.Application;
+import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.ViewModel;
 import android.os.AsyncTask;
@@ -14,30 +16,20 @@ import java.util.List;
 /**
  * Created by Abdullah Ali on 12/07/2018
  */
-public class EditModel extends ViewModel {
-    private LiveData<Deck> deck;
-    private LiveData<List<Card>> cards;
-    private Card currentCard;
+public class EditModel extends AndroidViewModel {
+    private LiveData<Card> currentCard;
     private String question;
     private String answer;
     private CardEditRepo repo;
 
-    public EditModel (CardEditRepo repo) {
-        this.repo = repo;
+    public EditModel (Application application) {
+        super(application);
+        this.repo = new CardEditRepo(application);
 
     }
 
     // Methods dependant of repo
 
-    public LiveData<Deck> setDeck(String deckId) {
-        deck = repo.getDeck(deckId);
-        return deck;
-    }
-
-    public LiveData<List<Card>> setAllCards (String deckId) {
-        cards = repo.getAllCards(deckId);
-        return cards;
-    }
 
     public void addCard(Card card, Progress progress) {
         //TODO: check if these need to be initialised better
@@ -46,7 +38,13 @@ public class EditModel extends ViewModel {
         AddCardTask task = new AddCardTask();
         task.execute(newCard);
     }
-        private class AddCardTask extends AsyncTask<Card, Void, Void> {
+
+    public LiveData<Card> getCard(int cardId, String deckId) {
+        currentCard = repo.getCard(cardId, deckId);
+        return currentCard;
+    }
+
+    private class AddCardTask extends AsyncTask<Card, Void, Void> {
 
             @Override
             protected Void doInBackground(Card... cards) {
@@ -57,15 +55,17 @@ public class EditModel extends ViewModel {
         }
 
     public void updateQuestion(String question) {
-        currentCard.setQuestion(question);
+        Card newCard = currentCard.getValue();
+        newCard.setQuestion(question);
         UpdateCardTask task = new UpdateCardTask();
-        task.execute(currentCard);
+        task.execute(newCard);
     }
 
-    public void updateAnswer (int id, String answer) {
-        currentCard.setAnswer(answer);
+    public void updateAnswer (String answer) {
+        Card newCard = currentCard.getValue();
+        newCard.setAnswer(answer);
         UpdateCardTask task = new UpdateCardTask();
-        task.execute(currentCard);
+        task.execute(newCard);
     }
 
         private class UpdateCardTask extends AsyncTask<Card, Void, Void> {
@@ -93,20 +93,6 @@ public class EditModel extends ViewModel {
 
 
     // Methods independant of repo
-
-    public void viewCard(Card currentCard) {
-        this.currentCard = currentCard;
-        this.question = currentCard.getQuestion();
-        this.answer = currentCard.getAnswer();
-    }
-
-    public Card getCurrentCard() {
-        return currentCard;
-    }
-
-    public void setCurrentCard(Card currentCard) {
-        this.currentCard = currentCard;
-    }
 
     public String getQuestion() {
         return question;

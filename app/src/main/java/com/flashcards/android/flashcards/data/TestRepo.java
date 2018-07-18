@@ -1,9 +1,12 @@
 package com.flashcards.android.flashcards.data;
 
+import android.app.Application;
 import android.arch.lifecycle.LiveData;
 
 import com.flashcards.android.flashcards.lib.Card;
 import com.flashcards.android.flashcards.lib.CardsDAO;
+import com.flashcards.android.flashcards.lib.Deck;
+import com.flashcards.android.flashcards.lib.DeckDAO;
 import com.flashcards.android.flashcards.lib.Progress;
 import com.flashcards.android.flashcards.lib.ProgressDAO;
 import com.google.common.collect.EvictingQueue;
@@ -18,11 +21,14 @@ import javax.inject.Inject;
 public class TestRepo {
     private final CardsDAO cardsDAO;
     private final ProgressDAO progressDAO;
+    private final DeckDAO deckDAO;
 
     @Inject
-    public TestRepo(CardsDAO cardsDAO, ProgressDAO progressDAO) {
-        this.cardsDAO = cardsDAO;
-        this.progressDAO = progressDAO;
+    public TestRepo(Application application) {
+        FlashCardsDatabase db = FlashCardsDatabase.getFlashCardsDB(application);
+        this.cardsDAO = db.cardsDAO();
+        this.deckDAO = db.deckDAO();
+        this.progressDAO = db.progressDAO();
     }
 
     /**
@@ -58,6 +64,18 @@ public class TestRepo {
 
     public void incCorrect(int cardId, String deckId) {
         progressDAO.incCorrect(cardId, deckId);
+    }
+
+    public LiveData<Deck> getDeck(String deckId) {
+        return deckDAO.getDeck(deckId);
+    }
+
+    public void setDeck(Deck deck) {
+        deckDAO.setDeck(deck);
+    }
+
+    public void setProgress(Progress progress) {
+        progressDAO.setProgress(progress);
     }
 
     //TODO: fix evicting queue

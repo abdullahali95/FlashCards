@@ -10,18 +10,14 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.flashcards.android.flashcards.R;
 import com.flashcards.android.flashcards.ViewModel.DeckInfoModel;
-import com.flashcards.android.flashcards.ViewModel.MainModel;
 import com.flashcards.android.flashcards.lib.Card;
 import com.flashcards.android.flashcards.lib.Deck;
-import com.flashcards.android.flashcards.ViewModel.CardsAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -80,6 +76,7 @@ public class DeckInfoActivity extends AppCompatActivity {
             public void onChanged(@Nullable List<Card> cards) {
                 adapter.setCards(cards);
                 adapter.notifyDataSetChanged();
+                recyclerView.refreshDrawableState();
             }
         });
 

@@ -1,11 +1,9 @@
 package com.flashcards.android.flashcards.view;
 
 import android.arch.lifecycle.Observer;
-import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.os.AsyncTask;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
@@ -16,18 +14,13 @@ import android.support.v7.widget.RecyclerView;
 import android.text.InputType;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.flashcards.android.flashcards.R;
 import com.flashcards.android.flashcards.ViewModel.MainModel;
 import com.flashcards.android.flashcards.lib.Deck;
-import com.flashcards.android.flashcards.ViewModel.DeckAdapter;
 
-import java.util.ArrayList;
 import java.util.List;
-
-import javax.inject.Inject;
 
 import static com.flashcards.android.flashcards.data.MockDeck.getFakeDeck;
 
@@ -60,6 +53,8 @@ public class MainActivity extends AppCompatActivity {
                 adapter.notifyDataSetChanged();
             }
         });
+
+
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         adapter = new DeckAdapter(decks, mainModel, this);

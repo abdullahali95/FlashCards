@@ -6,6 +6,7 @@ import android.arch.persistence.room.Delete;
 import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.OnConflictStrategy;
 import android.arch.persistence.room.Query;
+import android.arch.persistence.room.Update;
 
 import com.flashcards.android.flashcards.lib.Progress;
 import com.google.common.collect.EvictingQueue;
@@ -45,6 +46,9 @@ public interface ProgressDAO {
 
     @Query("UPDATE Progress SET correct = correct + 1 WHERE cardId =:cardId AND deckId = :deckId")
     public void incCorrect(int cardId, String deckId);
+
+    @Update(onConflict = OnConflictStrategy.REPLACE)
+    public void setProgress(Progress progress);
 
     //TODO: fix the storage of these
 //    @Query("UPDATE Progress SET lastTen = :lastTen WHERE 'cardId' =:cardId AND 'deckId' = :deckId")

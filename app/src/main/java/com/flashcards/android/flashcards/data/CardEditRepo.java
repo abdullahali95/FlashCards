@@ -1,5 +1,6 @@
 package com.flashcards.android.flashcards.data;
 
+import android.app.Application;
 import android.arch.lifecycle.LiveData;
 
 import com.flashcards.android.flashcards.lib.Card;
@@ -22,10 +23,11 @@ public class CardEditRepo {
     private final ProgressDAO progressDAO;
 
     @Inject
-    public CardEditRepo(CardsDAO cardsDAO, DeckDAO deckDAO, ProgressDAO progressDAO) {
-        this.cardsDAO = cardsDAO;
-        this.deckDAO = deckDAO;
-        this.progressDAO = progressDAO;
+    public CardEditRepo(Application application) {
+        FlashCardsDatabase db = FlashCardsDatabase.getFlashCardsDB(application);
+        this.cardsDAO = db.cardsDAO();
+        this.deckDAO = db.deckDAO();
+        this.progressDAO = db.progressDAO();
     }
 
     public void createCard(Card card) {

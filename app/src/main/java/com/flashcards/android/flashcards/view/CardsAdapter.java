@@ -1,24 +1,23 @@
-package com.flashcards.android.flashcards.ViewModel;
+package com.flashcards.android.flashcards.view;
 
-import android.arch.lifecycle.Observer;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.support.annotation.Nullable;
+import android.content.Intent;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.widget.Toast;
 
 import com.flashcards.android.flashcards.R;
+import com.flashcards.android.flashcards.ViewModel.DeckInfoModel;
 import com.flashcards.android.flashcards.lib.Card;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static com.flashcards.android.flashcards.R.color.cardBackground;
 
 /**
  * This class is for the individual cards displayed on the Deck Info Activity recycler view.
@@ -63,7 +62,7 @@ public class CardsAdapter extends RecyclerView.Adapter<CardsAdapter.CardsViewHol
         else return cards.size();
     }
 
-    public class CardsViewHolder extends RecyclerView.ViewHolder implements View.OnLongClickListener {
+    public class CardsViewHolder extends RecyclerView.ViewHolder implements View.OnLongClickListener, View.OnClickListener, View.OnTouchListener {
         private WebView cardView;
         private Context context;
         private Card card;
@@ -71,17 +70,50 @@ public class CardsAdapter extends RecyclerView.Adapter<CardsAdapter.CardsViewHol
         public CardsViewHolder(View itemView, Context context) {
             super(itemView);
             this.cardView = (WebView) itemView.findViewById(R.id.wv_card_info_question);
-            cardView.getSettings().setTextZoom(120);
+            cardView.getSettings().setTextZoom(110);
             cardView.setBackgroundColor(itemView.getResources().getColor(R.color.cardBackground));
 
             itemView.setOnLongClickListener(this);
+            itemView.setOnClickListener(this);
+            cardView.setOnTouchListener(this);
 
             this.context = context;
+        }
+
+        // TODO: Find a better way to delete then long press.
+        @Override
+        public void onClick(View view) {
+            openEditor();
         }
 
 
         @Override
         public boolean onLongClick(View view) {
+            deleteCard();
+            return true;
+        }
+
+        @Override
+        public boolean onTouch(View view, MotionEvent event) {
+            if (event.getAction() == MotionEvent.ACTION_UP){
+                openEditor();
+            }
+
+            return false;
+        }
+
+
+        public void openEditor() {
+            card = cards.get(getAdapterPosition());
+
+            //Switch view
+            Intent intent = new Intent(this.context, CardEditActivity.class);
+            intent.putExtra("cardId", card.getCardId());
+            intent.putExtra("deckId", card.getDeckId());
+            this.context.startActivity(intent);
+        }
+
+        public void deleteCard() {
             card = cards.get(getAdapterPosition());
 
             AlertDialog.Builder builder = new AlertDialog.Builder(context);
@@ -106,8 +138,6 @@ public class CardsAdapter extends RecyclerView.Adapter<CardsAdapter.CardsViewHol
             });
 
             builder.show();
-
-            return true;
         }
     }
 }

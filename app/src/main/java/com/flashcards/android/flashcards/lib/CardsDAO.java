@@ -26,8 +26,8 @@ public interface CardsDAO {
     @Query("SELECT * FROM Card WHERE deckId = :deckId")
     public LiveData<List<Card>> getAllCards (String deckId);
 
-    @Query("SELECT * FROM CARD WHERE cardId = :id AND deckId = :deckId")
-    public LiveData<Card> getCard(int id, String deckId);
+    @Query("SELECT * FROM Card WHERE cardId = :cardId AND deckId = :deckId")
+    public LiveData<Card> getCard(int cardId, String deckId);
 
     @Update(onConflict = OnConflictStrategy.REPLACE)
     public void setCard(Card card);
