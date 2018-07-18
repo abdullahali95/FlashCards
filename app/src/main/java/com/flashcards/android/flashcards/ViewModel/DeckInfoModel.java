@@ -24,7 +24,6 @@ public class DeckInfoModel extends AndroidViewModel {
     public DeckInfoModel(@NonNull Application application) {
         super(application);
         this.repo = new DeckInfoRepo(application);
-        cards = repo.getAllCards("d317109d-1f52-4bdb-86ef-112245e1fc95");
     }
 
     /**
@@ -34,8 +33,13 @@ public class DeckInfoModel extends AndroidViewModel {
      */
     public LiveData<Deck> getDeck (String deckId) {
         currentDeck = repo.getDeck(deckId).getValue();
-        cards = repo.getAllCards(deckId);
+        getAllCards(deckId);
         return repo.getDeck(deckId);
+    }
+
+    public LiveData<List<Card>> getAllCards (String deckId) {
+        cards = repo.getAllCards(deckId);
+        return cards;
     }
 
     public void createCard() {
@@ -44,15 +48,28 @@ public class DeckInfoModel extends AndroidViewModel {
         task.execute(deckId);
     }
 
-    private class CreateCardTask extends AsyncTask<String, Void, Void> {
+    private class CreateCardTask extends AsyncTask<String, Void, Long> {
 
         @Override
-        protected Void doInBackground(String... strings) {
+        protected Long doInBackground(String... strings) {
             Card newCard = new Card(strings[0]);
-            String isNull = String.valueOf((newCard == null));
-            Log.d(isNull, "New Card is Null: ");
-            repo.createCard(newCard);
-            return null;
+
+            return repo.createCard(newCard);
+        }
+    }
+
+
+    public void deleteCard(Card card) {
+        DeleteCardTask task = new DeleteCardTask();
+        task.execute(card);
+    }
+
+    private class DeleteCardTask extends AsyncTask<Card, Void, Integer> {
+
+        @Override
+        protected Integer doInBackground(Card... cards) {
+            Card card = cards[0];
+            return repo.deleteCard(card);
         }
     }
 

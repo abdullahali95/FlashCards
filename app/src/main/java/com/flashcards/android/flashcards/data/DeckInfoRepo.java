@@ -8,7 +8,6 @@ import com.flashcards.android.flashcards.lib.Card;
 import com.flashcards.android.flashcards.lib.CardsDAO;
 import com.flashcards.android.flashcards.lib.Deck;
 import com.flashcards.android.flashcards.lib.DeckDAO;
-import com.flashcards.android.flashcards.lib.Progress;
 import com.flashcards.android.flashcards.lib.ProgressDAO;
 
 import java.util.List;
@@ -37,11 +36,15 @@ public class DeckInfoRepo {
         return cardsDAO.getAllCards(deckId);
     }
 
-    public void createCard(Card card) {
+    public Long createCard(Card card) {
         String isNull = String.valueOf((card == null));
         Log.d(isNull, "New Card is Null: ");
 
-        cardsDAO.setCard(card);
+
+        return cardsDAO.createCard(card);
     }
 
+    public int deleteCard(Card card) {
+        return cardsDAO.deleteCard(card);
+    }
 }

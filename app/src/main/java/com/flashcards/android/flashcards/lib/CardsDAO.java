@@ -8,8 +8,6 @@ import android.arch.persistence.room.OnConflictStrategy;
 import android.arch.persistence.room.Query;
 import android.arch.persistence.room.Update;
 
-import com.flashcards.android.flashcards.lib.Card;
-
 import java.util.List;
 
 /**
@@ -35,10 +33,10 @@ public interface CardsDAO {
     public void setCard(Card card);
 
     @Delete
-    public void deleteCard(Card card);
+    public int deleteCard(Card card);
 
     @Insert (onConflict = OnConflictStrategy.REPLACE)
-    public void createCard(Card card);
+    public Long createCard(Card card);
 
     @Query("UPDATE Card SET question = :question WHERE cardId =:id AND deckId = :deckId")
     public void setQuestion(int id, String deckId, String question);

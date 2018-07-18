@@ -46,7 +46,7 @@ public abstract class FlashCardsDatabase extends RoomDatabase {
 
     // Adding test data to database
     //TODO: delete this once working
-
+//
 //    private static RoomDatabase.Callback sRoomDatabaseCallback = new RoomDatabase.Callback(){
 //
 //        @Override
@@ -76,7 +76,7 @@ public abstract class FlashCardsDatabase extends RoomDatabase {
 //            // Not needed if you only populate on creation.
 //            // deckDAO.deleteAll();
 //
-//            Card card = new Card("d317109d-1f52-4bdb-86ef-112245e1fc95");
+//            Card card = new Card("0d2a51db-9b01-4f76-93e5-2621c451e158");
 //            cardsDAO.createCard(card);
 //            return null;
 //        }

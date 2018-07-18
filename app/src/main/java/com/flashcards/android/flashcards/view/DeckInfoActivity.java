@@ -42,6 +42,7 @@ public class DeckInfoActivity extends AppCompatActivity {
     private TextView deckInfo;
     private FloatingActionButton fab;
     private Button testButton;
+    private Context context;
 
     // Model objects
     private Deck deck;
@@ -53,37 +54,28 @@ public class DeckInfoActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_deck_info_floating);
 
-        // Add model
-        deckInfoModel = ViewModelProviders.of(this).get(DeckInfoModel.class);
-
+        context = this;
 
         // Get info of clicked deck
         Bundle bundle = getIntent().getExtras();
         String deckId = bundle.getString("Deck");
 
-        final Context context = this;
+        // Add model
+        deckInfoModel = ViewModelProviders.of(this).get(DeckInfoModel.class);
+        deckInfoModel.getDeck(deckId);
 
-//        String test = deckInfoModel.getDeck(deckId).getValue().getName();
-//        Toast.makeText(this, test, Toast.LENGTH_SHORT).show();
-        Log.d(deckId, "onCreate: ");
+        initView();
+        initRecyclerView();
 
         // Add observer for changes to decks
         deckInfoModel.getDeck(deckId).observe(this, new Observer<Deck>() {
             @Override
             public void onChanged(@Nullable Deck deck) {
                 setDeck(deck);
-                if (deck != null) {
-                    String test = deck.getName();
-                    Toast.makeText(context, test, Toast.LENGTH_SHORT).show();
-                }
             }
         });
 
-        initView();
-
-        initRecyclerView();
-
-        deckInfoModel.getCards().observe(this, new Observer<List<Card>>() {
+        deckInfoModel.getAllCards(deckId).observe(this, new Observer<List<Card>>() {
             @Override
             public void onChanged(@Nullable List<Card> cards) {
                 adapter.setCards(cards);
@@ -103,7 +95,9 @@ public class DeckInfoActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 deckInfoModel.createCard();
+
             }
         });
     }
