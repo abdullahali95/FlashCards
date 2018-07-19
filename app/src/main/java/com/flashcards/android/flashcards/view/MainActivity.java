@@ -18,7 +18,7 @@ import android.widget.Toast;
 
 import com.flashcards.android.flashcards.R;
 import com.flashcards.android.flashcards.ViewModel.MainModel;
-import com.flashcards.android.flashcards.lib.Deck;
+import com.flashcards.android.flashcards.lib.model.Deck;
 
 import java.util.List;
 

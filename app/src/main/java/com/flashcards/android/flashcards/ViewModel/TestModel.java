@@ -6,10 +6,10 @@ import android.arch.lifecycle.LiveData;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import com.flashcards.android.flashcards.data.TestRepo;
-import com.flashcards.android.flashcards.lib.Card;
-import com.flashcards.android.flashcards.lib.Deck;
-import com.flashcards.android.flashcards.lib.Progress;
+import com.flashcards.android.flashcards.data.repo.TestRepo;
+import com.flashcards.android.flashcards.lib.model.Card;
+import com.flashcards.android.flashcards.lib.model.Deck;
+import com.flashcards.android.flashcards.lib.model.Progress;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -21,10 +21,9 @@ public class TestModel extends AndroidViewModel {
      * Created by Abdullah Ali
      */
 
-    // Uses minHeap to create priority Queue
     private Deck testDeck;
     private List<Card> testCards;
-    private PriorityQueue<Card> testQueue;
+    private PriorityQueue<Card> testQueue; // Uses minHeap to create priority Queue
     private Card currentCard;
     private Card lastCard;
     private int deckSize;
@@ -54,10 +53,6 @@ public class TestModel extends AndroidViewModel {
         makeQueue();
 
         this.deckSize = testQueue.size();
-        initialiseLearntScores();
-
-        this.lastCard = testQueue.poll();
-        testQueue.add(lastCard);
 
         //Set the date of last use to today's date.
         SimpleDateFormat sf = new SimpleDateFormat("dd-MM-yyyy");
@@ -67,28 +62,17 @@ public class TestModel extends AndroidViewModel {
 //        TODO: repo.setDeck(testDeck);
     }
 
+
     public LiveData<List<Card>> getTestCards() {
         return repo.getAllCards(testDeck.getDeckId());
     }
 
 
-
-    private void initialiseLearntScores() {
-        for (Card card : testQueue) {
-            card.getProgress().generateLearntScore(deckSize);
-        }
-    }
-
     public void makeQueue() {
-        Log.d(String.valueOf(testCards.size()), "makeQueue: ");
         int size = testCards.size();
 
         for (Card card:testCards) {
-            if (card.getProgress() == null) {
-                card.setProgress(new Progress(card.getCardId(), card.getDeckId()));
-            }
-
-            card.getProgress().generateLearntScore(size);
+            card.getLearntScore(size);
         }
 
         testQueue.addAll(testCards);
@@ -103,15 +87,25 @@ public class TestModel extends AndroidViewModel {
     }
 
     public Card getCard() {
-        currentCard = testQueue.poll();
-        if (currentCard.equals(lastCard)) {
-            // If the drawn card is the same as last time, redraw the card.
+        if (currentCard != null) {
+            lastCard = currentCard;
+        }
 
-            Card card2 = testQueue.poll();
-            testQueue.add(currentCard);
-            currentCard = card2;
+        currentCard = testQueue.poll();
+
+        Log.d("Queue size ", String.valueOf(testQueue.size()));
+
+        if (lastCard != null) {
+            testQueue.add(lastCard);
+            for (Card card : testQueue) {
+                Log.d("Card: ", card.toString());
+                Log.d("LS: ", String.valueOf(card.getLearntScore()));
+
+            }
 
         }
+
+        Log.d("Queue size ", String.valueOf(testQueue.size()));
 
         return currentCard;
     }
@@ -120,48 +114,51 @@ public class TestModel extends AndroidViewModel {
     public boolean markCorrect() {
         incAttempts();
         incCorrect();
-        //TODO: card.getProgress().addAnswer(Boolean.TRUE);
+        currentCard.addAnswer(Boolean.TRUE);
+
+        AddAnswerTask task = new AddAnswerTask();
+        task.execute();
+
         generateLearntScore();
-        lastCard = currentCard;
-        testQueue.add(currentCard);
         return true;
     }
 
     public boolean skip() {
-
         generateLearntScore();
-        lastCard = currentCard;
-        testQueue.add(currentCard);
         return true;
     }
 
     //
     public boolean markIncorrect() {
         incAttempts();
-        // TODO: card.getProgress().addAnswer(Boolean.FALSE);
+        currentCard.addAnswer(Boolean.FALSE);
+
+        AddAnswerTask task = new AddAnswerTask();
+        task.execute();
+
         generateLearntScore();
-        lastCard = currentCard;
-        testQueue.add(currentCard);
         return true;
     }
 
 
     public void incAttempts () {
-        IncAttemptsTask task = new IncAttemptsTask();
+        currentCard.setAttempts(currentCard.getAttempts()+1);
+        SetAttemptsTask task = new SetAttemptsTask();
         task.execute();
     }
 
-    public class IncAttemptsTask extends AsyncTask<Void, Void, Boolean> {
+    public class SetAttemptsTask extends AsyncTask<Void, Void, Boolean> {
 
         @Override
         protected Boolean doInBackground(Void... voids) {
-            repo.incAttempts(currentCard.getCardId(), currentCard.getDeckId());
+            repo.setAttempts(currentCard.getCardId(), currentCard.getDeckId(), currentCard.getAttempts());
             return true;
         }
     }
 
 
     public void incCorrect () {
+        currentCard.setCorrect(currentCard.getCorrect()+1);
         IncCorrectTask task = new IncCorrectTask();
         task.execute();
     }
@@ -170,28 +167,43 @@ public class TestModel extends AndroidViewModel {
 
         @Override
         protected Boolean doInBackground(Void... voids) {
-            repo.incCorrect(currentCard.getCardId(), currentCard.getDeckId());
+            repo.setCorrect(currentCard.getCardId(), currentCard.getDeckId(), currentCard.getCorrect());
+            return true;
+        }
+    }
+
+    public class AddAnswerTask extends AsyncTask<Void, Void, Boolean> {
+
+        @Override
+        protected Boolean doInBackground(Void... bools) {
+            repo.setLastTen(currentCard.getCardId(), currentCard.getDeckId(), currentCard.getLastTen());
             return true;
         }
     }
 
 
     public void generateLearntScore () {
-        setProgressTask task = new setProgressTask();
+        currentCard.getLearntScore(deckSize);
+        setLearntScoreTask task = new setLearntScoreTask();
         task.execute();
     }
 
-    public class setProgressTask extends AsyncTask<Void, Void, Boolean> {
+    public class setLearntScoreTask extends AsyncTask<Void, Void, Boolean> {
 
         @Override
         protected Boolean doInBackground(Void... voids) {
-            currentCard.getProgress().generateLearntScore(deckSize);
-            repo.setProgress(currentCard.getProgress());
+            repo.setLearntScore(currentCard.getCardId(),
+                    currentCard.getDeckId(), currentCard.getLearntScore());
             return true;
         }
+    }
+
+    public void setCurrentCard(Card currentCard) {
+        this.currentCard = currentCard;
     }
 
     public void setTestCards(List<Card> testCards) {
         this.testCards = testCards;
     }
+
 }

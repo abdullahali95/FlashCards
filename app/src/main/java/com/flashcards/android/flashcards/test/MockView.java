@@ -1,10 +1,5 @@
 package com.flashcards.android.flashcards.test;
 
-import com.flashcards.android.flashcards.lib.Card;
-import com.flashcards.android.flashcards.lib.Deck;
-import com.flashcards.android.flashcards.ViewModel.TestModel;
-import com.flashcards.android.flashcards.data.MockDeck;
-
 public class MockView {
 //    private Deck mock;
 //    private TestModel model;

@@ -1,4 +1,4 @@
-package com.flashcards.android.flashcards.lib;
+package com.flashcards.android.flashcards.lib.DAO;
 
 import android.arch.lifecycle.LiveData;
 import android.arch.persistence.room.Dao;
@@ -8,7 +8,7 @@ import android.arch.persistence.room.OnConflictStrategy;
 import android.arch.persistence.room.Query;
 import android.arch.persistence.room.Update;
 
-import com.flashcards.android.flashcards.lib.Progress;
+import com.flashcards.android.flashcards.lib.model.Progress;
 import com.google.common.collect.EvictingQueue;
 
 import java.util.List;
@@ -51,7 +51,7 @@ public interface ProgressDAO {
     public void setProgress(Progress progress);
 
     //TODO: fix the storage of these
-//    @Query("UPDATE Progress SET lastTen = :lastTen WHERE 'cardId' =:cardId AND 'deckId' = :deckId")
-//    public void setLastTen(int cardId, String deckId, EvictingQueue<Boolean> lastTen);
+    @Query("UPDATE Progress SET lastTen = :lastTen WHERE cardId =:cardId AND deckId = :deckId")
+    public void setLastTen(int cardId, String deckId, EvictingQueue<Boolean> lastTen);
 
 }

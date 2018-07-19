@@ -4,27 +4,28 @@ import android.arch.persistence.db.SupportSQLiteDatabase;
 import android.arch.persistence.room.Database;
 import android.arch.persistence.room.Room;
 import android.arch.persistence.room.RoomDatabase;
+import android.arch.persistence.room.TypeConverter;
+import android.arch.persistence.room.TypeConverters;
+import android.arch.persistence.room.migration.Migration;
 import android.content.Context;
-import android.os.AsyncTask;
-import android.support.annotation.NonNull;
 
-import com.flashcards.android.flashcards.lib.Card;
-import com.flashcards.android.flashcards.lib.CardsDAO;
-import com.flashcards.android.flashcards.lib.Deck;
-import com.flashcards.android.flashcards.lib.DeckDAO;
-import com.flashcards.android.flashcards.lib.Progress;
-import com.flashcards.android.flashcards.lib.ProgressDAO;
+import com.flashcards.android.flashcards.lib.model.Card;
+import com.flashcards.android.flashcards.lib.DAO.CardsDAO;
+import com.flashcards.android.flashcards.lib.model.Deck;
+import com.flashcards.android.flashcards.lib.DAO.DeckDAO;
+import com.flashcards.android.flashcards.lib.model.Progress;
+import com.flashcards.android.flashcards.lib.DAO.ProgressDAO;
 
 /**
  * Created by Abdullah Ali on 15/07/2018
  */
 
-@Database(entities = {Card.class, Deck.class, Progress.class}, version = 2, exportSchema = false)
+@Database(entities = {Card.class, Deck.class}, version = 4, exportSchema = false)
+@TypeConverters({Converters.class})
 public abstract class FlashCardsDatabase extends RoomDatabase {
 
     public abstract CardsDAO cardsDAO();
     public abstract DeckDAO deckDAO();
-    public abstract ProgressDAO progressDAO();
 
     // Database lives here
     private static FlashCardsDatabase flashCardsDB;
@@ -43,6 +44,16 @@ public abstract class FlashCardsDatabase extends RoomDatabase {
         }
         return flashCardsDB;
     }
+
+
+//    public static final Migration MIGRATION_2_3 = new Migration(2, 3) {
+//        @Override
+//        public void migrate(SupportSQLiteDatabase flashCardsDB) {
+//            flashCardsDB.execSQL("ALTER TABLE product "
+//                    + " ADD COLUMN lastTen STRING");
+//        }
+//    };
+
 
     // Adding test data to database
     //TODO: delete this once working

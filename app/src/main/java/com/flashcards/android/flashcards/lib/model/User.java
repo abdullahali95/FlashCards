@@ -1,4 +1,4 @@
-package com.flashcards.android.flashcards.lib;
+package com.flashcards.android.flashcards.lib.model;
 
 import java.util.ArrayList;
 

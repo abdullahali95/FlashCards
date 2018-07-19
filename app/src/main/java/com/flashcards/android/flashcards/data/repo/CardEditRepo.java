@@ -1,14 +1,15 @@
-package com.flashcards.android.flashcards.data;
+package com.flashcards.android.flashcards.data.repo;
 
 import android.app.Application;
 import android.arch.lifecycle.LiveData;
 
-import com.flashcards.android.flashcards.lib.Card;
-import com.flashcards.android.flashcards.lib.CardsDAO;
-import com.flashcards.android.flashcards.lib.Deck;
-import com.flashcards.android.flashcards.lib.DeckDAO;
-import com.flashcards.android.flashcards.lib.Progress;
-import com.flashcards.android.flashcards.lib.ProgressDAO;
+import com.flashcards.android.flashcards.data.FlashCardsDatabase;
+import com.flashcards.android.flashcards.lib.model.Card;
+import com.flashcards.android.flashcards.lib.DAO.CardsDAO;
+import com.flashcards.android.flashcards.lib.model.Deck;
+import com.flashcards.android.flashcards.lib.DAO.DeckDAO;
+import com.flashcards.android.flashcards.lib.model.Progress;
+import com.flashcards.android.flashcards.lib.DAO.ProgressDAO;
 
 import java.util.List;
 
@@ -20,14 +21,12 @@ import javax.inject.Inject;
 public class CardEditRepo {
     private final CardsDAO cardsDAO;
     private final DeckDAO deckDAO;
-    private final ProgressDAO progressDAO;
 
     @Inject
     public CardEditRepo(Application application) {
         FlashCardsDatabase db = FlashCardsDatabase.getFlashCardsDB(application);
         this.cardsDAO = db.cardsDAO();
         this.deckDAO = db.deckDAO();
-        this.progressDAO = db.progressDAO();
     }
 
     public void createCard(Card card) {
@@ -62,7 +61,4 @@ public class CardEditRepo {
         cardsDAO.deleteCard(card);
     }
 
-    public void addProgress (Progress progress) {
-        progressDAO.addProgress(progress);
-    }
 }

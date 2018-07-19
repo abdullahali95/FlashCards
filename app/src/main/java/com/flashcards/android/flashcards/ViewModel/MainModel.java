@@ -3,11 +3,10 @@ package com.flashcards.android.flashcards.ViewModel;
 import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.LiveData;
-import android.arch.lifecycle.ViewModel;
 import android.os.AsyncTask;
 
-import com.flashcards.android.flashcards.data.MainRepo;
-import com.flashcards.android.flashcards.lib.Deck;
+import com.flashcards.android.flashcards.data.repo.MainRepo;
+import com.flashcards.android.flashcards.lib.model.Deck;
 
 import java.util.List;
 

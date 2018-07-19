@@ -5,11 +5,10 @@ import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.LiveData;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
-import android.util.Log;
 
-import com.flashcards.android.flashcards.data.DeckInfoRepo;
-import com.flashcards.android.flashcards.lib.Card;
-import com.flashcards.android.flashcards.lib.Deck;
+import com.flashcards.android.flashcards.data.repo.DeckInfoRepo;
+import com.flashcards.android.flashcards.lib.model.Card;
+import com.flashcards.android.flashcards.lib.model.Deck;
 
 import java.util.List;
 

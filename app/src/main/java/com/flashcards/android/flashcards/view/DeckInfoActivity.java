@@ -16,8 +16,8 @@ import android.widget.TextView;
 
 import com.flashcards.android.flashcards.R;
 import com.flashcards.android.flashcards.ViewModel.DeckInfoModel;
-import com.flashcards.android.flashcards.lib.Card;
-import com.flashcards.android.flashcards.lib.Deck;
+import com.flashcards.android.flashcards.lib.model.Card;
+import com.flashcards.android.flashcards.lib.model.Deck;
 
 import java.util.ArrayList;
 import java.util.List;

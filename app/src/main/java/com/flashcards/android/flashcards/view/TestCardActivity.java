@@ -11,9 +11,8 @@ import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.widget.Button;
 import com.flashcards.android.flashcards.R;
-import com.flashcards.android.flashcards.ViewModel.MainModel;
-import com.flashcards.android.flashcards.lib.Card;
-import com.flashcards.android.flashcards.lib.Deck;
+import com.flashcards.android.flashcards.lib.model.Card;
+import com.flashcards.android.flashcards.lib.model.Deck;
 import com.flashcards.android.flashcards.ViewModel.TestModel;
 import com.transitionseverywhere.*;
 
@@ -28,9 +27,7 @@ import static com.flashcards.android.flashcards.R.color.*;
  */
 public class TestCardActivity extends AppCompatActivity {
     ViewGroup transitionsContainer;
-    Deck testDeck;
     TestModel model;
-    Card currentCard;
     WebView card;
     String question;
     String answer;
@@ -61,15 +58,14 @@ public class TestCardActivity extends AppCompatActivity {
         model.getAllCards(deckId).observe(this, new Observer<List<Card>>() {
             @Override
             public void onChanged(@Nullable List<Card> cards) {
-                if (cards.size() > 0) {
+                if (cards.size() > 0 && model.getCurrentCard() == null) {
                     model.initQueue(cards);
-                    if (currentCard == null) {
-                        model.setTestCards(cards);
-                        currentCard = model.getCurrentCard();
-                        question = currentCard.getQuestion();
-                        card.loadUrl("about:blank");
-                        card.loadData(question, "text/html", "utf-8");
-                    }
+                    model.setTestCards(cards);
+                    question = model.getCurrentCard().getQuestion();
+                    card.loadUrl("about:blank");
+                    card.loadData(question, "text/html", "utf-8");
+                    Log.d("updated QUEUE", "onChanged: ");
+
                 }
             }
         });
@@ -120,9 +116,7 @@ public class TestCardActivity extends AppCompatActivity {
     public void getNewCard () {
 
         // TODO: Add slide animation for card
-
-        currentCard = model.getCard();
-        question = currentCard.getQuestion();
+        question = model.getCard().getQuestion();
         card.loadUrl("about:blank");
         card.loadData(question, "text/html", "utf-8");
 
@@ -233,7 +227,7 @@ public class TestCardActivity extends AppCompatActivity {
                 new Runnable() {
                     @Override public void run() {
 
-                        answer = currentCard.getAnswer();
+                        answer = model.getCurrentCard().getAnswer();
                         card.loadUrl("about:blank");
                         card.loadData(answer, "text/html", "utf-8");
 

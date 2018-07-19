@@ -1,14 +1,15 @@
-package com.flashcards.android.flashcards.data;
+package com.flashcards.android.flashcards.data.repo;
 
 import android.app.Application;
 import android.arch.lifecycle.LiveData;
 
-import com.flashcards.android.flashcards.lib.Card;
-import com.flashcards.android.flashcards.lib.CardsDAO;
-import com.flashcards.android.flashcards.lib.Deck;
-import com.flashcards.android.flashcards.lib.DeckDAO;
-import com.flashcards.android.flashcards.lib.Progress;
-import com.flashcards.android.flashcards.lib.ProgressDAO;
+import com.flashcards.android.flashcards.data.FlashCardsDatabase;
+import com.flashcards.android.flashcards.lib.model.Card;
+import com.flashcards.android.flashcards.lib.DAO.CardsDAO;
+import com.flashcards.android.flashcards.lib.model.Deck;
+import com.flashcards.android.flashcards.lib.DAO.DeckDAO;
+import com.flashcards.android.flashcards.lib.model.Progress;
+import com.flashcards.android.flashcards.lib.DAO.ProgressDAO;
 import com.google.common.collect.EvictingQueue;
 
 import java.util.List;
@@ -20,7 +21,6 @@ import javax.inject.Inject;
  */
 public class TestRepo {
     private final CardsDAO cardsDAO;
-    private final ProgressDAO progressDAO;
     private final DeckDAO deckDAO;
 
     @Inject
@@ -28,7 +28,6 @@ public class TestRepo {
         FlashCardsDatabase db = FlashCardsDatabase.getFlashCardsDB(application);
         this.cardsDAO = db.cardsDAO();
         this.deckDAO = db.deckDAO();
-        this.progressDAO = db.progressDAO();
     }
 
     /**
@@ -50,20 +49,12 @@ public class TestRepo {
         return cardsDAO.getCard(cardId, deckId);
     }
 
-    public LiveData<List<Progress>> getAllProgress (String deckId) {
-        return progressDAO.getAllProgress(deckId);
-    }
-
-    public LiveData<Progress> getProgress (int cardId, String deckId) {
-        return progressDAO.getProgress(cardId, deckId);
-    }
-
     public void incAttempts(int cardId, String deckId) {
-        progressDAO.incAttempts(cardId, deckId);
+        cardsDAO.incAttempts(cardId, deckId);
     }
 
     public void incCorrect(int cardId, String deckId) {
-        progressDAO.incCorrect(cardId, deckId);
+        cardsDAO.incCorrect(cardId, deckId);
     }
 
     public LiveData<Deck> getDeck(String deckId) {
@@ -74,16 +65,19 @@ public class TestRepo {
         deckDAO.setDeck(deck);
     }
 
-    public void setProgress(Progress progress) {
-        progressDAO.setProgress(progress);
+    public void setLastTen(int cardId, String deckId, EvictingQueue<Boolean> lastTen) {
+        cardsDAO.setLastTen(cardId, deckId, lastTen);
     }
 
-    //TODO: fix evicting queue
-//    public void setLastTen(int cardId, String deckId, EvictingQueue<Boolean> lastTen) {
-//        progressDAO.setLastTen(cardId, deckId, lastTen);
-//    }
-//
-//    public void setLearntScore(int cardId, String deckId, int learntScore) {
-//        progressDAO.setLearntScore(cardId, deckId, learntScore);
-//    }
+    public void setLearntScore(int cardId, String deckId, int learntScore) {
+        cardsDAO.setLearntScore(cardId, deckId, learntScore);
+    }
+
+    public void setCorrect(int cardId, String deckId, int correct) {
+        cardsDAO.setCorrect (cardId, deckId, correct);
+    }
+
+    public void setAttempts(int cardId, String deckId, int attempts) {
+        cardsDAO.setAttempts (cardId, deckId, attempts);
+    }
 }

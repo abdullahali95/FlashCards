@@ -3,15 +3,11 @@ package com.flashcards.android.flashcards.ViewModel;
 import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.LiveData;
-import android.arch.lifecycle.ViewModel;
 import android.os.AsyncTask;
 
-import com.flashcards.android.flashcards.data.CardEditRepo;
-import com.flashcards.android.flashcards.lib.Card;
-import com.flashcards.android.flashcards.lib.Deck;
-import com.flashcards.android.flashcards.lib.Progress;
-
-import java.util.List;
+import com.flashcards.android.flashcards.data.repo.CardEditRepo;
+import com.flashcards.android.flashcards.lib.model.Card;
+import com.flashcards.android.flashcards.lib.model.Progress;
 
 /**
  * Created by Abdullah Ali on 12/07/2018
@@ -31,10 +27,9 @@ public class EditModel extends AndroidViewModel {
     // Methods dependant of repo
 
 
-    public void addCard(Card card, Progress progress) {
+    public void addCard(Card card) {
         //TODO: check if these need to be initialised better
         Card newCard = card;
-        newCard.setProgress(progress);
         AddCardTask task = new AddCardTask();
         task.execute(newCard);
     }
@@ -49,7 +44,6 @@ public class EditModel extends AndroidViewModel {
             @Override
             protected Void doInBackground(Card... cards) {
                 repo.createCard(cards[0]);
-                repo.addProgress(cards[0].getProgress());
                 return null;
             }
         }

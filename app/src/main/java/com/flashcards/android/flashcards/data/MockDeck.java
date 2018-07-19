@@ -1,7 +1,7 @@
 package com.flashcards.android.flashcards.data;
 
-import com.flashcards.android.flashcards.lib.Card;
-import com.flashcards.android.flashcards.lib.Deck;
+import com.flashcards.android.flashcards.lib.model.Card;
+import com.flashcards.android.flashcards.lib.model.Deck;
 
 public class MockDeck {
 
