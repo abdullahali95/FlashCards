@@ -1,11 +1,17 @@
 package com.flashcards.android.flashcards.view;
 
+import android.app.Activity;
+import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v4.view.ViewCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +23,11 @@ import com.flashcards.android.flashcards.R;
 import com.flashcards.android.flashcards.ViewModel.MainModel;
 import com.flashcards.android.flashcards.lib.model.Deck;
 
+import org.ocpsoft.prettytime.PrettyTime;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -26,11 +37,13 @@ public class DeckAdapter extends RecyclerView.Adapter<DeckAdapter.DeckViewHolder
     private List<Deck> decks;
     private MainModel model;
     private Context context;
+    private Activity activity;
 
-    public DeckAdapter(List<Deck> decks, MainModel mainModel, Context context) {
+    public DeckAdapter(List<Deck> decks, MainModel mainModel, Context context, Activity activity) {
         this.decks = decks;
         this.model = mainModel;
         this.context = context;
+        this.activity = activity;
     }
 
     public void setDecks(List<Deck> decks) {
@@ -46,14 +59,29 @@ public class DeckAdapter extends RecyclerView.Adapter<DeckAdapter.DeckViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull DeckViewHolder holder, int position) {
-        holder.deckName.setText(decks.get(position).getName());
+        Deck currentDeck = decks.get(position);
 
-        //TODO: format last used date properly
-        holder.lastUsed.setText(decks.get(position).getLastUsed());
+        // Set deck name
+        holder.deckName.setText(currentDeck.getName());
 
-        //TODO: this probably needs data from model
-        String totalCard = decks.get(position).getSize() + " cards";
-        holder.cardCount.setText(totalCard);
+        // Set cards in deck
+        String totalCard = (currentDeck.getDeckSize() == 1) ? " card" : " cards";
+        holder.cardCount.setText(currentDeck.getDeckSize() + totalCard);
+
+        // Set time since last tested
+        Date convertedDate = new Date();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd kk:mm:ss");
+        try {
+            convertedDate = dateFormat.parse(decks.get(position).getLastUsed());
+            PrettyTime p  = new PrettyTime();
+            String datetime= p.format(convertedDate);
+            datetime = "last used: " + datetime;
+            holder.lastUsed.setText(datetime);
+
+        } catch (ParseException e) {
+            holder.lastUsed.setText(currentDeck.getLastUsed());
+        }
+
 
     }
 
@@ -100,7 +128,11 @@ public class DeckAdapter extends RecyclerView.Adapter<DeckAdapter.DeckViewHolder
             } else {
                 Intent intent = new Intent(this.context, DeckInfoActivity.class);
                 intent.putExtra("Deck", deck.getDeckId());
-                this.context.startActivity(intent);
+
+                ActivityOptionsCompat options = ActivityOptionsCompat.
+                        makeSceneTransitionAnimation(activity, deckName, "deck_title_transition");
+
+                this.context.startActivity(intent, options.toBundle());
 
             }
 

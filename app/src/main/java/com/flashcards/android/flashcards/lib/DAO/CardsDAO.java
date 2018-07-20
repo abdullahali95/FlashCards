@@ -34,7 +34,7 @@ public interface CardsDAO {
     public void changeDeck(int id, String oldDeckId, String newDeckId);
 
     @Query("SELECT COUNT(*) FROM Card WHERE deckId = :deckId")
-    public LiveData<Integer> getDeckSize(String deckId);
+    public Integer getAllCardsLength(String deckId);
 
     @Query("SELECT * FROM Card WHERE deckId = :deckId")
     public LiveData<List<Card>> getAllCards (String deckId);

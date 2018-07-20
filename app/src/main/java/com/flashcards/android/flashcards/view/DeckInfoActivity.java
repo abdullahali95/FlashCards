@@ -3,14 +3,17 @@ package com.flashcards.android.flashcards.view;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -48,7 +51,12 @@ public class DeckInfoActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.hide();
+
         setContentView(R.layout.activity_deck_info_floating);
+
 
         context = this;
 
@@ -95,13 +103,24 @@ public class DeckInfoActivity extends AppCompatActivity {
 
                 deckInfoModel.createCard();
 
+
+
+            }
+        });
+
+        testButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(DeckInfoActivity.this, TestCardActivity.class);
+                intent.putExtra("deckId", deck.getDeckId());
+                startActivity(intent);
             }
         });
     }
 
     private void initRecyclerView() {
         recyclerView = (RecyclerView) findViewById(R.id.deck_info_rec);
-        adapter = new CardsAdapter(deckInfoModel, cards, (Context) this);
+        adapter = new CardsAdapter(deckInfoModel, cards, (Context) this, this);
 
         staggeredGridLayoutManager = new StaggeredGridLayoutManager(columns, LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(staggeredGridLayoutManager);

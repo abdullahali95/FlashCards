@@ -18,6 +18,7 @@ public class Deck {
     private String name;
     private String created;
     private String lastUsed;
+    private int deckSize;
     @Ignore
     private ArrayList<Card> cards;
 
@@ -47,7 +48,7 @@ public class Deck {
 
 
     private void initialiseDates() {
-        SimpleDateFormat sf = new SimpleDateFormat("dd-MM-yyyy");
+        SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd kk:mm:ss");
         Calendar cal = Calendar.getInstance();
         String date = sf.format(cal.getTime());
         created = date;
@@ -97,6 +98,14 @@ public class Deck {
 
     public void setCards(ArrayList<Card> cards) {
         this.cards = cards;
+    }
+
+    public int getDeckSize() {
+        return deckSize;
+    }
+
+    public void setDeckSize(int deckSize) {
+        this.deckSize = deckSize;
     }
 
     public boolean addCard (Card card) {

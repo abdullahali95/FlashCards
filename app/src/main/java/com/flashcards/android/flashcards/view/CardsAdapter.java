@@ -1,8 +1,10 @@
 package com.flashcards.android.flashcards.view;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -29,12 +31,13 @@ public class CardsAdapter extends RecyclerView.Adapter<CardsAdapter.CardsViewHol
     private List<Card> cards;
     private DeckInfoModel model;
     private Context context;
+    private Activity activity;
 
-    public CardsAdapter(DeckInfoModel model, ArrayList<Card> cards, Context context) {
+    public CardsAdapter(DeckInfoModel model, ArrayList<Card> cards, Context context, Activity activity) {
         this.model = model;
         this.cards = cards;
         this.context = context;
-
+        this.activity = activity;
     }
 
     public void setCards(List<Card> cards) {
@@ -110,7 +113,11 @@ public class CardsAdapter extends RecyclerView.Adapter<CardsAdapter.CardsViewHol
             Intent intent = new Intent(this.context, CardEditActivity.class);
             intent.putExtra("cardId", card.getCardId());
             intent.putExtra("deckId", card.getDeckId());
-            this.context.startActivity(intent);
+
+            ActivityOptionsCompat options = ActivityOptionsCompat.
+                    makeSceneTransitionAnimation(activity, cardView, "card_transition");
+
+            this.context.startActivity(intent, options.toBundle());
         }
 
         public void deleteCard() {

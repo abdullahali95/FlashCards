@@ -16,12 +16,10 @@ import java.util.List;
 public class MainRepo {
 
     private final DeckDAO deckDAO;
-    private final CardsDAO cardDAO;
 
     public MainRepo(Application application) {
         FlashCardsDatabase db = FlashCardsDatabase.getFlashCardsDB(application);
         this.deckDAO = db.deckDAO();
-        this.cardDAO = db.cardsDAO();
     }
 
     public LiveData<List<Deck>> getAllDecks() {
@@ -37,7 +35,7 @@ public class MainRepo {
     }
 
     public LiveData<Integer> getDeckSize (String deckId) {
-        return cardDAO.getDeckSize(deckId);
+        return deckDAO.getDeckSize(deckId);
     }
 
 }

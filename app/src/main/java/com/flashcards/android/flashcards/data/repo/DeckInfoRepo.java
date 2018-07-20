@@ -46,4 +46,12 @@ public class DeckInfoRepo {
     public int deleteCard(Card card) {
         return cardsDAO.deleteCard(card);
     }
+
+    public int getAllCardsLength(String deckId) {
+        return cardsDAO.getAllCardsLength(deckId);
+    }
+
+    public void setDeckSize(String deckId, int newDeckSize) {
+        deckDAO.setDeckSize(deckId, newDeckSize);
+    }
 }

@@ -80,4 +80,8 @@ public class TestRepo {
     public void setAttempts(int cardId, String deckId, int attempts) {
         cardsDAO.setAttempts (cardId, deckId, attempts);
     }
+
+    public void setLastUsed(String deckId, String date) {
+        deckDAO.setLastUsed(deckId, date);
+    }
 }

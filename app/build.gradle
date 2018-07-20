@@ -31,6 +31,7 @@ dependencies {
     api 'com.google.guava:guava:25.1-android'
     implementation "com.andkulikov:transitionseverywhere:1.8.0"
     implementation 'com.android.support:cardview-v7:26.1.0'
+    implementation 'org.ocpsoft.prettytime:prettytime:4.0.1.Final'
 
     def room_version = "1.1.1"
     implementation "android.arch.persistence.room:runtime:$room_version"

@@ -38,14 +38,19 @@ public interface DeckDAO {
    @Query("SELECT * FROM Deck WHERE deckId = :deckId")
     public LiveData<Deck> getDeck (String deckId);
 
-    @Query("SELECT name FROM Deck WHERE deckId = :uuid")
-    public LiveData<String> getName(String uuid);
+    @Query("SELECT name FROM Deck WHERE deckId = :deckId")
+    public LiveData<String> getName(String deckId);
 
-    @Query("UPDATE Deck SET name = :name WHERE deckId =:uuid")
-    public void setName(String uuid, String name);
+    @Query("UPDATE Deck SET name = :name WHERE deckId =:deckId")
+    public void setName(String deckId, String name);
 
-    @Query("UPDATE Deck SET lastUsed = :lastUsed WHERE deckId =:uuid")
-    public void setLastUsed(String uuid, String lastUsed);
+    @Query("UPDATE Deck SET lastUsed = :lastUsed WHERE deckId =:deckId")
+    public void setLastUsed(String deckId, String lastUsed);
 
+    @Query("UPDATE Deck SET deckSize = :size WHERE deckId =:deckId")
+    public void setDeckSize(String deckId, int size);
+
+    @Query("SELECT deckSize FROM Deck WHERE deckId = :deckId")
+    public LiveData<Integer> getDeckSize(String deckId);
 
 }

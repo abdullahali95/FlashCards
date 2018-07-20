@@ -11,6 +11,7 @@
     <WebView
         android:id="@+id/wv_card_info_question"
         android:layout_margin="8dp"
+        android:transitionName="card_transition"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 

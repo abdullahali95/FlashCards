@@ -38,10 +38,34 @@ public class TestModel extends AndroidViewModel {
 
     }
 
-    public void setTestDeck(String deckId) {
-        testDeck = repo.getDeck(deckId).getValue();
+    public LiveData<Deck> getDeck(String deckId) {
+        return repo.getDeck(deckId);
+    }
+
+    public void setTestDeck(Deck deck) {
+        testDeck = deck;
+
+        // Update last used date
+        SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd kk:mm:ss");
+        Calendar cal = Calendar.getInstance();
+        String date = sf.format(cal.getTime());
+
+        testDeck.setLastUsed(date);
+
+        SetLastUsedTask task = new SetLastUsedTask();
+        task.execute();
 
     }
+
+    public class SetLastUsedTask extends AsyncTask<Void, Void, Boolean> {
+
+        @Override
+        protected Boolean doInBackground(Void... voids) {
+            repo.setLastUsed(testDeck.getDeckId(), testDeck.getLastUsed());
+            return true;
+        }
+    }
+
 
     public LiveData<List<Card>> getAllCards(String deckId) {
         testCards = repo.getAllCards(deckId).getValue();
@@ -54,14 +78,7 @@ public class TestModel extends AndroidViewModel {
 
         this.deckSize = testQueue.size();
 
-        //Set the date of last use to today's date.
-        SimpleDateFormat sf = new SimpleDateFormat("dd-MM-yyyy");
-        Calendar cal = Calendar.getInstance();
-        String date = sf.format(cal.getTime());
-//        TODO: testDeck.setLastUsed(date);
-//        TODO: repo.setDeck(testDeck);
     }
-
 
     public LiveData<List<Card>> getTestCards() {
         return repo.getAllCards(testDeck.getDeckId());

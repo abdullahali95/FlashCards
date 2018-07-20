@@ -9,6 +9,8 @@
     android:orientation="vertical">
 
     <android.support.constraint.ConstraintLayout
+        android:background="@color/colorPrimary"
+        android:transitionName="deck_item_transition"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -20,6 +22,8 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:text="Deck Name"
+            android:textColor="@color/white"
+            android:transitionName="deck_title_transition"
             android:textSize="32sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
@@ -28,6 +32,7 @@
 
         <Button
             android:id="@+id/btn_test_deck_info"
+            android:transitionName="test_btn_transition"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
@@ -46,6 +51,7 @@
             android:layout_marginBottom="8dp"
             android:layout_marginStart="8dp"
             android:text="deck info"
+            android:textColor="@color/white_teal"
             android:textSize="18sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_deck_name" />
@@ -59,6 +65,7 @@
             android:layout_marginStart="50dp"
             android:orientation="horizontal"
             android:text="Graph goes here"
+            android:textColor="@color/white_teal"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/tv_info_deck"

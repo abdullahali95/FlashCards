@@ -4,10 +4,22 @@ import android.arch.persistence.room.TypeConverter;
 
 import com.google.common.collect.EvictingQueue;
 
+import java.util.Date;
+
 /**
  * Created by Abdullah Ali on 19/07/2018
  */
 public class Converters {
+
+    @TypeConverter
+    public static Date toDate(Long value) {
+        return value == null ? null : new Date(value);
+    }
+
+    @TypeConverter
+    public static Long toLong(Date value) {
+        return value == null ? null : value.getTime();
+    }
 
     @TypeConverter
     public static EvictingQueue<Boolean> fromString (String s) {

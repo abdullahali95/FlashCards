@@ -57,7 +57,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new DeckAdapter(decks, mainModel, this);
+        adapter = new DeckAdapter(decks, mainModel, this, this);
         recyclerView.setAdapter(adapter);
 
         addButton.setOnClickListener(new View.OnClickListener() {

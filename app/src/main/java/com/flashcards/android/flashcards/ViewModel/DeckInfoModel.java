@@ -52,8 +52,12 @@ public class DeckInfoModel extends AndroidViewModel {
         @Override
         protected Long doInBackground(String... strings) {
             Card newCard = new Card(strings[0]);
+            Long result = repo.createCard(newCard);
 
-            return repo.createCard(newCard);
+            //Update deck size
+            int newDeckSize = repo.getAllCardsLength(newCard.getDeckId());
+            repo.setDeckSize(newCard.getDeckId(), newDeckSize);
+            return result;
         }
     }
 
@@ -68,7 +72,12 @@ public class DeckInfoModel extends AndroidViewModel {
         @Override
         protected Integer doInBackground(Card... cards) {
             Card card = cards[0];
-            return repo.deleteCard(card);
+            int result = repo.deleteCard(card);
+
+            //Update deck size
+            int newDeckSize = repo.getAllCardsLength(card.getDeckId());
+            repo.setDeckSize(card.getDeckId(), newDeckSize);
+            return result;
         }
     }
 

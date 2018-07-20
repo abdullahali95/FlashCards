@@ -20,7 +20,7 @@ import com.flashcards.android.flashcards.lib.DAO.ProgressDAO;
  * Created by Abdullah Ali on 15/07/2018
  */
 
-@Database(entities = {Card.class, Deck.class}, version = 4, exportSchema = false)
+@Database(entities = {Card.class, Deck.class}, version = 5, exportSchema = false)
 @TypeConverters({Converters.class})
 public abstract class FlashCardsDatabase extends RoomDatabase {
 
@@ -45,14 +45,6 @@ public abstract class FlashCardsDatabase extends RoomDatabase {
         return flashCardsDB;
     }
 
-
-//    public static final Migration MIGRATION_2_3 = new Migration(2, 3) {
-//        @Override
-//        public void migrate(SupportSQLiteDatabase flashCardsDB) {
-//            flashCardsDB.execSQL("ALTER TABLE product "
-//                    + " ADD COLUMN lastTen STRING");
-//        }
-//    };
 
 
     // Adding test data to database

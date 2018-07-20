@@ -4,6 +4,7 @@ import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -42,6 +43,10 @@ public class TestCardActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.hide();
+
         setContentView(R.layout.activity_test_card);
 
         loadViews();
@@ -53,7 +58,14 @@ public class TestCardActivity extends AppCompatActivity {
 
         model = ViewModelProviders.of(this).get(TestModel.class);
 
-        model.setTestDeck(deckId);
+
+
+        model.getDeck(deckId).observe(this, new Observer<Deck>() {
+            @Override
+            public void onChanged(@Nullable Deck deck) {
+                model.setTestDeck(deck);
+            }
+        });
 
         model.getAllCards(deckId).observe(this, new Observer<List<Card>>() {
             @Override
