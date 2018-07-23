@@ -1,20 +1,18 @@
 package com.flashcards.android.flashcards.view;
 
 import android.app.Activity;
-import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
+import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.util.Pair;
-import android.support.v4.view.ViewCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;;
-import android.view.ContextMenu;
+;
 import android.view.LayoutInflater;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,10 +24,15 @@ import android.widget.Toast;
 
 import com.flashcards.android.flashcards.R;
 import com.flashcards.android.flashcards.ViewModel.MainModel;
+import com.flashcards.android.flashcards.lib.JsonParser;
 import com.flashcards.android.flashcards.lib.model.Deck;
 
 import org.ocpsoft.prettytime.PrettyTime;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.Writer;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -110,7 +113,6 @@ public class DeckAdapter extends RecyclerView.Adapter<DeckAdapter.DeckViewHolder
                         } else if (id == R.id.action_delete) {
                             delete(currentDeck);
 
-
                         }
                         return false;
                     }
@@ -130,8 +132,49 @@ public class DeckAdapter extends RecyclerView.Adapter<DeckAdapter.DeckViewHolder
     }
 
     public void export(Deck deck) {
+        File file;
+
+        try {
+            Writer output = null;
+            String fileName = deck.getName();
+            file = File.createTempFile(fileName, ".deck", context.getExternalCacheDir());
+            ExportDeckTask task = new ExportDeckTask();
+            task.execute(deck);
+
+            // TODO: Add progress updater
+            String parsed = task.get();
+
+            output = new BufferedWriter(new FileWriter(file));
+            output.write(parsed);
+            output.close();
+            Toast.makeText(context, "Composition saved", Toast.LENGTH_LONG).show();
+
+            Intent share = new Intent(Intent.ACTION_SEND);
+            share.setType("text/json");
+            share.putExtra(Intent.EXTRA_STREAM, Uri.parse("file://" + file.getAbsolutePath()));
+
+            context.startActivity(Intent.createChooser(share, "Title of the dialog the system will open"));
+
+            //TODO: add background task to delete cache files
+
+        } catch (Exception e) {
+            Toast.makeText(context, e.getMessage(), Toast.LENGTH_LONG).show();
+            e.printStackTrace();
+        }
 
     }
+
+    private class ExportDeckTask extends AsyncTask<Deck, Void, String> {
+
+        @Override
+        protected String doInBackground(Deck... decks) {
+            String parsed = JsonParser.wrtieJson(decks[0], context);
+
+            return parsed;
+        }
+    }
+
+
     public void delete(final Deck deck) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setTitle("Are you sure you want to delete the deck: " + deck.getName() + "?");
@@ -202,11 +245,10 @@ public class DeckAdapter extends RecyclerView.Adapter<DeckAdapter.DeckViewHolder
                 Intent intent = new Intent(this.context, DeckInfoActivity.class);
                 intent.putExtra("Deck", deck.getDeckId());
 
-                Pair<View, String> p1 = Pair.create((View) deckName, "deck_title_transition");
-                Pair<View, String> p2 = Pair.create((View) itemView, "deck_item_transition");
+                Pair<View, String> p1 = Pair.create((View) itemView, "deck_item_transition");
 
                 ActivityOptionsCompat options = ActivityOptionsCompat.
-                        makeSceneTransitionAnimation(activity, p1, p2);
+                        makeSceneTransitionAnimation(activity, p1);
 
                 this.context.startActivity(intent, options.toBundle());
 

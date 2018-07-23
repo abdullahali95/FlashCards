@@ -42,6 +42,9 @@ public interface CardsDAO {
     @Query("SELECT * FROM Card WHERE deckId = :deckId")
     public LiveData<List<Card>> getAllCards (String deckId);
 
+    @Query("SELECT * FROM Card WHERE deckId = :deckId")
+    public List<Card> getAllDeckCards (String deckId);
+
     @Query("SELECT * FROM Card WHERE cardId = :cardId AND deckId = :deckId")
     public LiveData<Card> getCard(int cardId, String deckId);
 

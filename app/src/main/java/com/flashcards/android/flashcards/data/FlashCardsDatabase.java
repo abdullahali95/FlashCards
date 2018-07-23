@@ -42,7 +42,6 @@ public abstract class FlashCardsDatabase extends RoomDatabase {
     }
 
 
-
     // Adding test data to database
     //TODO: delete this once working
 //

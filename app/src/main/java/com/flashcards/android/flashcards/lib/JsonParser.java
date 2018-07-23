@@ -1,9 +1,12 @@
 package com.flashcards.android.flashcards.lib;
 
+import android.content.Context;
 import android.content.res.AssetManager;
 import android.content.res.XmlResourceParser;
 import android.util.Log;
 
+import com.flashcards.android.flashcards.data.FlashCardsDatabase;
+import com.flashcards.android.flashcards.lib.DAO.CardsDAO;
 import com.flashcards.android.flashcards.lib.model.Card;
 import com.flashcards.android.flashcards.lib.model.Deck;
 import com.flashcards.android.flashcards.lib.model.SimpleCard;
@@ -43,12 +46,18 @@ public class JsonParser {
         return deck;
     }
 
-    public static String wrtieJson (Deck deck) {
+    public static String wrtieJson (Deck deck, Context context) {
+        // Get cards for the deck
+        FlashCardsDatabase db = FlashCardsDatabase.getFlashCardsDB(context);
+        CardsDAO cardsDAO = db.cardsDAO();
+
+        List<Card> cards = cardsDAO.getAllDeckCards(deck.getDeckId());
+
+
         SimpleDeck sd = new SimpleDeck(deck.getName());
         SimpleCard sc;
 
         List<SimpleCard> simpleCards = new ArrayList<SimpleCard>();
-        List<Card> cards = deck.getCards();
 
         for (Card card : cards) {
             sc = new SimpleCard(card.getQuestion(), card.getAnswer());
