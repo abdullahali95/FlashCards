@@ -52,11 +52,7 @@ public class DeckInfoActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.hide();
-
         setContentView(R.layout.activity_deck_info_floating);
-
 
         context = this;
 
@@ -102,8 +98,6 @@ public class DeckInfoActivity extends AppCompatActivity {
             public void onClick(View view) {
 
                 deckInfoModel.createCard();
-
-
 
             }
         });

@@ -1,0 +1,13 @@
+{
+  "name": "General Medicine",
+  "cards": [
+    {
+      "answer": "Humerus, Radius, Ulna",
+      "question": "Bones of the arm"
+    },
+    {
+      "answer": "Type 1 Diabetes",
+      "question": "Diabetes associated with childhood onset"
+    }
+  ]
+}

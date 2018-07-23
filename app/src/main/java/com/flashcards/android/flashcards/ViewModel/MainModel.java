@@ -6,8 +6,11 @@ import android.arch.lifecycle.LiveData;
 import android.os.AsyncTask;
 
 import com.flashcards.android.flashcards.data.repo.MainRepo;
+import com.flashcards.android.flashcards.lib.model.Card;
 import com.flashcards.android.flashcards.lib.model.Deck;
+import com.flashcards.android.flashcards.lib.model.SimpleCard;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -33,6 +36,7 @@ public class MainModel extends AndroidViewModel{
         task.execute(deck);
 
     }
+
     private class InsertDeckTask extends AsyncTask<Deck, Void, Void> {
         @Override
         protected Void doInBackground(Deck... decks) {
@@ -40,6 +44,36 @@ public class MainModel extends AndroidViewModel{
             return null;
         }
     }
+
+
+    public void insertSimpleCards(Deck newDeck, List<SimpleCard> simpleCards) {
+        List<Card> cards = new ArrayList<Card>();
+        String deckId = newDeck.getDeckId();
+        Card card;
+
+        for(SimpleCard simpleCard : simpleCards) {
+            card = new Card(deckId, simpleCard.getQuestion(), simpleCard.getAnswer());
+            cards.add(card);
+        }
+        InsertCardsTask task = new InsertCardsTask();
+
+        newDeck.setCards((ArrayList<Card>) cards);
+        task.execute(newDeck);
+    }
+
+    private class InsertCardsTask extends AsyncTask<Deck, Void, Void> {
+        @Override
+        protected Void doInBackground(Deck... decks) {
+            String deckId = decks[0].getDeckId();
+            repo.addCards(decks[0].getCards());
+
+            int newDeckSize = repo.getAllCardsLength(deckId);
+            repo.setDeckSize(deckId, newDeckSize);
+
+            return null;
+        }
+    }
+
 
     public void deleteDeck(Deck deck) {
         DeleteDeckTask task = new DeleteDeckTask();

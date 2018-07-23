@@ -7,15 +7,20 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v4.util.Pair;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
-import android.util.Pair;
+import android.util.Log;;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -54,12 +59,14 @@ public class DeckAdapter extends RecyclerView.Adapter<DeckAdapter.DeckViewHolder
     @Override
     public DeckViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.main_rec_deck, parent, false);
+
         return new DeckViewHolder(view, model, context);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull DeckViewHolder holder, int position) {
-        Deck currentDeck = decks.get(position);
+    public void onBindViewHolder(@NonNull final DeckViewHolder holder, final int position) {
+
+        final Deck currentDeck = decks.get(position);
 
         // Set deck name
         holder.deckName.setText(currentDeck.getName());
@@ -83,7 +90,73 @@ public class DeckAdapter extends RecyclerView.Adapter<DeckAdapter.DeckViewHolder
         }
 
 
+        holder.popupButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                PopupMenu popup = new PopupMenu(context, holder.popupButton);
+
+                popup.inflate(R.menu.menu_main_rec);
+
+                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+                        int id = item.getItemId();
+                        if (id == R.id.action_test) {
+                            test(currentDeck);
+
+                        } else if (id == R.id.action_export) {
+                            export(currentDeck);
+
+                        } else if (id == R.id.action_delete) {
+                            delete(currentDeck);
+
+
+                        }
+                        return false;
+                    }
+                });
+
+                popup.show();
+            }
+        });
+
+
     }
+
+    public void test(Deck deck) {
+        Intent intent = new Intent(context, TestCardActivity.class);
+        intent.putExtra("deckId", deck.getDeckId());
+        context.startActivity(intent);
+    }
+
+    public void export(Deck deck) {
+
+    }
+    public void delete(final Deck deck) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setTitle("Are you sure you want to delete the deck: " + deck.getName() + "?");
+
+        // Set up the buttons
+        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                model.deleteDeck(deck);
+
+                // TODO: this should show up as a confirmation from Room db
+                String alert = "Deck: " + deck.getName() + " deleted";
+                Toast.makeText(context, alert, Toast.LENGTH_SHORT).show();
+            }
+        });
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+
+        builder.show();
+    }
+
 
     @Override
     public int getItemCount() {
@@ -92,10 +165,12 @@ public class DeckAdapter extends RecyclerView.Adapter<DeckAdapter.DeckViewHolder
         } else return decks.size();
     }
 
-    public class DeckViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
+    public class DeckViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener,
+            View.OnLongClickListener {
         private TextView deckName;
         private TextView lastUsed;
         private TextView cardCount;
+        private ImageButton popupButton;
         private Button testButton;
         private Deck deck;
         private MainModel model;
@@ -106,31 +181,32 @@ public class DeckAdapter extends RecyclerView.Adapter<DeckAdapter.DeckViewHolder
             deckName = (TextView) itemView.findViewById(R.id.title_rec_deck);
             lastUsed = (TextView) itemView.findViewById(R.id.days_rec_deck);
             cardCount = (TextView) itemView.findViewById(R.id.cards_rec_deck);
-            testButton = (Button) itemView.findViewById(R.id.test_button_rec_deck);
+            popupButton = (ImageButton) itemView.findViewById(R.id.popup_options_btn);
             this.model = model;
             this.context = context;
 
             itemView.setOnClickListener(this);
             itemView.setOnLongClickListener(this);
-            testButton.setOnClickListener(this);
         }
+
 
         @Override
         public void onClick(View v) {
             deck = decks.get(getAdapterPosition());
 
             //Switch view
-            if(v.getId() == testButton.getId()) {
-                Intent intent = new Intent(this.context, TestCardActivity.class);
-                intent.putExtra("deckId", deck.getDeckId());
-                this.context.startActivity(intent);
+            if(v.getId() == popupButton.getId()) {
+                return;
 
             } else {
                 Intent intent = new Intent(this.context, DeckInfoActivity.class);
                 intent.putExtra("Deck", deck.getDeckId());
 
+                Pair<View, String> p1 = Pair.create((View) deckName, "deck_title_transition");
+                Pair<View, String> p2 = Pair.create((View) itemView, "deck_item_transition");
+
                 ActivityOptionsCompat options = ActivityOptionsCompat.
-                        makeSceneTransitionAnimation(activity, deckName, "deck_title_transition");
+                        makeSceneTransitionAnimation(activity, p1, p2);
 
                 this.context.startActivity(intent, options.toBundle());
 
@@ -142,28 +218,7 @@ public class DeckAdapter extends RecyclerView.Adapter<DeckAdapter.DeckViewHolder
         public boolean onLongClick(View view) {
             deck = decks.get(getAdapterPosition());
 
-            AlertDialog.Builder builder = new AlertDialog.Builder(context);
-            builder.setTitle("Are you sure you want to delete the deck: " + deck.getName() + "?");
-
-            // Set up the buttons
-            builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    model.deleteDeck(deck);
-
-                    // TODO: this should show up as a confirmation from Room db
-                    String alert = "Deck: " + deck.getName() + " deleted";
-                    Toast.makeText(context, alert, Toast.LENGTH_SHORT).show();
-                }
-            });
-            builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    dialog.cancel();
-                }
-            });
-
-            builder.show();
+            delete(deck);
 
             return true;
         }

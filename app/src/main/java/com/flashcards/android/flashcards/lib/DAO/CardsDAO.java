@@ -30,6 +30,9 @@ public interface CardsDAO {
     @Insert (onConflict = OnConflictStrategy.REPLACE)
     public Long createCard(Card card);
 
+    @Insert (onConflict = OnConflictStrategy.REPLACE)
+    public Long[] createCard(List<Card> card);
+
     @Query("UPDATE Card SET deckId = :newDeckId WHERE cardId =:id AND deckId = :oldDeckId")
     public void changeDeck(int id, String oldDeckId, String newDeckId);
 

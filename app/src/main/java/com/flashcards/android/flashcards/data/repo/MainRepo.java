@@ -5,6 +5,7 @@ import android.arch.lifecycle.LiveData;
 
 import com.flashcards.android.flashcards.data.FlashCardsDatabase;
 import com.flashcards.android.flashcards.lib.DAO.CardsDAO;
+import com.flashcards.android.flashcards.lib.model.Card;
 import com.flashcards.android.flashcards.lib.model.Deck;
 import com.flashcards.android.flashcards.lib.DAO.DeckDAO;
 
@@ -16,10 +17,12 @@ import java.util.List;
 public class MainRepo {
 
     private final DeckDAO deckDAO;
+    private final CardsDAO cardsDAO;
 
     public MainRepo(Application application) {
         FlashCardsDatabase db = FlashCardsDatabase.getFlashCardsDB(application);
         this.deckDAO = db.deckDAO();
+        this.cardsDAO = db.cardsDAO();
     }
 
     public LiveData<List<Deck>> getAllDecks() {
@@ -36,6 +39,18 @@ public class MainRepo {
 
     public LiveData<Integer> getDeckSize (String deckId) {
         return deckDAO.getDeckSize(deckId);
+    }
+
+    public void addCards(List<Card> cards) {
+        cardsDAO.createCard(cards);
+    }
+
+    public int getAllCardsLength(String deckId) {
+        return cardsDAO.getAllCardsLength(deckId);
+    }
+
+    public void setDeckSize(String deckId, int newDeckSize) {
+        deckDAO.setDeckSize(deckId, newDeckSize);
     }
 
 }

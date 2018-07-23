@@ -28,7 +28,6 @@ public class EditModel extends AndroidViewModel {
 
 
     public void addCard(Card card) {
-        //TODO: check if these need to be initialised better
         Card newCard = card;
         AddCardTask task = new AddCardTask();
         task.execute(newCard);

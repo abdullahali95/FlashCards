@@ -1,20 +1,16 @@
 package com.flashcards.android.flashcards.data;
 
-import android.arch.persistence.db.SupportSQLiteDatabase;
 import android.arch.persistence.room.Database;
 import android.arch.persistence.room.Room;
 import android.arch.persistence.room.RoomDatabase;
-import android.arch.persistence.room.TypeConverter;
 import android.arch.persistence.room.TypeConverters;
-import android.arch.persistence.room.migration.Migration;
 import android.content.Context;
 
+import com.flashcards.android.flashcards.lib.Converters;
 import com.flashcards.android.flashcards.lib.model.Card;
 import com.flashcards.android.flashcards.lib.DAO.CardsDAO;
 import com.flashcards.android.flashcards.lib.model.Deck;
 import com.flashcards.android.flashcards.lib.DAO.DeckDAO;
-import com.flashcards.android.flashcards.lib.model.Progress;
-import com.flashcards.android.flashcards.lib.DAO.ProgressDAO;
 
 /**
  * Created by Abdullah Ali on 15/07/2018

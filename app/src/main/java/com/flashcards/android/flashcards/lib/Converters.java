@@ -1,4 +1,4 @@
-package com.flashcards.android.flashcards.data;
+package com.flashcards.android.flashcards.lib;
 
 import android.arch.persistence.room.TypeConverter;
 
@@ -39,6 +39,7 @@ public class Converters {
     public static String QueueToString (EvictingQueue<Boolean> b) {
         String s = "";
         Boolean current;
+        if (b == null) return s;
         for (int i = 0; i < b.size(); i++) {
             current = b.poll();
             if (current == Boolean.TRUE) {

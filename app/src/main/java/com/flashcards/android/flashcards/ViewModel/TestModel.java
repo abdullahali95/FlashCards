@@ -29,7 +29,6 @@ public class TestModel extends AndroidViewModel {
     private int deckSize;
     private TestRepo repo;
 
-    // TODO: remove deck from constructor arguments
     public TestModel(Application application) {
         super(application);
         this.repo = new TestRepo(application);
