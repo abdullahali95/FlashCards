@@ -12,19 +12,38 @@
         <activity
             android:name=".view.MainActivity"
             android:exported="true">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
+
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:host="*" android:pathPattern=".*\\.deck" />
+                <data android:pathPattern=".*\\.deck" />
+                <data android:pathPattern=".*\\..*\\.deck"/>
+                <data android:pathPattern=".*\\..*\\..*\\.deck"/>
+                <data android:pathPattern=".*\\..*\\..*\\..*\\.deck"/>
+                <data android:pathPattern=".*\\..*\\..*\\..*\\..*\\.deck"/>
+                <data android:pathPattern=".*\\..*\\..*\\..*\\..*\\..*\\.deck"/>
+                <data android:mimeType="*/*" />
+
+            </intent-filter>
+
+
         </activity>
         <activity
             android:name=".view.TestCardActivity"
             android:exported="true" />
         <activity
             android:name=".view.CardEditActivity"
-            android:exported="true"></activity>
+            android:exported="true"/>
         <activity android:name=".view.DeckInfoActivity"
-            android:exported="true"></activity>
+            android:exported="true"/>
+
 
     </application>
 

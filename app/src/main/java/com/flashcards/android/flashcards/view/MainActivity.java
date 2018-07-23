@@ -4,7 +4,9 @@ import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.res.AssetManager;
+import android.net.Uri;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
@@ -19,6 +21,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.flashcards.android.flashcards.R;
@@ -31,8 +34,12 @@ import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
 
+import java.io.BufferedReader;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.URI;
 import java.util.List;
 
 import static com.flashcards.android.flashcards.data.MockDeck.getFakeDeck;
@@ -68,8 +75,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
-
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         adapter = new DeckAdapter(decks, mainModel, this, this);
         recyclerView.setAdapter(adapter);
@@ -80,6 +85,14 @@ public class MainActivity extends AppCompatActivity {
                 addDeck();
             }
         });
+
+        final Intent intent = getIntent();
+        final String action = intent.getAction();
+
+        if(Intent.ACTION_VIEW.equals(action)) {
+            Uri filePath = intent.getData();
+            importDeck(filePath);
+        }
 
     }
 
@@ -95,7 +108,7 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_import) {
-            importDeck();
+            Toast.makeText(getApplicationContext(),"Coming Soon...",Toast.LENGTH_LONG).show();
             return true;
         } else if (id == R.id.action_settings) {
             Toast.makeText(getApplicationContext(),"Settings Selected",Toast.LENGTH_LONG).show();
@@ -104,15 +117,15 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void importDeck() {
-        String json = null;
+    private void importDeck(Uri uri) {
         try {
-            InputStream is = getResources().getAssets().open("sample_deck.json");
+
+            InputStream is = getContentResolver().openInputStream(uri);
             int size = is.available();
             byte[] buffer = new byte[size];
             is.read(buffer);
             is.close();
-            json = new String(buffer, "UTF-8");
+            String json = new String(buffer, "UTF-8");
 
             SimpleDeck deck = JsonParser.readJson(json);
             Log.d("importDeck: ", json);
@@ -122,11 +135,13 @@ public class MainActivity extends AppCompatActivity {
             mainModel.insertDeck(newDeck);
             mainModel.insertSimpleCards(newDeck, deck.getCards());
 
-            Toast.makeText(this, "Deck imported", Toast.LENGTH_LONG);
+            Toast.makeText(this, "Deck imported", Toast.LENGTH_LONG).show();
 
         } catch (IOException ex) {
-            Toast.makeText(this, "File not found", Toast.LENGTH_LONG);
-
+            Toast.makeText(this, "File not found", Toast.LENGTH_LONG).show();
+            ex.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
     }
