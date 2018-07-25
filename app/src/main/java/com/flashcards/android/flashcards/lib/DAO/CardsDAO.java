@@ -9,7 +9,6 @@ import android.arch.persistence.room.Query;
 import android.arch.persistence.room.Update;
 
 import com.flashcards.android.flashcards.lib.model.Card;
-import com.flashcards.android.flashcards.lib.model.Progress;
 import com.google.common.collect.EvictingQueue;
 
 import java.util.List;

@@ -7,10 +7,10 @@ import android.arch.persistence.room.TypeConverters;
 import android.content.Context;
 
 import com.flashcards.android.flashcards.lib.Converters;
-import com.flashcards.android.flashcards.lib.model.Card;
 import com.flashcards.android.flashcards.lib.DAO.CardsDAO;
-import com.flashcards.android.flashcards.lib.model.Deck;
 import com.flashcards.android.flashcards.lib.DAO.DeckDAO;
+import com.flashcards.android.flashcards.lib.model.Card;
+import com.flashcards.android.flashcards.lib.model.Deck;
 
 /**
  * Created by Abdullah Ali on 15/07/2018

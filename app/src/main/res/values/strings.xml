@@ -17,4 +17,5 @@
     <string name="export_action_main_rec">Export</string>
     <string name="delete_action_main_rec">Delete</string>
     <string name="popup_options_button">Options Button</string>
+    <string name="action_multiplayer">Multiplayer</string>
 </resources>

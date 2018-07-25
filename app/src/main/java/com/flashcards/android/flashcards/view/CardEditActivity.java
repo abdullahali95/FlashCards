@@ -3,10 +3,11 @@ package com.flashcards.android.flashcards.view;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.graphics.Color;
+import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -18,8 +19,6 @@ import com.flashcards.android.flashcards.lib.model.Card;
 import com.flashcards.android.flashcards.lib.model.Deck;
 
 import jp.wasabeef.richeditor.RichEditor;
-
-import static com.flashcards.android.flashcards.data.MockDeck.getFakeDeck;
 
 public class CardEditActivity extends AppCompatActivity {
     RichEditor editor;
@@ -33,7 +32,7 @@ public class CardEditActivity extends AppCompatActivity {
     Button greenButton;
     Button undoButton;
     Button redoButton;
-    Button flipButton;
+    FloatingActionButton flipButton;
 
     Deck deck;
     Card currentCard;
@@ -140,7 +139,7 @@ public class CardEditActivity extends AppCompatActivity {
         greenButton = (Button) findViewById(R.id.question_btn_color_green);
         undoButton = (Button) findViewById(R.id.question_btn_undo);
         redoButton = (Button) findViewById(R.id.question_btn_redo);
-        flipButton = (Button) findViewById(R.id.btn_edit_flip);
+        flipButton = (FloatingActionButton) findViewById(R.id.btn_edit_flip);
     }
 
     private void initEditor() {
@@ -149,7 +148,7 @@ public class CardEditActivity extends AppCompatActivity {
         editor = (RichEditor) findViewById(R.id.question_editor_module);
         editor.setPadding(20,20,20,20);
         editor.setBackgroundColor(getResources().getColor(R.color.cardBackground));
-        editor.setEditorFontSize(32);
+        editor.setEditorFontSize(24);
     }
 
 

@@ -11,7 +11,6 @@ import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.util.Pair;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
-;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -37,6 +36,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+
+;
 
 /**
  * Created by Abdullah Ali on 09/07/2018
@@ -126,9 +127,14 @@ public class DeckAdapter extends RecyclerView.Adapter<DeckAdapter.DeckViewHolder
     }
 
     public void test(Deck deck) {
-        Intent intent = new Intent(context, TestCardActivity.class);
-        intent.putExtra("deckId", deck.getDeckId());
-        context.startActivity(intent);
+        if (deck.getDeckSize() < 2) {
+            // Error message
+            Toast.makeText(context, "The deck must have atleast 2 cards for the test mode", Toast.LENGTH_LONG).show();
+        } else {
+            Intent intent = new Intent(context, TestCardActivity.class);
+            intent.putExtra("deckId", deck.getDeckId());
+            context.startActivity(intent);
+        }
     }
 
     public void export(Deck deck) {
@@ -147,13 +153,13 @@ public class DeckAdapter extends RecyclerView.Adapter<DeckAdapter.DeckViewHolder
             output = new BufferedWriter(new FileWriter(file));
             output.write(parsed);
             output.close();
-            Toast.makeText(context, "Composition saved", Toast.LENGTH_LONG).show();
+            Toast.makeText(context, "Deck saved", Toast.LENGTH_LONG).show();
 
             Intent share = new Intent(Intent.ACTION_SEND);
             share.setType("text/json");
             share.putExtra(Intent.EXTRA_STREAM, Uri.parse("file://" + file.getAbsolutePath()));
 
-            context.startActivity(Intent.createChooser(share, "Title of the dialog the system will open"));
+            context.startActivity(Intent.createChooser(share, "Share flash cards deck"));
 
             //TODO: add background task to delete cache files
 
@@ -214,7 +220,6 @@ public class DeckAdapter extends RecyclerView.Adapter<DeckAdapter.DeckViewHolder
         private TextView lastUsed;
         private TextView cardCount;
         private ImageButton popupButton;
-        private Button testButton;
         private Deck deck;
         private MainModel model;
         private Context context;

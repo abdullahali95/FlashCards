@@ -6,20 +6,27 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.widget.Button;
+
 import com.flashcards.android.flashcards.R;
+import com.flashcards.android.flashcards.ViewModel.TestModel;
 import com.flashcards.android.flashcards.lib.model.Card;
 import com.flashcards.android.flashcards.lib.model.Deck;
-import com.flashcards.android.flashcards.ViewModel.TestModel;
-import com.transitionseverywhere.*;
+import com.transitionseverywhere.ChangeBounds;
+import com.transitionseverywhere.ChangeText;
+import com.transitionseverywhere.Recolor;
+import com.transitionseverywhere.TransitionManager;
+import com.transitionseverywhere.TransitionSet;
 
 import java.util.List;
 
-import static com.flashcards.android.flashcards.R.color.*;
+import static com.flashcards.android.flashcards.R.color.cardBackground;
+import static com.flashcards.android.flashcards.R.color.colorAccent;
+import static com.flashcards.android.flashcards.R.color.green;
+import static com.flashcards.android.flashcards.R.color.red;
 
 /**
  * Created by Abdullah Ali *
@@ -54,7 +61,6 @@ public class TestCardActivity extends AppCompatActivity {
         // Get info of clicked deck
         Bundle bundle = getIntent().getExtras();
         String deckId = bundle.getString("deckId");
-        Log.d(deckId, "onCreate: ");
 
         model = ViewModelProviders.of(this).get(TestModel.class);
 
@@ -70,14 +76,19 @@ public class TestCardActivity extends AppCompatActivity {
         model.getAllCards(deckId).observe(this, new Observer<List<Card>>() {
             @Override
             public void onChanged(@Nullable List<Card> cards) {
-                if (cards.size() > 0 && model.getCurrentCard() == null) {
+                if (model.getCurrentCard() == null) {
                     model.initQueue(cards);
                     model.setTestCards(cards);
                     question = model.getCurrentCard().getQuestion();
                     card.loadUrl("about:blank");
                     card.loadData(question, "text/html", "utf-8");
-                    Log.d("updated QUEUE", "onChanged: ");
 
+                } else {
+                    // TODO: ensure screen stays on answerView when orientation is changed.
+
+                    question = model.getCurrentCard().getQuestion();
+                    card.loadUrl("about:blank");
+                    card.loadData(question, "text/html", "utf-8");
                 }
             }
         });
@@ -130,11 +141,10 @@ public class TestCardActivity extends AppCompatActivity {
         // TODO: Add slide animation for card
         question = model.getCard().getQuestion();
         card.loadUrl("about:blank");
+        card.getSettings().setTextZoom(200);
         card.loadData(question, "text/html", "utf-8");
 
     }
-
-
 
     /**
      * Gets a new card from the model
@@ -241,6 +251,7 @@ public class TestCardActivity extends AppCompatActivity {
 
                         answer = model.getCurrentCard().getAnswer();
                         card.loadUrl("about:blank");
+                        card.getSettings().setTextZoom(150);
                         card.loadData(answer, "text/html", "utf-8");
 
                         // second quarter turn

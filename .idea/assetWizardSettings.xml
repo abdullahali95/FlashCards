@@ -42,11 +42,19 @@
                                 </PersistentState>
                               </value>
                             </entry>
-                          </map>
-                        </option>
-                        <option name="values">
-                          <map>
-                            <entry key="outputIconType" value="ACTIONBAR" />
+                            <entry key="launcher">
+                              <value>
+                                <PersistentState>
+                                  <option name="values">
+                                    <map>
+                                      <entry key="backgroundImage" value="C:\Users\abdul\Documents\ComputerScience\Final Project\Design\bg-Adaptive.png" />
+                                      <entry key="foregroundImage" value="C:\Users\abdul\Documents\ComputerScience\Final Project\Design\foreground-Adaptive.png" />
+                                      <entry key="previewDensity" value="XXHIGH" />
+                                    </map>
+                                  </option>
+                                </PersistentState>
+                              </value>
+                            </entry>
                           </map>
                         </option>
                       </PersistentState>

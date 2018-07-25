@@ -4,12 +4,10 @@ import android.app.Application;
 import android.arch.lifecycle.LiveData;
 
 import com.flashcards.android.flashcards.data.FlashCardsDatabase;
-import com.flashcards.android.flashcards.lib.model.Card;
 import com.flashcards.android.flashcards.lib.DAO.CardsDAO;
-import com.flashcards.android.flashcards.lib.model.Deck;
 import com.flashcards.android.flashcards.lib.DAO.DeckDAO;
-import com.flashcards.android.flashcards.lib.model.Progress;
-import com.flashcards.android.flashcards.lib.DAO.ProgressDAO;
+import com.flashcards.android.flashcards.lib.model.Card;
+import com.flashcards.android.flashcards.lib.model.Deck;
 import com.google.common.collect.EvictingQueue;
 
 import java.util.List;

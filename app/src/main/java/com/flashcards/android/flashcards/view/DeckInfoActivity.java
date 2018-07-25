@@ -4,18 +4,18 @@ import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.View;
-import android.view.Window;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.flashcards.android.flashcards.R;
 import com.flashcards.android.flashcards.ViewModel.DeckInfoModel;
@@ -24,8 +24,6 @@ import com.flashcards.android.flashcards.lib.model.Deck;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static com.flashcards.android.flashcards.data.MockDeck.getFakeDeck;
 
 public class DeckInfoActivity extends AppCompatActivity {
 
@@ -108,9 +106,14 @@ public class DeckInfoActivity extends AppCompatActivity {
         testButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(DeckInfoActivity.this, TestCardActivity.class);
-                intent.putExtra("deckId", deck.getDeckId());
-                startActivity(intent);
+                if (deck.getDeckSize() < 2) {
+                    // Error message
+                    Toast.makeText(context, "The deck must have atleast 2 cards for the test mode", Toast.LENGTH_LONG).show();
+                } else {
+                    Intent intent = new Intent(DeckInfoActivity.this, TestCardActivity.class);
+                    intent.putExtra("deckId", deck.getDeckId());
+                    startActivity(intent);
+                }
             }
         });
     }

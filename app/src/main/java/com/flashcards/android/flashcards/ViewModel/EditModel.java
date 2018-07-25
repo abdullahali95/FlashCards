@@ -7,7 +7,6 @@ import android.os.AsyncTask;
 
 import com.flashcards.android.flashcards.data.repo.CardEditRepo;
 import com.flashcards.android.flashcards.lib.model.Card;
-import com.flashcards.android.flashcards.lib.model.Progress;
 
 /**
  * Created by Abdullah Ali on 12/07/2018

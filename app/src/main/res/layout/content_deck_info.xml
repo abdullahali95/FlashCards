@@ -9,8 +9,10 @@
     android:orientation="vertical">
 
     <android.support.constraint.ConstraintLayout
-        android:background="@color/colorPrimary"
+        android:background="@color/colorAccent"
         android:transitionName="deck_item_transition"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -32,16 +34,15 @@
 
         <Button
             android:id="@+id/btn_test_deck_info"
+            android:theme="@style/AppTheme.Button"
             android:transitionName="test_btn_transition"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
+
             android:text="@string/btn_test_deck_info"
-            android:textColor="@color/white"
-            style="?android:attr/borderlessButtonStyle"
-            android:background="@color/colorAccent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_info_deck"

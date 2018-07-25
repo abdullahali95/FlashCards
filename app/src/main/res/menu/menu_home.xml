@@ -4,9 +4,9 @@
     tools:context="com.flashcards.android.flashcards.view.HomeActivity">
 
     <item
-        android:id="@+id/action_import"
+        android:id="@+id/action_multiplayer"
         android:orderInCategory="100"
-        android:title="@string/action_import"
+        android:title="@string/action_multiplayer"
         app:showAsAction="collapseActionView" />
 
     <item

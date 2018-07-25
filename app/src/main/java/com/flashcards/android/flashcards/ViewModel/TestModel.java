@@ -4,12 +4,10 @@ import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.LiveData;
 import android.os.AsyncTask;
-import android.util.Log;
 
 import com.flashcards.android.flashcards.data.repo.TestRepo;
 import com.flashcards.android.flashcards.lib.model.Card;
 import com.flashcards.android.flashcards.lib.model.Deck;
-import com.flashcards.android.flashcards.lib.model.Progress;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -109,19 +107,12 @@ public class TestModel extends AndroidViewModel {
 
         currentCard = testQueue.poll();
 
-        Log.d("Queue size ", String.valueOf(testQueue.size()));
-
         if (lastCard != null) {
             testQueue.add(lastCard);
             for (Card card : testQueue) {
-                Log.d("Card: ", card.toString());
-                Log.d("LS: ", String.valueOf(card.getLearntScore()));
-
             }
 
         }
-
-        Log.d("Queue size ", String.valueOf(testQueue.size()));
 
         return currentCard;
     }

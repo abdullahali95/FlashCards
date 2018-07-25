@@ -1,16 +1,9 @@
 package com.flashcards.android.flashcards.lib.model;
 
-import android.arch.persistence.room.Entity;
-import android.arch.persistence.room.ForeignKey;
-import android.arch.persistence.room.Ignore;
-import android.support.annotation.NonNull;
-
 import com.google.common.collect.EvictingQueue;
 
 import java.util.Iterator;
-import java.util.List;
 
-import static android.arch.persistence.room.ForeignKey.CASCADE;
 import static java.lang.Boolean.TRUE;
 import static java.lang.Math.random;
 
@@ -29,8 +22,8 @@ public class Progress {
      * @return Ratio of correct answers.
      */
     public static double ratioCorrect(int total, EvictingQueue<Boolean> lastTen) {
-        // If less then 10 attempts, this score shouldn't matter, as it may be too inaccurate
-    	if (total < 10) return 1;
+        // If less then 4 attempts, this score shouldn't matter, as it may be too inaccurate
+    	if (total < 4) return 1;
     	
         else {
 	    	int attempts = 10 - lastTen.remainingCapacity();
@@ -52,13 +45,15 @@ public class Progress {
      * @return The reflex score, between 0 and 1 (inclusive)
      */
     public static double reflexScore(int attempts) {
-    	if (attempts == 0) {
-            return 0.5;         // Initial number irrelevant as not used in learntScore
+        if (attempts == 0) {
+            return 1;         // First value doesn't matter, as only uses random
+        } else if ( attempts > 20) {
+            return 1;           // Value close to 1, so saves calculation.
         } else {
-	    	int x = attempts;
-	        double score = 1 - ( (double) 1/(x+1));
-	        return score;
-        }
+                int x = attempts;
+                double score = 1 - ( (double) 1/(x+1));
+                return score;
+            }
     }
 
     //TODO: test the learntScore and it's initialisd value
