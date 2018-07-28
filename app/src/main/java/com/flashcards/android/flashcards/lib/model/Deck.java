@@ -16,9 +16,14 @@ public class Deck {
     @NonNull
     private String deckId;
     private String name;
+    private int deckSize;
+
     private String created;
     private String lastUsed;
-    private int deckSize;
+    private String nextTestDue;
+    private int reps;       // Amount of times the deck is tested
+    private double ef;      // Easiness factor
+
     @Ignore
     private ArrayList<Card> cards;
 
@@ -90,6 +95,30 @@ public class Deck {
      */
     public void setLastUsed(String lastUsed) {
         this.lastUsed = lastUsed;
+    }
+
+    public String getNextTestDue() {
+        return nextTestDue;
+    }
+
+    public void setNextTestDue(String nextTestDue) {
+        this.nextTestDue = nextTestDue;
+    }
+
+    public int getReps() {
+        return reps;
+    }
+
+    public void setReps(int reps) {
+        this.reps = reps;
+    }
+
+    public double getEf() {
+        return ef;
+    }
+
+    public void setEf(double ef) {
+        this.ef = ef;
     }
 
     public ArrayList<Card> getCards() {

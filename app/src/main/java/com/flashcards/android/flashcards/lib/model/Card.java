@@ -33,7 +33,7 @@ public class Card implements Comparable<Card> {
 
     private int attempts;   //Invariant: must always stay positive
     private int correct;
-    private EvictingQueue<Boolean> lastTen;     // Pushes out old elements if size exceeds 10
+    private EvictingQueue<Boolean> lastFive;     // Pushes out old elements if size exceeds 5
     private int learntScore;
 
 
@@ -49,6 +49,7 @@ public class Card implements Comparable<Card> {
         this.deckId = deckId;
         this.question = question;
         this.answer = answer;
+        this.lastFive = EvictingQueue.create(5);
     }
 
     /**
@@ -62,7 +63,7 @@ public class Card implements Comparable<Card> {
         this.answer = "";
         this.attempts = 0;
         this.correct = 0;
-        this.lastTen = EvictingQueue.create(10);
+        this.lastFive = EvictingQueue.create(5);
         this.learntScore = 100;
     }
 
@@ -124,24 +125,24 @@ public class Card implements Comparable<Card> {
         correct++;
     }
 
-    public EvictingQueue<Boolean> getLastTen() {
-        return lastTen;
+    public EvictingQueue<Boolean> getLastFive() {
+        return lastFive;
     }
 
     public void setLearntScore(int learntScore) {
         this.learntScore = learntScore;
     }
 
-    public void setLastTen(EvictingQueue<Boolean> lastTen) {
-        this.lastTen = lastTen;
+    public void setLastFive(EvictingQueue<Boolean> lastFive) {
+        this.lastFive = lastFive;
     }
 
     public void setLastTen(List<Boolean> list) {
-        lastTen.addAll(list);
+        lastFive.addAll(list);
     }
 
     public void addAnswer(Boolean answer) {
-        lastTen.offer(answer);
+        lastFive.add(answer);
     }
 
     public int getLearntScore(int deckSize) {

@@ -69,8 +69,8 @@ public interface CardsDAO {
     public void incCorrect(int cardId, String deckId);
 
     //TODO: fix the storage of these
-    @Query("UPDATE Card SET lastTen = :lastTen WHERE cardId =:cardId AND deckId = :deckId")
-    public void setLastTen(int cardId, String deckId, EvictingQueue<Boolean> lastTen);
+    @Query("UPDATE Card SET lastFive = :lastFive WHERE cardId =:cardId AND deckId = :deckId")
+    public void setLastFive(int cardId, String deckId, EvictingQueue<Boolean> lastFive);
 
     @Query("UPDATE Card SET learntScore = :learntScore WHERE cardId =:cardId AND deckId = :deckId")
     public void setLearntScore(int cardId, String deckId, int learntScore);

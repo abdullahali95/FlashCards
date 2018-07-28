@@ -115,7 +115,6 @@ public class MainActivity extends AppCompatActivity {
             String json = new String(buffer, "UTF-8");
 
             SimpleDeck deck = JsonParser.readJson(json);
-            Log.d("importDeck: ", json);
 
             Deck newDeck = new Deck(deck.getName());
 

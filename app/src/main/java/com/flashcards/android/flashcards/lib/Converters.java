@@ -1,6 +1,7 @@
 package com.flashcards.android.flashcards.lib;
 
 import android.arch.persistence.room.TypeConverter;
+import android.util.Log;
 
 import com.google.common.collect.EvictingQueue;
 
@@ -23,7 +24,7 @@ public class Converters {
 
     @TypeConverter
     public static EvictingQueue<Boolean> fromString (String s) {
-        EvictingQueue<Boolean> b = EvictingQueue.create(10);
+        EvictingQueue<Boolean> b = EvictingQueue.create(5);
         for (int i = 0; i < s.length(); i++) {
             if (s.charAt(i) == 't') {
                 b.add(Boolean.TRUE);
@@ -40,12 +41,12 @@ public class Converters {
         String s = "";
         Boolean current;
         if (b == null) return s;
-        for (int i = 0; i < b.size(); i++) {
+        for (int i = 0; i < 5; i++) {
             current = b.poll();
             if (current == Boolean.TRUE) {
                 s += "t";
             } else if (current == Boolean.FALSE) {
-                s += "f";;
+                s += "f";
             }
         }
         return s;

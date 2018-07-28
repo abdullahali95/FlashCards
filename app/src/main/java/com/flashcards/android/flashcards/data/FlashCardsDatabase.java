@@ -16,7 +16,7 @@ import com.flashcards.android.flashcards.lib.model.Deck;
  * Created by Abdullah Ali on 15/07/2018
  */
 
-@Database(entities = {Card.class, Deck.class}, version = 5, exportSchema = false)
+@Database(entities = {Card.class, Deck.class}, version = 6, exportSchema = false)
 @TypeConverters({Converters.class})
 public abstract class FlashCardsDatabase extends RoomDatabase {
 

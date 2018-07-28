@@ -2,120 +2,48 @@
   "name": "Spanish",
   "cards": [
     {
-      "question": "Good morning.",
-      "answer": "Buenos días."
+      "question": "One",
+      "answer": "Uno"
     },
     {
-      "question": "Good afternoon.",
-      "answer": "Buenas tardes."
+      "question": "Two",
+      "answer": "dos"
     },
     {
-      "question": "Good evening. (greeting)",
-      "answer": "Buenas noches."
+      "question": "Three",
+      "answer": "tres"
     },
     {
-      "question": "Hello, my name is John.",
-      "answer": "Hola, me llamo Juan."
+      "question": "Four",
+      "answer": "cuatro"
     },
     {
-      "question": "What is your name?",
-      "answer": "¿Cómo se llama usted?"
+      "question": "Five",
+      "answer": "cinco"
     },
     {
-      "question": "How are you?",
-      "answer": "¿Cómo está usted?"
+      "question": "Six",
+      "answer": "seis"
     },
     {
-      "question": "I am fine.",
-      "answer": "Estoy bien."
+      "question": "Seven",
+      "answer": "siete"
     },
     {
-      "question": "Nice to meet you.",
-      "answer": "Mucho gusto."
+      "question": "Eight",
+      "answer": "Ocho"
     },
     {
-      "question": "Goodbye.",
-      "answer": "Adiós."
+      "question": "Nine",
+      "answer": "Nueve"
     },
     {
-      "question": "See you later.",
-      "answer": "Hasta luego."
+      "question": "Ten",
+      "answer": "Diez"
     },
     {
-      "question": "I am lost. Where is the restroom?",
-      "answer": "Estoy perdido. ¿Dónde está el baño?"
-    },
-    {
-      "question": "Excuse me.",
-      "answer": "Con permiso. OR Perdóname"
-    },
-    {
-      "question": "Please.",
-      "answer": "Por favor."
-    },
-    {
-      "question": "Thank you.",
-      "answer": "Gracías."
-    },
-    {
-      "question": "I'm sorry.",
-      "answer": "Lo siento."
-    },
-    {
-      "question": "Bless you.",
-      "answer": "Salud."
-    },
-    {
-      "question": "You are welcome (it was nothing).",
-      "answer": "De nada."
-    },
-    {
-      "question": "How much does it cost?",
-      "answer": "¿Cuánto cuesta?"
-    },
-    {
-      "question": "How many are there?",
-      "answer": "¿Cuántos hay?"
-    },
-    {
-      "question": "There are many.",
-      "answer": "Hay muchos."
-    },
-    {
-      "question": "Do you want to buy this?",
-      "answer": "¿Quiere comprarlo usted?"
-    },
-    {
-      "question": "What time is it?",
-      "answer": "¿Qué hora es?"
-    },
-    {
-      "question": "How do you say maybe in Spanish?",
-      "answer": "¿Cómo se dice maybe en Español?"
-    },
-    {
-      "question": "Yes.",
-      "answer": "Sí."
-    },
-    {
-      "question": "No.",
-      "answer": "No."
-    },
-    {
-      "question": "I do not understand.",
-      "answer": "Yo no comprendo."
-    },
-    {
-      "question": "Would you speak slower, please.",
-      "answer": "Por favor, habla mas despacio."
-    },
-    {
-      "question": "Who?",
-      "answer": "¿Quièn?"
-    },
-    {
-      "question": "Why?",
-      "answer": "¿Por què?"
+      "question": "Zero",
+      "answer": "Cero"
     }
   ]
 }

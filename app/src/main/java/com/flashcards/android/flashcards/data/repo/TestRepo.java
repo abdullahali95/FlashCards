@@ -37,6 +37,10 @@ public class TestRepo {
         return cardsDAO.getAllCards(deckId);
     }
 
+    public List<Card> getAllDeckCards (String deckId) {
+        return cardsDAO.getAllDeckCards(deckId);
+    }
+
     /**
      * These need to have their Progress object also added
      * @param cardId
@@ -63,8 +67,8 @@ public class TestRepo {
         deckDAO.setDeck(deck);
     }
 
-    public void setLastTen(int cardId, String deckId, EvictingQueue<Boolean> lastTen) {
-        cardsDAO.setLastTen(cardId, deckId, lastTen);
+    public void setLastFive(int cardId, String deckId, EvictingQueue<Boolean> lastFive) {
+        cardsDAO.setLastFive(cardId, deckId, lastFive);
     }
 
     public void setLearntScore(int cardId, String deckId, int learntScore) {

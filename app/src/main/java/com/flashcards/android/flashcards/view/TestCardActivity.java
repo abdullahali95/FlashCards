@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
@@ -62,40 +63,22 @@ public class TestCardActivity extends AppCompatActivity {
         Bundle bundle = getIntent().getExtras();
         String deckId = bundle.getString("deckId");
 
-        model = ViewModelProviders.of(this).get(TestModel.class);
+        model = ViewModelProviders.of(TestCardActivity.this).get(TestModel.class);
 
+        if (model.currentDeckId() != deckId) {
 
+            model.initQueue(deckId);
+            question = model.getCurrentCard().getQuestion();
+            card.loadUrl("about:blank");
+            card.loadData(question, "text/html", "utf-8");
 
-        model.getDeck(deckId).observe(this, new Observer<Deck>() {
-            @Override
-            public void onChanged(@Nullable Deck deck) {
-                model.setTestDeck(deck);
-            }
-        });
+        } else {
+            // TODO: ensure screen stays on answerView when orientation is changed.
 
-        model.getAllCards(deckId).observe(this, new Observer<List<Card>>() {
-            @Override
-            public void onChanged(@Nullable List<Card> cards) {
-                if (model.getCurrentCard() == null) {
-                    model.initQueue(cards);
-                    model.setTestCards(cards);
-                    question = model.getCurrentCard().getQuestion();
-                    card.loadUrl("about:blank");
-                    card.loadData(question, "text/html", "utf-8");
-
-                } else {
-                    // TODO: ensure screen stays on answerView when orientation is changed.
-
-                    question = model.getCurrentCard().getQuestion();
-                    card.loadUrl("about:blank");
-                    card.loadData(question, "text/html", "utf-8");
-                }
-            }
-        });
-
-
-        // TODO: add method to look through webview String for '#' and replace it with '%23'
-
+            question = model.getCurrentCard().getQuestion();
+            card.loadUrl("about:blank");
+            card.loadData(question, "text/html", "utf-8");
+        }
 
         // Add Event listeners to buttons
         skipButton.setOnClickListener(new View.OnClickListener() {
@@ -139,7 +122,7 @@ public class TestCardActivity extends AppCompatActivity {
     public void getNewCard () {
 
         // TODO: Add slide animation for card
-        question = model.getCard().getQuestion();
+        question = model.getNewCard().getQuestion();
         card.loadUrl("about:blank");
         card.getSettings().setTextZoom(200);
         card.loadData(question, "text/html", "utf-8");
@@ -158,8 +141,11 @@ public class TestCardActivity extends AppCompatActivity {
      * Marks the card incorrect and moves to next card.
      */
     public void incorrect() {
-        model.markIncorrect();
-        getNewCard();
+
+        question = model.markIncorrect().getQuestion();
+        card.loadUrl("about:blank");
+        card.getSettings().setTextZoom(200);
+        card.loadData(question, "text/html", "utf-8");
         flipToQuestion();
     }
 
@@ -167,8 +153,10 @@ public class TestCardActivity extends AppCompatActivity {
      * Marks the card correct and moves to next card.
      */
     public void correct () {
-        model.markCorrect();
-        getNewCard();
+        question = model.markCorrect().getQuestion();
+        card.loadUrl("about:blank");
+        card.getSettings().setTextZoom(200);
+        card.loadData(question, "text/html", "utf-8");
         flipToQuestion();
     }
 
@@ -315,6 +303,10 @@ public class TestCardActivity extends AppCompatActivity {
 
     }
 
-
+    @Override
+    public void onBackPressed() {
+        model.finish();
+        finish();
+    }
 
 }
