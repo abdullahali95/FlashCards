@@ -150,8 +150,6 @@ public class TestModelBackup extends AndroidViewModel {
         incAttempts();
         Log.d(currentCard.getLastFive().toString(), "markIncorrect: ");
         currentCard.addAnswer(Boolean.FALSE);
-        Log.d(currentCard.getLastFive().toString(), "markIncorrectAfter: ");
-        Log.d(String.valueOf(currentCard.getLastFive().size()), "markIncorrectSizeAfter: ");
 
         AddAnswerTask task = new AddAnswerTask();
         task.execute();

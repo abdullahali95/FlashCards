@@ -39,13 +39,11 @@ public class Converters {
     @TypeConverter
     public static String QueueToString (EvictingQueue<Boolean> b) {
         String s = "";
-        Boolean current;
         if (b == null) return s;
-        for (int i = 0; i < 5; i++) {
-            current = b.poll();
-            if (current == Boolean.TRUE) {
+        for (Boolean current : b) {
+            if (current.equals(Boolean.TRUE)) {
                 s += "t";
-            } else if (current == Boolean.FALSE) {
+            } else if (current.equals(Boolean.FALSE)) {
                 s += "f";
             }
         }

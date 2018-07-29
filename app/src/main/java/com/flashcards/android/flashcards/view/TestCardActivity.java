@@ -133,8 +133,11 @@ public class TestCardActivity extends AppCompatActivity {
      * Gets a new card from the model
      */
     public void skip () {
-        model.skip();
-        getNewCard();
+
+        question = model.skip().getQuestion();
+        card.loadUrl("about:blank");
+        card.getSettings().setTextZoom(200);
+        card.loadData(question, "text/html", "utf-8");
     }
 
     /**
@@ -303,10 +306,18 @@ public class TestCardActivity extends AppCompatActivity {
 
     }
 
+    // Clean up methods
+
     @Override
     public void onBackPressed() {
         model.finish();
         finish();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        model.finish();
     }
 
 }

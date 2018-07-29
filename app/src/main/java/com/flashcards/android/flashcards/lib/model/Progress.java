@@ -31,8 +31,11 @@ public class Progress {
      * @return Customised Leitner Score.
      * PostConditions: The leitner score should be between 0.2 - 1.0
      */
-    public static double leitnerScore (int total, EvictingQueue<Boolean> lastFive) {
-    	if (total == 0) return 0.2;
+    public static double leitnerScore (Card card) {
+        int total = card.getAttempts();
+        EvictingQueue<Boolean> lastFive = card.getLastFive();
+
+        if (total == 0) return 0.2;
     	
         else {
 
@@ -40,14 +43,9 @@ public class Progress {
 	        int correct = 0;
 	        for (Iterator<Boolean> i = lastFive.iterator(); i.hasNext(); ) {
 	            if(i.next() == TRUE) correct++;
-
 	        }
-
 	        // 5 is the max size of the Queue
 	        double ls = ((double) correct)/5;
-
-            Log.d(String.valueOf(correct), "Correct: ");
-            Log.d(String.valueOf(ls), "Leanrt Score: ");
 
 	        // If there are no true answers, min value should be 0.2
 	        return (ls > 0)? ls : 0.2;
@@ -64,7 +62,7 @@ public class Progress {
      */
     public static double reflexScore(int attempts) {
         if (attempts == 0) {
-            return 1;         // First value doesn't matter, as only uses random
+            return 1;         // The function doesn't provide an appropriate value for 0.
         } else if ( attempts > 20) {
             return 1;           // Value close to 1, so saves calculation.
         } else {
@@ -80,39 +78,24 @@ public class Progress {
      * @return Learnt score
      */
     public static int generateLearntScore(int sizeOfDeck, Card card) {
-        int attempts = card.getAttempts();
         int scale = sizeOfDeck * 5;     // Determines the variation in the scores
 
-        if (attempts == 0) {
+        double rand = Math.random();
+        double m = reflexScore(card.getAttempts());
+        double l = leitnerScore(card);
 
-            // Initialised with values between 400 and 600
-            int initialVal =(int) ( ((double) Math.random() * (scale*0.2)) + (scale*0.4));
-            card.setLearntScore(initialVal);
-            return initialVal;
-        } else {
+        // The effect of random function should vary depending on size of deck
+        // The smaller the deck, the more random the deck should be shuffled.
+        // The effect is determined by function y = (1.5/x)+0.25
 
-            double rand = random();
-            
-            double m = reflexScore(card.getAttempts());
-            
-            double l = leitnerScore(card.getAttempts(), card.getLastFive());
-            Log.d(String.valueOf(l), card.toString());
-            
-            // The effect of random function should vary depending on size of deck
-            // The smaller the deck, the more random the deck should be shuffled.
-            // The effect is determined by function y = (1.5/x)+0.25
-            
-            double randWeight = (1.5/sizeOfDeck) + 0.25;
-            
-            double s = ((l * m * (1-randWeight)) + (rand * randWeight))/2;
+        double randWeight = (1.5/sizeOfDeck) + 0.25;
 
-            int score = (int) Math.round(s * 2 * scale);
+        double s = ((l * m * (1-randWeight)) + (rand * randWeight))/2;
 
-            card.setLearntScore(score);
-            return score;
-        }
+        int score = (int) Math.round(s * 2 * scale);
+
+        card.setLearntScore(score);
+        return score;
     }
-
-
 
 }

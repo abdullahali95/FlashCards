@@ -44,6 +44,9 @@ public interface CardsDAO {
     @Query("SELECT * FROM Card WHERE deckId = :deckId")
     public List<Card> getAllDeckCards (String deckId);
 
+    @Update(onConflict = OnConflictStrategy.REPLACE)
+    public void setAllCards(List<Card> allCards);
+
     @Query("SELECT * FROM Card WHERE cardId = :cardId AND deckId = :deckId")
     public LiveData<Card> getCard(int cardId, String deckId);
 
@@ -74,5 +77,6 @@ public interface CardsDAO {
 
     @Query("UPDATE Card SET learntScore = :learntScore WHERE cardId =:cardId AND deckId = :deckId")
     public void setLearntScore(int cardId, String deckId, int learntScore);
+
 
 }
