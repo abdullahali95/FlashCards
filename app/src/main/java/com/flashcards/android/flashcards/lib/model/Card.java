@@ -150,6 +150,11 @@ public class Card implements Comparable<Card> {
         return learntScore;
     }
 
+    public int skip(int deckSize) {
+        learntScore = Progress.skipCard(deckSize, this);
+        return learntScore;
+    }
+
     public int getLearntScore() {
         return learntScore;
     }
@@ -185,5 +190,6 @@ public class Card implements Comparable<Card> {
         return "Question='" + question + '\'' +
                 ", Answer='" + answer + '\'';
     }
+
 
 }

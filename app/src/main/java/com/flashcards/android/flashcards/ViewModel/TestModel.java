@@ -19,6 +19,7 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.PriorityQueue;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.PriorityBlockingQueue;
 
 
 /*
@@ -30,18 +31,16 @@ public class TestModel extends AndroidViewModel {
 
     private TestRepo repo;
     private String deckId;
-    private static PriorityQueue<Card> testQueue;
+    private static PriorityBlockingQueue<Card> testQueue;
     private Card currentCard;
     private Card lastCard;
 
-    private Handler updater;
-    private Runnable runnable;
+    private int counter;
 
     public TestModel(@NonNull Application application) {
         super(application);
         this.repo = new TestRepo(application);
-        testQueue = new PriorityQueue<Card>();
-        updater = new Handler();
+        testQueue = new PriorityBlockingQueue<Card>();
     }
 
 
@@ -70,15 +69,6 @@ public class TestModel extends AndroidViewModel {
 
         SetLastUsedTask task2 = new SetLastUsedTask();
         task2.execute();
-
-        // Save Progress every 10 seconds
-        updater.postDelayed(runnable = new Runnable(){
-            public void run(){
-                SaveChangesTask task3 = new SaveChangesTask();
-                task3.execute();
-                updater.postDelayed(this, 10000);
-            }
-        }, 10000);
 
     }
 
@@ -125,26 +115,31 @@ public class TestModel extends AndroidViewModel {
     }
 
     public Card skip() {
+        Log.d(String.valueOf(currentCard.getLearntScore()), "skip: ");
+        currentCard.skip(testQueue.size()+1);
+        Log.d(String.valueOf(currentCard.getLearntScore()), "skip: ");
+
         lastCard = currentCard;
         currentCard = getNewCard();
+        Log.d("Last Card: ", lastCard.toString());
+        Log.d("Current Card: ", currentCard.toString());
+        testQueue.add(lastCard);
+
+        incCounter();
         return currentCard;
     }
 
     public Card markIncorrect() {
         currentCard.addAnswer(Boolean.FALSE);
-        Log.d("Last Five: ", currentCard.getLastFive().toString());
         incAttempts();
         incCorrect();
-
-        Log.d(String.valueOf(currentCard.getLearntScore()), "LearntScoreBefore: ");
-
         generateLearntScore();
-        Log.d(String.valueOf(currentCard.getLearntScore()), "LearntScoreAfter: ");
 
         lastCard = currentCard;
         currentCard = getNewCard();
 
         testQueue.add(lastCard);
+        incCounter();
         return currentCard;
     }
 
@@ -152,18 +147,12 @@ public class TestModel extends AndroidViewModel {
         currentCard.addAnswer(Boolean.TRUE);
         incAttempts();
         incCorrect();
-
-        Log.d(String.valueOf(currentCard.getAttempts()), "Total Attempts: ");
-
-        Log.d(String.valueOf(currentCard.getLearntScore()), "LearntScoreBefore: ");
         generateLearntScore();
-        Log.d(String.valueOf(currentCard.getLearntScore()), "LearntScoreAfter: ");
-
 
         lastCard = currentCard;
         currentCard = getNewCard();
         testQueue.add(lastCard);
-
+        incCounter();
 
         return currentCard;
     }
@@ -182,13 +171,32 @@ public class TestModel extends AndroidViewModel {
         currentCard.getLearntScore(testQueue.size()+1);
     }
 
+    private void incCounter() {
+        counter++;
+
+        if (counter > 5) {
+            // Periodic reshuffle of cards
+            int size = testQueue.size();
+            PriorityBlockingQueue<Card> newQueue = new PriorityBlockingQueue<Card>();
+            for(Card card: testQueue) {
+                card.getLearntScore(size);
+                newQueue.add(card);
+            }
+            testQueue = newQueue;
+
+            SaveChangesTask task = new SaveChangesTask();
+            task.execute();
+
+            counter = 0;
+        }
+
+    }
+
 
     public void finish() {
         // TODO: Save changes
         SaveChangesTask task = new SaveChangesTask();
         task.execute();
-
-        updater.removeCallbacks(runnable);
 
     }
 
@@ -196,6 +204,8 @@ public class TestModel extends AndroidViewModel {
 
         @Override
         protected Void doInBackground(Void... voids) {
+
+            // Save Card info
             List<Card> allCards = new ArrayList<Card>();
             allCards.addAll(testQueue);
             repo.setAllCards(allCards);
