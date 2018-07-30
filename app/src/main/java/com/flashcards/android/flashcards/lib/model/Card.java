@@ -145,13 +145,13 @@ public class Card implements Comparable<Card> {
         lastFive.add(answer);
     }
 
-    public int getLearntScore(int deckSize) {
-        learntScore = Progress.generateLearntScore(deckSize, this);
+    public int getLearntScore(int deckSize, int aveAttempts, double aveLeitnerScore) {
+        learntScore = Progress.generateLearntScore(deckSize, this, aveAttempts, aveLeitnerScore);
         return learntScore;
     }
 
-    public int skip(int deckSize) {
-        learntScore = Progress.skipCard(deckSize, this);
+    public int skip(int deckSize, int aveAttempts, double aveLeitnerScore) {
+        learntScore = Progress.skipCard(deckSize, this, aveAttempts, aveLeitnerScore);
         return learntScore;
     }
 
@@ -177,11 +177,7 @@ public class Card implements Comparable<Card> {
 
     @Override
     public boolean equals(Object o) {
-        if (o == null) {
-            return false;
-        } else {
-            return ((Integer) this.cardId).equals(((Card) o).getCardId());
-        }
+        return o != null && ((Integer) this.cardId).equals(((Card) o).getCardId());
     }
 
 

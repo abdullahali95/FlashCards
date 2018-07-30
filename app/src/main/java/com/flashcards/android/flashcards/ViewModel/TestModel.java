@@ -12,6 +12,7 @@ import android.widget.Toast;
 import com.flashcards.android.flashcards.data.repo.TestRepo;
 import com.flashcards.android.flashcards.lib.model.Card;
 import com.flashcards.android.flashcards.lib.model.Deck;
+import com.flashcards.android.flashcards.lib.model.Progress;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -36,6 +37,8 @@ public class TestModel extends AndroidViewModel {
     private Card lastCard;
 
     private int counter;
+    private int aveAttempts;
+    private double aveLeitnerScore;
 
     public TestModel(@NonNull Application application) {
         super(application);
@@ -45,7 +48,7 @@ public class TestModel extends AndroidViewModel {
 
 
     public boolean queueReady() {
-        return (testQueue.size() > 0) ? true : false;
+        return testQueue.size() > 0;
     }
 
     public void initQueue(String deckId) {
@@ -55,12 +58,7 @@ public class TestModel extends AndroidViewModel {
         GetCardsTask task = new GetCardsTask();
         try {
             task.execute(deckId).get();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-//            Log.e("Test Model: ",
-//                    "Error: There was a problem while trying to obtain the cards from the database",
-//                    e);
-        } catch (ExecutionException e) {
+        } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
 //            Log.e("Test Model: ",
 //                    "Error: There was a problem while trying to obtain the cards from the database",
@@ -79,8 +77,16 @@ public class TestModel extends AndroidViewModel {
 
             List<Card> allCards = repo.getAllDeckCards(strings[0]);
             int size = allCards.size();
+
             for(Card card: allCards) {
-                card.getLearntScore(size);
+                aveAttempts += card.getAttempts();
+                aveLeitnerScore += Progress.leitnerScore(card);
+            }
+            aveAttempts = aveAttempts/size;
+            aveLeitnerScore = aveLeitnerScore/ (double) size;
+
+            for(Card card: allCards) {
+                card.getLearntScore(size, aveAttempts, aveLeitnerScore);
                 testQueue.add(card);
             }
 
@@ -116,7 +122,7 @@ public class TestModel extends AndroidViewModel {
 
     public Card skip() {
         Log.d(String.valueOf(currentCard.getLearntScore()), "skip: ");
-        currentCard.skip(testQueue.size()+1);
+        currentCard.skip(testQueue.size()+1, aveAttempts, aveLeitnerScore);
         Log.d(String.valueOf(currentCard.getLearntScore()), "skip: ");
 
         lastCard = currentCard;
@@ -132,7 +138,6 @@ public class TestModel extends AndroidViewModel {
     public Card markIncorrect() {
         currentCard.addAnswer(Boolean.FALSE);
         incAttempts();
-        incCorrect();
         generateLearntScore();
 
         lastCard = currentCard;
@@ -158,28 +163,38 @@ public class TestModel extends AndroidViewModel {
     }
 
 
-    public void incAttempts () {
+    private void incAttempts() {
         currentCard.setAttempts(currentCard.getAttempts()+1);
     }
 
 
-    public void incCorrect () {
+    private void incCorrect() {
         currentCard.setCorrect(currentCard.getCorrect()+1);
     }
 
-    public void generateLearntScore () {
-        currentCard.getLearntScore(testQueue.size()+1);
+    private void generateLearntScore() {
+        currentCard.getLearntScore(testQueue.size()+1, aveAttempts, aveLeitnerScore);
     }
 
     private void incCounter() {
         counter++;
 
         if (counter > 5) {
+
+            // Recalculate attempts and leitner score
+            int size = testQueue.size()+1;  // +1 as currentcared is not in the queue
+            for(Card card: testQueue) {
+                aveAttempts += card.getAttempts();
+                aveLeitnerScore += Progress.leitnerScore(card);
+            }
+            aveAttempts = aveAttempts/size;
+            aveLeitnerScore = aveLeitnerScore/ (double) size;
+
+
             // Periodic reshuffle of cards
-            int size = testQueue.size();
             PriorityBlockingQueue<Card> newQueue = new PriorityBlockingQueue<Card>();
             for(Card card: testQueue) {
-                card.getLearntScore(size);
+                card.getLearntScore(size, aveAttempts, aveLeitnerScore);
                 newQueue.add(card);
             }
             testQueue = newQueue;

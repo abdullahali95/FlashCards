@@ -7,6 +7,7 @@ import com.google.common.collect.EvictingQueue;
 import java.util.Iterator;
 
 import static java.lang.Boolean.TRUE;
+import static java.lang.Math.log;
 import static java.lang.Math.random;
 
 /**
@@ -22,10 +23,10 @@ public class Progress {
     /**
      * Uses the lastFive list to calculate the ratio of correct answers.
      * The values simulate the decks of cards in Leitner system. The decks are valued as follows:
-     * 0-1 correct = 0.4
-     * 2 correct = 0.55
-     * 3 correct = 0.7
-     * 4 correct = 0.85
+     * 0-1 correct = 0.2
+     * 2 correct = 0.4
+     * 3 correct = 0.6
+     * 4 correct = 0.8
      * 5 correct = 1.0 (card learnt)
      *
      * @return Customised Leitner Score.
@@ -35,21 +36,20 @@ public class Progress {
         int total = card.getAttempts();
         EvictingQueue<Boolean> lastFive = card.getLastFive();
 
-        // Initialising at 0.5 slows introduction of new cards into the deck,
-        // But still keeps the score slightly lower then cards which have been
-        // answered correctly atleast once (0.55)
-        if (total == 0) return 0.5;
+        // Initial value slightly higher then min value (0.2). This is so:
+        // Initial incorrect answers can be identified by the slightly lower then average leitner score
+        if (total == 0) return 0.3;
         else {
 	        int correct = 0;
             for (Boolean b : lastFive) {
                 if (b == TRUE) correct++;
             }
-	        // With the queue size 5, interval between each deck is 15%
+	        // With the queue size 5, interval between each deck is 20%
             // Following equation makes this division
-	        double ls = ((15*(correct-1))+40/ (double) 100);
+	        double ls = (0.2*(correct-1))+0.2;
 
-	        // If there are no true answers, min value should be 0.4
-	        return (ls >= 0.4)? ls : 0.4;
+	        // If there are no true answers, min value should be 0.2
+	        return (ls >= 0.2)? ls : 0.2;
         }
     }
 
@@ -61,27 +61,63 @@ public class Progress {
      * Preconditions: attempts must be a positive number
      * @return The reflex score, between 0 and 1 (inclusive)
      */
-    public static double reflexScore(int attempts) {
-        if (attempts == 0) {
-            return 1;         // The function doesn't provide an appropriate value for 0.
-        } else if ( attempts > 20) {
-            return 1;           // Value close to 1, so saves calculation.
+    public static double reflexScore(Card card, int aveAttempts, double aveLeitnerScore) {
+        int attempts = card.getAttempts();
+
+        double center = 2 - (2*aveLeitnerScore);
+
+        double attemptsDiff = attempts - aveAttempts;
+
+        double rs;
+        if (attemptsDiff < center-1.05 || attemptsDiff > center+1.05) {
+            rs = 1;
         } else {
-            return 1 - ( (double) 1/(attempts +1));
-            }
+            rs = (Math.pow((attemptsDiff-center),2)/2.0) + 0.4;
+        }
+        return rs;
     }
 
-    private static double combinedScore (int sizeOfDeck, Card card) {
+    private static double random(Card card, int aveAttempts) {
+        int attempts = card.getAttempts();
+        Log.d(card.toString(), "random: ");
+        double attemptsDiff = attempts - aveAttempts;
+        Log.d(String.valueOf(attemptsDiff), "attempts Diff: ");
+
         double rand = Math.random();
-        double m = reflexScore(card.getAttempts());
+
+        if (attemptsDiff > -1) {
+            return rand;
+        } else {
+            Log.d("", "extreme rand diff found ");
+            double randBias = 0.1 - (1.0/(attemptsDiff-0.1));
+            return rand * randBias;
+        }
+    }
+
+    private static double combinedScore (int sizeOfDeck, Card card, int aveAttempts, double aveLeitnerScore) {
+        double r = random(card, aveAttempts);
+        double m = reflexScore(card, aveAttempts, aveLeitnerScore);
         double l = leitnerScore(card);
 
         // The effect of random function should vary depending on size of deck
         // The smaller the deck, the more random the deck should be shuffled.
-        // The effect is determined by function y = (1.5/x)+0.25
-        double randWeight = (1.5/sizeOfDeck) + 0.25;
+        // The effect is determined by function y = (1/x)+0.4
+        double randWeight;
+        // Once deck is mostly learnt, ordering should be primarily random
+        if (aveLeitnerScore > 0.8) randWeight = 0.6;
+        else randWeight = (1.0 / sizeOfDeck) + 0.4;
 
-        return ((l * m * (1-randWeight)) + (rand * randWeight))/2;
+        Log.d(String.valueOf(aveAttempts), "aveAttempts: ");
+        Log.d("aveLeitnerScore: ", String.valueOf(aveLeitnerScore));
+        Log.d(String.valueOf(r), "randomScore: ");
+        Log.d("reflexScore: ", String.valueOf(m));
+        Log.d("leitnerScore: ", String.valueOf(l));
+
+//        double combinedScore = ((l * m * (1-randWeight)) + (r * randWeight))/2;
+        double combinedScore = (l + m + r)/3.0;
+        Log.d("combinedScore: ", String.valueOf(combinedScore));
+
+        return combinedScore;
     }
 
     //TODO: test the learntScore and it's initialisd value
@@ -89,9 +125,9 @@ public class Progress {
      *
      * @return Learnt score
      */
-    public static int generateLearntScore(int sizeOfDeck, Card card) {
+    public static int generateLearntScore(int sizeOfDeck, Card card, int aveAttempts, double aveLeitnerScore) {
         int scale = sizeOfDeck * 5;     // Determines the variation in the scores
-        double s = combinedScore(sizeOfDeck, card);
+        double s = combinedScore(sizeOfDeck, card, aveAttempts, aveLeitnerScore);
         int score = (int) Math.round(s * 2 * scale);
 
         card.setLearntScore(score);
@@ -107,9 +143,10 @@ public class Progress {
      * @param card
      * @return
      */
-    public static int skipCard (int sizeOfDeck, Card card) {
+    public static int skipCard (int sizeOfDeck, Card card, int aveAttempts, double aveLeitnerScore) {
+
         int scale = sizeOfDeck * 5;     // Determines the variation in the scores
-        double s = combinedScore(sizeOfDeck, card);
+        double s = combinedScore(sizeOfDeck, card, aveAttempts, aveLeitnerScore);
 
         // Score increased by 20%
         if (s < 0.8) {
