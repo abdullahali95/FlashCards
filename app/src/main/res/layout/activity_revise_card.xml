@@ -2,32 +2,32 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/root_test"
+    android:id="@+id/root_revise"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorPrimaryDark"
-    tools:context=".view.TestCardActivity">
+    android:background="@color/colorBackground"
+    tools:context=".view.ReviseCardActivity">
 
 
     <Button
-        android:id="@+id/btn_skip_test"
+        android:id="@+id/btn_skip_revise"
         android:layout_width="wrap_content"
         android:layout_height="65dp"
         android:layout_marginBottom="16dp"
-        android:background="@color/colorPrimary"
-        android:textColor="@color/white_teal"
+        android:background="@color/white_teal"
+        android:textColor="@color/colorAccent"
         android:padding="15dp"
         android:text="@string/skip_btn_text"
         android:textSize="18sp"
         android:textStyle="bold"
 
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/btn_flip_test"
+        app:layout_constraintEnd_toStartOf="@+id/btn_flip_revise"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
-        android:id="@+id/btn_flip_test"
+        android:id="@+id/btn_flip_revise"
         android:layout_width="wrap_content"
         android:layout_height="65dp"
         android:layout_marginBottom="16dp"
@@ -39,10 +39,10 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/btn_skip_test" />
+        app:layout_constraintStart_toEndOf="@+id/btn_skip_revise" />
 
     <android.support.v7.widget.CardView
-        android:id="@+id/ll_card_test"
+        android:id="@+id/ll_card_revise"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginBottom="24dp"
@@ -55,7 +55,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/btn_skip_test">
+        app:layout_constraintBottom_toTopOf="@id/btn_skip_revise">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -64,12 +64,11 @@
             android:orientation="horizontal">
 
             <WebView
-                android:id="@+id/tv_question_test"
+                android:id="@+id/tv_question_revise"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
         </LinearLayout>
     </android.support.v7.widget.CardView>
-
 
 </android.support.constraint.ConstraintLayout>

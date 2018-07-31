@@ -14,6 +14,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -21,8 +22,14 @@ import com.flashcards.android.flashcards.R;
 import com.flashcards.android.flashcards.ViewModel.DeckInfoModel;
 import com.flashcards.android.flashcards.lib.model.Card;
 import com.flashcards.android.flashcards.lib.model.Deck;
+import com.flashcards.android.flashcards.lib.model.Progress;
 
+import org.ocpsoft.prettytime.PrettyTime;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class DeckInfoActivity extends AppCompatActivity {
@@ -38,7 +45,10 @@ public class DeckInfoActivity extends AppCompatActivity {
     private TextView deckName;
     private TextView deckInfo;
     private FloatingActionButton fab;
+    private Button reviseButton;
     private Button testButton;
+    private TextView progressText;
+    private ProgressBar progressBar;
     private Context context;
 
     // Model objects
@@ -90,9 +100,13 @@ public class DeckInfoActivity extends AppCompatActivity {
 
     private void initView() {
         fab = (FloatingActionButton) findViewById(R.id.fab_deck_info);
+        reviseButton = (Button) findViewById(R.id.btn_revise_deck_info);
         testButton = (Button) findViewById(R.id.btn_test_deck_info);
         deckName = (TextView) findViewById(R.id.tv_deck_name);
         deckInfo = (TextView) findViewById(R.id.tv_info_deck);
+        progressText = (TextView) findViewById(R.id.progress_text_deck_info);
+        progressBar = (ProgressBar) findViewById(R.id.progressBar_deck_info);
+
 
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -100,6 +114,20 @@ public class DeckInfoActivity extends AppCompatActivity {
 
                 deckInfoModel.createCard();
 
+            }
+        });
+
+        reviseButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (deck.getDeckSize() < 2) {
+                    // Error message
+                    Toast.makeText(context, "The deck must have atleast 2 cards for the test mode", Toast.LENGTH_LONG).show();
+                } else {
+                    Intent intent = new Intent(DeckInfoActivity.this, ReviseCardActivity.class);
+                    intent.putExtra("deckId", deck.getDeckId());
+                    startActivity(intent);
+                }
             }
         });
 
@@ -135,7 +163,28 @@ public class DeckInfoActivity extends AppCompatActivity {
         } else {
             deckInfoModel.setCurrentDeck(deck);
             deckName.setText(deck.getName());
-            //TODO: add deck info and graph
+
+            // Set time since last tested
+            Date convertedDate = new Date();
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd kk:mm:ss");
+            try {
+                convertedDate = dateFormat.parse(deck.getCreated());
+                PrettyTime p  = new PrettyTime();
+                String datetime= p.format(convertedDate);
+                datetime = "Created: " + datetime;
+                deckInfo.setText(datetime);
+
+            } catch (ParseException e) {
+
+            }
+
+            //TODO: Fix progress for when cards not properly tested.
+            // TODO: Add aveAttempts to Deck class, and if less then 1, set learnt as 0%
+            int progress = (int) Math.round(deck.getEf()*100);
+            progressBar.setProgress(progress);
+            progressText.setText("Deck Learnt: " + progress + "%");
+
+
         }
 
 

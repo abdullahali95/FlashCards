@@ -6,8 +6,8 @@ android {
         applicationId "com.flashcards.android.flashcards"
         minSdkVersion 21
         targetSdkVersion 22
-        versionCode 3
-        versionName "1.2"
+        versionCode 5
+        versionName "1.4"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -48,4 +48,3 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.8.5'
 
 }
-

@@ -108,6 +108,9 @@ public class DeckAdapter extends RecyclerView.Adapter<DeckAdapter.DeckViewHolder
                         if (id == R.id.action_test) {
                             test(currentDeck);
 
+                        } else if (id == R.id.action_revise) {
+                            revise(currentDeck);
+
                         } else if (id == R.id.action_export) {
                             export(currentDeck);
 
@@ -132,6 +135,17 @@ public class DeckAdapter extends RecyclerView.Adapter<DeckAdapter.DeckViewHolder
             Toast.makeText(context, "The deck must have atleast 2 cards for the test mode", Toast.LENGTH_LONG).show();
         } else {
             Intent intent = new Intent(context, TestCardActivity.class);
+            intent.putExtra("deckId", deck.getDeckId());
+            context.startActivity(intent);
+        }
+    }
+
+    public void revise(Deck deck) {
+        if (deck.getDeckSize() < 2) {
+            // Error message
+            Toast.makeText(context, "The deck must have atleast 2 cards for the Revise mode", Toast.LENGTH_LONG).show();
+        } else {
+            Intent intent = new Intent(context, ReviseCardActivity.class);
             intent.putExtra("deckId", deck.getDeckId());
             context.startActivity(intent);
         }

@@ -47,6 +47,9 @@ public interface DeckDAO {
     @Query("UPDATE Deck SET lastUsed = :lastUsed WHERE deckId =:deckId")
     public void setLastUsed(String deckId, String lastUsed);
 
+    @Query("UPDATE Deck SET ef = :ef WHERE deckId =:deckId")
+    public void setEf(String deckId, double ef);
+
     @Query("UPDATE Deck SET deckSize = :size WHERE deckId =:deckId")
     public void setDeckSize(String deckId, int size);
 

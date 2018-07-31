@@ -1,33 +1,24 @@
 package com.flashcards.android.flashcards.view;
 
 import android.arch.lifecycle.ViewModelProviders;
-import android.content.DialogInterface;
-import android.os.Bundle;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.text.InputType;
+import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.Toast;
 
 import com.flashcards.android.flashcards.R;
-import com.flashcards.android.flashcards.ViewModel.TestModel;
-import com.flashcards.android.flashcards.lib.model.Deck;
+import com.flashcards.android.flashcards.ViewModel.ReviseModel;
 import com.transitionseverywhere.*;
 
 import static com.flashcards.android.flashcards.R.color.*;
 
-/**
- * Created by Abdullah Ali *
- *
- */
-public class TestCardActivity extends AppCompatActivity {
+public class ReviseCardActivity extends AppCompatActivity {
+
     ViewGroup transitionsContainer;
-    TestModel model;
+    ReviseModel model;
     WebView card;
     String question;
     String answer;
@@ -44,11 +35,9 @@ public class TestCardActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.hide();
-        }
+        actionBar.hide();
 
-        setContentView(R.layout.activity_test_card);
+        setContentView(R.layout.activity_revise_card);
 
         loadViews();
 
@@ -56,9 +45,10 @@ public class TestCardActivity extends AppCompatActivity {
         Bundle bundle = getIntent().getExtras();
         String deckId = bundle.getString("deckId");
 
-        model = ViewModelProviders.of(TestCardActivity.this).get(TestModel.class);
+        model = ViewModelProviders.of(ReviseCardActivity.this).get(ReviseModel.class);
 
         if (model.currentDeckId() == null || !model.currentDeckId().equals(deckId)) {
+
             model.initQueue(deckId);
             question = model.getCurrentCard().getQuestion();
             card.loadUrl("about:blank");
@@ -93,13 +83,13 @@ public class TestCardActivity extends AppCompatActivity {
      * Loads layout components
      */
     public void loadViews() {
-        transitionsContainer = findViewById(R.id.root_test);
-        skipButton = findViewById(R.id.btn_skip_test);
-        flipButton = findViewById(R.id.btn_flip_test);
-        cardView = findViewById(R.id.ll_card_test);
+        transitionsContainer = (ViewGroup) findViewById(R.id.root_revise);
+        skipButton = (Button) findViewById(R.id.btn_skip_revise);
+        flipButton = (Button) findViewById(R.id.btn_flip_revise);
+        cardView = (View) findViewById(R.id.ll_card_revise);
 
         //TODO: Test if WebView scrolls
-        card = findViewById(R.id.tv_question_test);
+        card = (WebView) findViewById(R.id.tv_question_revise);
 
         // Set Editor
         card.setBackgroundColor(getResources().getColor(cardBackground));
@@ -125,60 +115,34 @@ public class TestCardActivity extends AppCompatActivity {
      * Gets a new card from the model
      */
     public void skip () {
-        if (model.queueEmpty()) {
-            endTest();
-        } else {
-            question = model.skip().getQuestion();
-            card.loadUrl("about:blank");
-            card.getSettings().setTextZoom(200);
-            card.loadData(question, "text/html", "utf-8");
-        }
+
+        question = model.skip().getQuestion();
+        card.loadUrl("about:blank");
+        card.getSettings().setTextZoom(200);
+        card.loadData(question, "text/html", "utf-8");
     }
 
     /**
      * Marks the card incorrect and moves to next card.
      */
     public void incorrect() {
-        if (model.queueEmpty()) {
-            endTest();
-        } else {
-            question = model.markIncorrect().getQuestion();
-            card.loadUrl("about:blank");
-            card.getSettings().setTextZoom(200);
-            card.loadData(question, "text/html", "utf-8");
-            flipToQuestion();
-        }
+
+        question = model.markIncorrect().getQuestion();
+        card.loadUrl("about:blank");
+        card.getSettings().setTextZoom(200);
+        card.loadData(question, "text/html", "utf-8");
+        flipToQuestion();
     }
 
     /**
      * Marks the card correct and moves to next card.
      */
     public void correct () {
-        if (model.queueEmpty()) {
-            endTest();
-        } else {
-            question = model.markCorrect().getQuestion();
-            card.loadUrl("about:blank");
-            card.getSettings().setTextZoom(200);
-            card.loadData(question, "text/html", "utf-8");
-            flipToQuestion();
-        }
-    }
-
-    private void endTest() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("You scored " + model.getScore()+ "%");
-
-        // Set up the buttons
-        builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                finish();
-            }
-        });
-
-        builder.show();
-
+        question = model.markCorrect().getQuestion();
+        card.loadUrl("about:blank");
+        card.getSettings().setTextZoom(200);
+        card.loadData(question, "text/html", "utf-8");
+        flipToQuestion();
     }
 
 
@@ -225,7 +189,8 @@ public class TestCardActivity extends AppCompatActivity {
         correctButton.setText(R.string.skip_btn_text);
 
         TransitionManager.beginDelayedTransition(transitionsContainer, new Recolor());
-        correctButton.setBackgroundColor(getResources().getColor(colorPrimary));
+        correctButton.setBackgroundColor(getResources().getColor(white_teal));
+        correctButton.setTextColor(getResources().getColor(colorAccent));
 
         skipButton = correctButton;
         correctButton.setOnClickListener(null);
@@ -246,39 +211,39 @@ public class TestCardActivity extends AppCompatActivity {
      */
     public void flipToAnswer() {
 
-        final View cardView = (findViewById(R.id.ll_card_test));
+        final View cardView = (findViewById(R.id.ll_card_revise));
 
         // Change Answer
 
         cardView.setCameraDistance(10000);
         cardView.animate().withLayer()
-            .rotationY(90)
-            .setDuration(200)
-            .withEndAction(
-                new Runnable() {
-                    @Override public void run() {
+                .rotationY(90)
+                .setDuration(200)
+                .withEndAction(
+                        new Runnable() {
+                            @Override public void run() {
 
-                        answer = model.getCurrentCard().getAnswer();
-                        card.loadUrl("about:blank");
-                        card.getSettings().setTextZoom(150);
-                        card.loadData(answer, "text/html", "utf-8");
+                                answer = model.getCurrentCard().getAnswer();
+                                card.loadUrl("about:blank");
+                                card.getSettings().setTextZoom(150);
+                                card.loadData(answer, "text/html", "utf-8");
 
-                        // second quarter turn
-                        cardView.setRotationY(-90);
-                        cardView.animate().withLayer()
-                            .rotationY(0)
-                            .setDuration(200)
-                            .start();
-                    }
-                }
-            ).start();
+                                // second quarter turn
+                                cardView.setRotationY(-90);
+                                cardView.animate().withLayer()
+                                        .rotationY(0)
+                                        .setDuration(200)
+                                        .start();
+                            }
+                        }
+                ).start();
 
 
         // Change Flip --> Incorrect Button
         TransitionManager.beginDelayedTransition(transitionsContainer, new TransitionSet()
-                        .addTransition(new ChangeText().setChangeBehavior(ChangeText.CHANGE_BEHAVIOR_OUT_IN))
-                        .addTransition(new Recolor())
-                        .addTransition(new ChangeBounds()));
+                .addTransition(new ChangeText().setChangeBehavior(ChangeText.CHANGE_BEHAVIOR_OUT_IN))
+                .addTransition(new Recolor())
+                .addTransition(new ChangeBounds()));
 
 
         flipButton.setText(R.string.incorrect_btn_text);
@@ -309,6 +274,7 @@ public class TestCardActivity extends AppCompatActivity {
 
         TransitionManager.beginDelayedTransition(transitionsContainer, new Recolor());
         skipButton.setBackgroundColor(getResources().getColor(green));
+        skipButton.setTextColor(getResources().getColor(white));
 
         correctButton = skipButton;
         skipButton.setOnClickListener(null);
@@ -324,5 +290,18 @@ public class TestCardActivity extends AppCompatActivity {
 
     }
 
+    // Clean up methods
+
+    @Override
+    public void onBackPressed() {
+        model.finish();
+        finish();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        model.finish();
+    }
 
 }

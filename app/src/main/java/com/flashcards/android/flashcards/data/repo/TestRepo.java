@@ -87,6 +87,10 @@ public class TestRepo {
         deckDAO.setLastUsed(deckId, date);
     }
 
+    public void setEf(String deckId, double ef) {
+        deckDAO.setEf(deckId, ef);
+    }
+
     public void setAllCards(List<Card> allCards) {
         cardsDAO.setAllCards(allCards);
     }

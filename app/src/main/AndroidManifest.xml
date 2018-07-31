@@ -3,17 +3,17 @@
     package="com.flashcards.android.flashcards">
 
     <uses-permission
-        android:required="true"
-        android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+        android:name="android.permission.ACCESS_COARSE_LOCATION"
+        android:required="true" />
     <uses-permission
-        android:required="true"
-        android:name="android.permission.ACCESS_WIFI_STATE"/>
+        android:name="android.permission.ACCESS_WIFI_STATE"
+        android:required="true" />
     <uses-permission
-        android:required="true"
-        android:name="android.permission.CHANGE_WIFI_STATE"/>
+        android:name="android.permission.CHANGE_WIFI_STATE"
+        android:required="true" />
     <uses-permission
-        android:required="true"
-        android:name="android.permission.INTERNET"/>
+        android:name="android.permission.INTERNET"
+        android:required="true" />
 
     <application
         android:allowBackup="true"
@@ -25,40 +25,39 @@
         <activity
             android:name=".view.MainActivity"
             android:exported="true">
-
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
-
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
-                <data android:host="*" android:pathPattern=".*\\.deck" />
+
+                <data
+                    android:host="*"
+                    android:pathPattern=".*\\.deck" />
                 <data android:pathPattern=".*\\.deck" />
-                <data android:pathPattern=".*\\..*\\.deck"/>
-                <data android:pathPattern=".*\\..*\\..*\\.deck"/>
-                <data android:pathPattern=".*\\..*\\..*\\..*\\.deck"/>
-                <data android:pathPattern=".*\\..*\\..*\\..*\\..*\\.deck"/>
-                <data android:pathPattern=".*\\..*\\..*\\..*\\..*\\..*\\.deck"/>
+                <data android:pathPattern=".*\\..*\\.deck" />
+                <data android:pathPattern=".*\\..*\\..*\\.deck" />
+                <data android:pathPattern=".*\\..*\\..*\\..*\\.deck" />
+                <data android:pathPattern=".*\\..*\\..*\\..*\\..*\\.deck" />
+                <data android:pathPattern=".*\\..*\\..*\\..*\\..*\\..*\\.deck" />
                 <data android:mimeType="*/*" />
-
             </intent-filter>
-
-
         </activity>
         <activity
             android:name=".view.TestCardActivity"
             android:exported="true" />
         <activity
             android:name=".view.CardEditActivity"
-            android:windowSoftInputMode="adjustResize"
-            android:exported="true"/>
-        <activity android:name=".view.DeckInfoActivity"
-            android:exported="true"/>
-
-
+            android:exported="true"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".view.DeckInfoActivity"
+            android:exported="true" />
+        <activity android:name=".view.ReviseCardActivity"></activity>
     </application>
 
 </manifest>
