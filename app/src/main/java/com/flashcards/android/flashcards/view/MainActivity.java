@@ -31,6 +31,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 
+/**
+ * Created by Abdullah Ali
+ *
+ * This is the view class of the Home page, which displays the decks created by the user.
+ */
+
 public class MainActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private DeckAdapter adapter;
@@ -167,6 +173,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         builder.show();
+
     }
 
 

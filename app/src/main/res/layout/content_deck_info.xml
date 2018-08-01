@@ -10,43 +10,44 @@
     android:orientation="vertical">
 
     <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:background="@color/colorAccent"
-        android:transitionName="deck_item_transition"
         android:paddingLeft="5dp"
         android:paddingRight="5dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:transitionName="deck_item_transition">
 
         <TextView
             android:id="@+id/progress_text_deck_info"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
             android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="24dp"
+            android:layout_marginTop="8dp"
             android:text="@string/txt_progress_deck_info"
             android:textColor="@color/white_teal"
+            app:layout_constraintBottom_toTopOf="@+id/progressBar_deck_info"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/btn_test_deck_info"
-            app:layout_constraintTop_toBottomOf="@+id/tv_deck_name" />
+            app:layout_constraintTop_toBottomOf="@+id/tv_deck_name"
+            app:layout_constraintVertical_bias="1.0" />
 
         <ProgressBar
             android:id="@+id/progressBar_deck_info"
             style="@android:style/Widget.ProgressBar.Horizontal"
             android:layout_width="0dp"
-            android:layout_height="5dp"
+            android:layout_height="8dp"
+            android:layout_marginBottom="16dp"
             android:layout_marginLeft="15dp"
             android:layout_marginRight="15dp"
-            android:layout_marginTop="8dp"
             android:max="100"
             android:min="0"
-            android:progressBackgroundTint="@color/white"
+            android:progressBackgroundTint="@color/white_teal"
             android:progressTint="@color/colorPrimary"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/btn_test_deck_info"
-            app:layout_constraintTop_toBottomOf="@+id/progress_text_deck_info"
-            app:layout_constraintVertical_bias="0.0" />
+            app:layout_constraintStart_toEndOf="@+id/btn_test_deck_info" />
 
         <TextView
             android:id="@+id/tv_deck_name"
@@ -57,22 +58,22 @@
             android:layout_marginTop="8dp"
             android:text="Deck Name"
             android:textColor="@color/white"
-            android:transitionName="deck_title_transition"
             android:textSize="32sp"
             android:textStyle="bold"
+            android:transitionName="deck_title_transition"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <Button
             android:id="@+id/btn_revise_deck_info"
-            android:theme="@style/AppTheme.Button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:text="@string/btn_revise_deck_info"
+            android:theme="@style/AppTheme.Button"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_info_deck"
@@ -80,13 +81,13 @@
 
         <Button
             android:id="@+id/btn_test_deck_info"
-            android:theme="@style/AppTheme.Button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:text="@string/btn_test_deck_info"
+            android:theme="@style/AppTheme.Button"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@id/btn_revise_deck_info"
             app:layout_constraintTop_toBottomOf="@+id/tv_info_deck"
@@ -98,12 +99,11 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
             android:layout_marginStart="8dp"
-            android:text=""
+            android:text="@string/tv_info_deck"
             android:textColor="@color/white_teal"
             android:textSize="18sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_deck_name" />
-
 
 
     </android.support.constraint.ConstraintLayout>

@@ -32,6 +32,10 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * Created by Abdullah Ali
+ */
+
 public class DeckInfoActivity extends AppCompatActivity {
 
     // Recycler View
@@ -179,7 +183,7 @@ public class DeckInfoActivity extends AppCompatActivity {
             }
 
             //TODO: Fix progress for when cards not properly tested.
-            // TODO: Add aveAttempts to Deck class, and if less then 1, set learnt as 0%
+            // TODO: Do this by calculating it in Revise mode while setting deckEf, to avoid further fields in Deck class
             int progress = (int) Math.round(deck.getEf()*100);
             progressBar.setProgress(progress);
             progressText.setText("Deck Learnt: " + progress + "%");

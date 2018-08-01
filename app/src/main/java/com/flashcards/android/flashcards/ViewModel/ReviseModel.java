@@ -163,11 +163,14 @@ public class ReviseModel extends AndroidViewModel {
 
             // Recalculate attempts and leitner score
             int size = testQueue.size()+1;  // +1 as currentcared is not in the queue
+
+            aveAttempts = 0;
+            aveLeitnerScore = 0;
             for(Card card: testQueue) {
                 aveAttempts += card.getAttempts();
                 aveLeitnerScore += Progress.leitnerScore(card);
             }
-            aveAttempts = aveAttempts/size;
+            aveAttempts = (int) Math.round(aveAttempts/ (double) size);
             aveLeitnerScore = aveLeitnerScore/ (double) size;
 
 
@@ -211,7 +214,17 @@ public class ReviseModel extends AndroidViewModel {
             String date = sf.format(cal.getTime());
 
             repo.setLastUsed(deckId, date);
-            repo.setEf(deckId, aveLeitnerScore);
+
+            // If the deck has been revised, update the Easiness Factor of the deck.
+            double ef;
+            if (aveAttempts >= 2) {
+                ef = aveLeitnerScore;
+            } else {
+                // Gives a more accurate value as the deck has not been learnt well
+                // Yet the LeitnerScore is initialised at 0.3
+                ef = aveLeitnerScore/3;
+            }
+            repo.setEf(deckId, ef);
 
             return null;
         }

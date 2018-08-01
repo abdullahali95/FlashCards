@@ -10,6 +10,10 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.UUID;
 
+/**
+ * Created by Abdullah Ali
+ */
+
 @Entity
 public class Deck {
     @PrimaryKey
