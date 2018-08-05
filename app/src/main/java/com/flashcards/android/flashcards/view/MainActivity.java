@@ -1,7 +1,10 @@
 package com.flashcards.android.flashcards.view;
 
+import android.app.job.JobInfo;
+import android.app.job.JobScheduler;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -14,7 +17,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.InputType;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -23,7 +25,8 @@ import android.widget.Toast;
 
 import com.flashcards.android.flashcards.R;
 import com.flashcards.android.flashcards.ViewModel.MainModel;
-import com.flashcards.android.flashcards.lib.JsonParser;
+import com.flashcards.android.flashcards.lib.misc.JsonParser;
+import com.flashcards.android.flashcards.lib.misc.NotificationService;
 import com.flashcards.android.flashcards.lib.model.Deck;
 import com.flashcards.android.flashcards.lib.model.SimpleDeck;
 
@@ -86,6 +89,8 @@ public class MainActivity extends AppCompatActivity {
             Uri filePath = intent.getData();
             importDeck(filePath);
         }
+
+        scheduleNotifications();
 
     }
 
@@ -176,8 +181,32 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-
     public void setDecks(List<Deck> decks) {
         this.decks = decks;
+    }
+
+    public void scheduleNotifications () {
+        long delay = (24*60*60*1000);      // 1 Day in ms.
+
+        ComponentName componentName = new ComponentName(this, NotificationService.class);
+        JobInfo info = new JobInfo.Builder(2121, componentName)
+                .setPeriodic(delay)
+                .setPersisted(true)
+                .build();
+
+        JobScheduler scheduler = (JobScheduler) getSystemService(JOB_SCHEDULER_SERVICE);
+        scheduler.schedule(info);
+    }
+
+    public void cancelJob() {
+        JobScheduler scheduler = (JobScheduler) getSystemService(JOB_SCHEDULER_SERVICE);
+        scheduler.cancel(2121);
+    }
+
+    // Redraws the whole view every time it is requested (As opposed to pausing it in the background)
+    @Override
+    protected void onResume() {
+        super.onResume();
+        recyclerView.getAdapter().notifyDataSetChanged();
     }
 }

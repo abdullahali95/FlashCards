@@ -6,9 +6,9 @@ import android.arch.persistence.room.RoomDatabase;
 import android.arch.persistence.room.TypeConverters;
 import android.content.Context;
 
-import com.flashcards.android.flashcards.lib.Converters;
 import com.flashcards.android.flashcards.lib.DAO.CardsDAO;
 import com.flashcards.android.flashcards.lib.DAO.DeckDAO;
+import com.flashcards.android.flashcards.lib.misc.Converters;
 import com.flashcards.android.flashcards.lib.model.Card;
 import com.flashcards.android.flashcards.lib.model.Deck;
 
@@ -16,7 +16,7 @@ import com.flashcards.android.flashcards.lib.model.Deck;
  * Created by Abdullah Ali on 15/07/2018
  */
 
-@Database(entities = {Card.class, Deck.class}, version = 6, exportSchema = false)
+@Database(entities = {Card.class, Deck.class}, version = 8, exportSchema = false)
 @TypeConverters({Converters.class})
 public abstract class FlashCardsDatabase extends RoomDatabase {
 
@@ -38,6 +38,15 @@ public abstract class FlashCardsDatabase extends RoomDatabase {
                 }
             }
         }
+        return flashCardsDB;
+    }
+
+    /**
+     * Methdd for when Application not required.
+     * @return FlashCardsDB
+     */
+    public static FlashCardsDatabase getFlashCardsDB() {
+
         return flashCardsDB;
     }
 

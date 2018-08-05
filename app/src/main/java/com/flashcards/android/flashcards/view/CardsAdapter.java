@@ -81,7 +81,10 @@ public class CardsAdapter extends RecyclerView.Adapter<CardsAdapter.CardsViewHol
             cardView.setOnTouchListener(this);
 
             this.context = context;
+
         }
+
+
 
         // TODO: Find a better way to delete then long press.
         @Override

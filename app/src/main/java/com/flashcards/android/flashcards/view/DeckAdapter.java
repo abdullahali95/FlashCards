@@ -10,12 +10,12 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.util.Pair;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.PopupMenu;
 import android.widget.TextView;
@@ -23,7 +23,7 @@ import android.widget.Toast;
 
 import com.flashcards.android.flashcards.R;
 import com.flashcards.android.flashcards.ViewModel.MainModel;
-import com.flashcards.android.flashcards.lib.JsonParser;
+import com.flashcards.android.flashcards.lib.misc.JsonParser;
 import com.flashcards.android.flashcards.lib.model.Deck;
 
 import org.ocpsoft.prettytime.PrettyTime;
@@ -34,6 +34,7 @@ import java.io.FileWriter;
 import java.io.Writer;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -77,20 +78,33 @@ public class DeckAdapter extends RecyclerView.Adapter<DeckAdapter.DeckViewHolder
 
         // Set cards in deck
         String totalCard = (currentDeck.getDeckSize() == 1) ? " card" : " cards";
-        holder.cardCount.setText(currentDeck.getDeckSize() + totalCard);
+        totalCard = currentDeck.getDeckSize() + totalCard;
+        holder.cardCount.setText(totalCard);
 
         // Set time since last tested
         Date convertedDate = new Date();
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd kk:mm:ss");
         try {
-            convertedDate = dateFormat.parse(decks.get(position).getLastUsed());
-            PrettyTime p  = new PrettyTime();
-            String datetime= p.format(convertedDate);
-            datetime = "last used: " + datetime;
-            holder.lastUsed.setText(datetime);
+            convertedDate = dateFormat.parse(decks.get(position).getNextTestDue());
+            String datetime;
+
+            if (convertedDate.before(Calendar.getInstance().getTime())) {
+                // If revision due in the past, display 'now'
+                datetime = "Revision due now";
+                holder.cardView.setCardBackgroundColor(context.getResources().getColor(R.color.redBg));
+            } else {
+                PrettyTime p  = new PrettyTime();
+                datetime= p.format(convertedDate);
+                datetime = "Revision due " + datetime;
+                holder.cardView.setCardBackgroundColor(context.getResources().getColor(R.color.colorAccent));
+            }
+
+            holder.nextDue.setText(datetime);
 
         } catch (ParseException e) {
-            holder.lastUsed.setText(currentDeck.getLastUsed());
+            holder.nextDue.setText(currentDeck.getLastUsed());
+        } catch (Exception e) {
+            holder.nextDue.setText("");
         }
 
 
@@ -230,8 +244,9 @@ public class DeckAdapter extends RecyclerView.Adapter<DeckAdapter.DeckViewHolder
 
     public class DeckViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener,
             View.OnLongClickListener {
+        private CardView cardView;
         private TextView deckName;
-        private TextView lastUsed;
+        private TextView nextDue;
         private TextView cardCount;
         private ImageButton popupButton;
         private Deck deck;
@@ -241,9 +256,10 @@ public class DeckAdapter extends RecyclerView.Adapter<DeckAdapter.DeckViewHolder
         public DeckViewHolder(View itemView, MainModel model, Context context) {
             super(itemView);
             deckName = (TextView) itemView.findViewById(R.id.title_rec_deck);
-            lastUsed = (TextView) itemView.findViewById(R.id.days_rec_deck);
+            nextDue = (TextView) itemView.findViewById(R.id.days_rec_deck);
             cardCount = (TextView) itemView.findViewById(R.id.cards_rec_deck);
             popupButton = (ImageButton) itemView.findViewById(R.id.popup_options_btn);
+            cardView = (CardView) itemView.findViewById(R.id.main_rec_deck);
             this.model = model;
             this.context = context;
 

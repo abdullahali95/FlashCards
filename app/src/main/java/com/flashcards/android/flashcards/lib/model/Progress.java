@@ -4,11 +4,7 @@ import android.util.Log;
 
 import com.google.common.collect.EvictingQueue;
 
-import java.util.Iterator;
-
 import static java.lang.Boolean.TRUE;
-import static java.lang.Math.log;
-import static java.lang.Math.random;
 
 /**
  * Created by Abdullah Ali

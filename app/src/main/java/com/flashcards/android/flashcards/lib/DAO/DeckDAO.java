@@ -34,9 +34,11 @@ public interface DeckDAO {
     @Query("SELECT * FROM Deck")
     public LiveData<List<Deck>> getAllDecks ();
 
-//   @Query("SELECT * FROM Deck WHERE lastUsed NOT LIKE :deckId LIMIT 1")
-   @Query("SELECT * FROM Deck WHERE deckId = :deckId")
+    @Query("SELECT * FROM Deck WHERE deckId = :deckId")
     public LiveData<Deck> getDeck (String deckId);
+
+    @Query("SELECT * FROM Deck WHERE deckId = :deckId")
+    public Deck getDeckNow (String deckId);
 
     @Query("SELECT name FROM Deck WHERE deckId = :deckId")
     public LiveData<String> getName(String deckId);
@@ -55,5 +57,8 @@ public interface DeckDAO {
 
     @Query("SELECT deckSize FROM Deck WHERE deckId = :deckId")
     public LiveData<Integer> getDeckSize(String deckId);
+
+    @Query("SELECT nextTestDue FROM Deck")
+    public List<String> getAllNextDue ();
 
 }

@@ -1,8 +1,11 @@
 package com.flashcards.android.flashcards.test;
 
 import com.flashcards.android.flashcards.lib.model.Card;
+import com.flashcards.android.flashcards.lib.model.Deck;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.PriorityQueue;
 
 /**
@@ -53,6 +56,16 @@ public class TestCards {
         currentCard.addAnswer(Boolean.FALSE);
         System.out.println(currentCard.getLastFive());
         testQueue.add(currentCard);
+
+
+        Deck deck = new Deck("TestDeck");
+        SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd kk:mm:ss");
+        Calendar cal = Calendar.getInstance();
+        String date = sf.format(cal.getTime());
+
+        System.out.println((deck.getNextTestDue() == null));
+        deck.setNextTestDue(date);
+        System.out.println((deck.getNextTestDue() == null));
     }
 
 }

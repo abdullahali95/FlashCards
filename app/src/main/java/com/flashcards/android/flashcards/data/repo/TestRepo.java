@@ -63,6 +63,10 @@ public class TestRepo {
         return deckDAO.getDeck(deckId);
     }
 
+    public Deck getDeckNow(String deckId) {
+        return deckDAO.getDeckNow(deckId);
+    }
+
     public void setDeck(Deck deck) {
         deckDAO.setDeck(deck);
     }

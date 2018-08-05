@@ -2,18 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.flashcards.android.flashcards">
 
-    <uses-permission
-        android:name="android.permission.ACCESS_COARSE_LOCATION"
-        android:required="true" />
-    <uses-permission
-        android:name="android.permission.ACCESS_WIFI_STATE"
-        android:required="true" />
-    <uses-permission
-        android:name="android.permission.CHANGE_WIFI_STATE"
-        android:required="true" />
-    <uses-permission
-        android:name="android.permission.INTERNET"
-        android:required="true" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <application
         android:allowBackup="true"
@@ -58,6 +47,10 @@
             android:name=".view.DeckInfoActivity"
             android:exported="true" />
         <activity android:name=".view.ReviseCardActivity"></activity>
+
+        <service android:name=".lib.misc.NotificationService"
+            android:permission="android.permission.BIND_JOB_SERVICE" />
+
     </application>
 
 </manifest>

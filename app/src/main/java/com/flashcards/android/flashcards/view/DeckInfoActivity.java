@@ -22,7 +22,6 @@ import com.flashcards.android.flashcards.R;
 import com.flashcards.android.flashcards.ViewModel.DeckInfoModel;
 import com.flashcards.android.flashcards.lib.model.Card;
 import com.flashcards.android.flashcards.lib.model.Deck;
-import com.flashcards.android.flashcards.lib.model.Progress;
 
 import org.ocpsoft.prettytime.PrettyTime;
 
@@ -184,7 +183,7 @@ public class DeckInfoActivity extends AppCompatActivity {
 
             //TODO: Fix progress for when cards not properly tested.
             // TODO: Do this by calculating it in Revise mode while setting deckEf, to avoid further fields in Deck class
-            int progress = (int) Math.round(deck.getEf()*100);
+            int progress = (int) Math.round(deck.getLs()*20);
             progressBar.setProgress(progress);
             progressText.setText("Deck Learnt: " + progress + "%");
 

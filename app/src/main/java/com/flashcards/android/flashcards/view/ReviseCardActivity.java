@@ -1,9 +1,9 @@
 package com.flashcards.android.flashcards.view;
 
 import android.arch.lifecycle.ViewModelProviders;
+import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
@@ -11,9 +11,18 @@ import android.widget.Button;
 
 import com.flashcards.android.flashcards.R;
 import com.flashcards.android.flashcards.ViewModel.ReviseModel;
-import com.transitionseverywhere.*;
+import com.transitionseverywhere.ChangeBounds;
+import com.transitionseverywhere.ChangeText;
+import com.transitionseverywhere.Recolor;
+import com.transitionseverywhere.TransitionManager;
+import com.transitionseverywhere.TransitionSet;
 
-import static com.flashcards.android.flashcards.R.color.*;
+import static com.flashcards.android.flashcards.R.color.cardBackground;
+import static com.flashcards.android.flashcards.R.color.colorAccent;
+import static com.flashcards.android.flashcards.R.color.green;
+import static com.flashcards.android.flashcards.R.color.red;
+import static com.flashcards.android.flashcards.R.color.white;
+import static com.flashcards.android.flashcards.R.color.white_teal;
 
 public class ReviseCardActivity extends AppCompatActivity {
 
@@ -291,11 +300,16 @@ public class ReviseCardActivity extends AppCompatActivity {
     }
 
     // Clean up methods
-
     @Override
     public void onBackPressed() {
         model.finish();
         finish();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        model.finish();
     }
 
     @Override

@@ -12,9 +12,7 @@ import com.flashcards.android.flashcards.lib.model.Card;
 import com.flashcards.android.flashcards.lib.model.Deck;
 import com.flashcards.android.flashcards.lib.model.Progress;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.PriorityBlockingQueue;
@@ -29,6 +27,7 @@ public class ReviseModel extends AndroidViewModel {
 
     private TestRepo repo;
     private String deckId;
+    private Deck currentDeck;
     private static PriorityBlockingQueue<Card> testQueue;
     private Card currentCard;
     private Card lastCard;
@@ -69,6 +68,7 @@ public class ReviseModel extends AndroidViewModel {
         @Override
         protected Void doInBackground(String... strings) {
 
+            currentDeck = repo.getDeckNow(strings[0]);
             List<Card> allCards = repo.getAllDeckCards(strings[0]);
             int size = allCards.size();
 
@@ -162,13 +162,14 @@ public class ReviseModel extends AndroidViewModel {
         if (counter > 5) {
 
             // Recalculate attempts and leitner score
-            int size = testQueue.size()+1;  // +1 as currentcared is not in the queue
+            int size = 0;
 
             aveAttempts = 0;
             aveLeitnerScore = 0;
             for(Card card: testQueue) {
                 aveAttempts += card.getAttempts();
                 aveLeitnerScore += Progress.leitnerScore(card);
+                size++;
             }
             aveAttempts = (int) Math.round(aveAttempts/ (double) size);
             aveLeitnerScore = aveLeitnerScore/ (double) size;
@@ -190,14 +191,6 @@ public class ReviseModel extends AndroidViewModel {
 
     }
 
-
-    public void finish() {
-        // TODO: Save changes
-        SaveChangesTask task = new SaveChangesTask();
-        task.execute();
-
-    }
-
     public class SaveChangesTask extends AsyncTask<Void, Void, Void> {
 
         @Override
@@ -208,23 +201,40 @@ public class ReviseModel extends AndroidViewModel {
             allCards.addAll(testQueue);
             repo.setAllCards(allCards);
 
-            // Update last used date
-            SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd kk:mm:ss");
-            Calendar cal = Calendar.getInstance();
-            String date = sf.format(cal.getTime());
+            return null;
+        }
+    }
 
-            repo.setLastUsed(deckId, date);
 
+    public void finish() {
+        // TODO: Save changes
+        SaveChangesTask task = new SaveChangesTask();
+        task.execute();
+
+        SaveDeckTask task2 = new SaveDeckTask();
+        task2.execute();
+
+    }
+
+    public class SaveDeckTask extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Void... voids) {
             // If the deck has been revised, update the Easiness Factor of the deck.
-            double ef;
+            double ls;
             if (aveAttempts >= 2) {
-                ef = aveLeitnerScore;
+                ls = aveLeitnerScore * 5;
+                Log.d(String.valueOf(ls), "ls: ");
             } else {
                 // Gives a more accurate value as the deck has not been learnt well
                 // Yet the LeitnerScore is initialised at 0.3
-                ef = aveLeitnerScore/3;
+                ls = aveLeitnerScore*2;
             }
-            repo.setEf(deckId, ef);
+            currentDeck.setLs(ls);
+
+            // Update last used date
+            currentDeck.setNextInterval();
+            repo.setDeck(currentDeck);
 
             return null;
         }

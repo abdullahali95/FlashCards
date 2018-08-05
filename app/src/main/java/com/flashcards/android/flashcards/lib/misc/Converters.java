@@ -1,7 +1,6 @@
-package com.flashcards.android.flashcards.lib;
+package com.flashcards.android.flashcards.lib.misc;
 
 import android.arch.persistence.room.TypeConverter;
-import android.util.Log;
 
 import com.google.common.collect.EvictingQueue;
 
