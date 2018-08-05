@@ -6,12 +6,15 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.flashcards.android.flashcards.R;
@@ -54,8 +57,7 @@ public class CardsAdapter extends RecyclerView.Adapter<CardsAdapter.CardsViewHol
     @Override
     public void onBindViewHolder(CardsAdapter.CardsViewHolder holder, int position) {
         String question = cards.get(position).getQuestion();
-        holder.cardView.loadUrl("about:blank");
-        holder.cardView.loadData(question, "text/html", "utf-8");
+        holder.cardView.setText(Html.fromHtml(question));
 
     }
 
@@ -65,20 +67,17 @@ public class CardsAdapter extends RecyclerView.Adapter<CardsAdapter.CardsViewHol
         else return cards.size();
     }
 
-    public class CardsViewHolder extends RecyclerView.ViewHolder implements View.OnLongClickListener, View.OnClickListener, View.OnTouchListener {
-        private WebView cardView;
+    public class CardsViewHolder extends RecyclerView.ViewHolder implements View.OnLongClickListener, View.OnClickListener {
+        private TextView cardView;
         private Context context;
         private Card card;
 
         public CardsViewHolder(View itemView, Context context) {
             super(itemView);
-            this.cardView = (WebView) itemView.findViewById(R.id.wv_card_info_question);
-            cardView.getSettings().setTextZoom(110);
-            cardView.setBackgroundColor(itemView.getResources().getColor(R.color.cardBackground));
+            this.cardView = (TextView) itemView.findViewById(R.id.wv_card_info_question);
 
             itemView.setOnLongClickListener(this);
             itemView.setOnClickListener(this);
-            cardView.setOnTouchListener(this);
 
             this.context = context;
 
@@ -98,16 +97,6 @@ public class CardsAdapter extends RecyclerView.Adapter<CardsAdapter.CardsViewHol
             deleteCard();
             return true;
         }
-
-        @Override
-        public boolean onTouch(View view, MotionEvent event) {
-            if (event.getAction() == MotionEvent.ACTION_UP){
-                openEditor();
-            }
-
-            return false;
-        }
-
 
         public void openEditor() {
             card = cards.get(getAdapterPosition());

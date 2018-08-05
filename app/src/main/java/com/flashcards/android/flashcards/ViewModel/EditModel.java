@@ -12,10 +12,11 @@ import com.flashcards.android.flashcards.lib.model.Card;
  * Created by Abdullah Ali on 12/07/2018
  */
 public class EditModel extends AndroidViewModel {
-    private LiveData<Card> currentCard;
+    private Card currentCard;
     private String question;
     private String answer;
     private CardEditRepo repo;
+    private boolean qside; // Indicates which side is being viewed (true = question, false = answer)
 
     public EditModel (Application application) {
         super(application);
@@ -33,8 +34,7 @@ public class EditModel extends AndroidViewModel {
     }
 
     public LiveData<Card> getCard(int cardId, String deckId) {
-        currentCard = repo.getCard(cardId, deckId);
-        return currentCard;
+        return repo.getCard(cardId, deckId);
     }
 
     private class AddCardTask extends AsyncTask<Card, Void, Void> {
@@ -47,24 +47,22 @@ public class EditModel extends AndroidViewModel {
         }
 
     public void updateQuestion(String question) {
-        Card newCard = currentCard.getValue();
-        newCard.setQuestion(question);
+        currentCard.setQuestion(question);
         UpdateCardTask task = new UpdateCardTask();
-        task.execute(newCard);
+        task.execute();
     }
 
     public void updateAnswer (String answer) {
-        Card newCard = currentCard.getValue();
-        newCard.setAnswer(answer);
+        currentCard.setAnswer(answer);
         UpdateCardTask task = new UpdateCardTask();
-        task.execute(newCard);
+        task.execute();
     }
 
-        private class UpdateCardTask extends AsyncTask<Card, Void, Void> {
+        private class UpdateCardTask extends AsyncTask<Void, Void, Void> {
 
             @Override
-            protected Void doInBackground(Card... cards) {
-                repo.setCard(cards[0]);
+            protected Void doInBackground(Void... voids) {
+                repo.setCard(currentCard);
                 return null;
             }
         }
@@ -100,5 +98,21 @@ public class EditModel extends AndroidViewModel {
 
     public void setAnswer(String answer) {
         this.answer = answer;
+    }
+
+    public Card getCurrentCard() {
+        return currentCard;
+    }
+
+    public void setCurrentCard(Card currentCard) {
+        this.currentCard = currentCard;
+    }
+
+    public boolean isQside() {
+        return qside;
+    }
+
+    public void setQside(boolean qside) {
+        this.qside = qside;
     }
 }

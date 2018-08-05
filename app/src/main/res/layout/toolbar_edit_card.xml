@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/toolbar_edit_card"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    style="?android:attr/buttonBarStyle"
+    android:orientation="horizontal">
+
+    <ImageButton
+        android:id="@+id/question_btn_bold"
+        style="?android:attr/borderlessButtonStyle"
+        android:layout_width="40dp"
+        android:layout_height="50dp"
+        android:layout_gravity="center"
+        android:src="@drawable/toolbar_btn_bold"/>
+
+    <ImageButton
+        android:id="@+id/question_btn_italic"
+        android:layout_width="40dp"
+        android:layout_height="50dp"
+        android:textAlignment="center"
+        android:layout_gravity="center"
+        style="?android:attr/borderlessButtonStyle"
+        android:src="@drawable/toolbar_btn_italic" />
+
+    <ImageButton
+        android:id="@+id/question_btn_underline"
+        android:layout_width="40dp"
+        android:layout_height="50dp"
+        android:textAlignment="center"
+        android:layout_gravity="center"
+        style="?android:attr/borderlessButtonStyle"
+        android:src="@drawable/toolbar_btn_underline" />
+
+    <Button
+        android:id="@+id/question_btn_color_black"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_gravity="center"
+        android:layout_marginEnd="5dp"
+        style="?android:attr/borderlessButtonStyle"
+        android:background="@android:color/background_dark" />
+
+    <Button
+        android:id="@+id/question_btn_color_green"
+        style="?android:attr/borderlessButtonStyle"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_gravity="center"
+        android:layout_marginEnd="5dp"
+        android:background="@color/green"
+
+        />
+
+    <Button
+        android:id="@+id/question_btn_color_blue"
+        android:layout_gravity="center"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginEnd="5dp"
+        style="?android:attr/borderlessButtonStyle"
+        android:background="@color/blue" />
+
+    <ImageButton
+        android:id="@+id/question_btn_unordered_list"
+        style="?android:attr/borderlessButtonStyle"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_gravity="center"
+        android:layout_marginEnd="5dp"
+        android:src="@drawable/toolbar_btn_list"
+        android:text="li" />
+
+    <ImageButton
+        android:id="@+id/question_btn_strikethrough"
+        style="?android:attr/borderlessButtonStyle"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_gravity="center"
+        android:layout_marginEnd="5dp"
+        android:src="@drawable/toolbar_btn_strikethrough"
+        android:text="li" />
+
+    <ImageButton
+        android:id="@+id/question_btn_undo"
+        style="?android:attr/borderlessButtonStyle"
+        android:layout_width="50dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:src="@drawable/toolbar_btn_undo"
+        android:text="Undo"
+        android:textAlignment="center" />
+
+    <ImageButton
+        android:id="@+id/question_btn_redo"
+        style="?android:attr/borderlessButtonStyle"
+        android:layout_width="70dp"
+        android:layout_height="50dp"
+        android:layout_gravity="center"
+        android:layout_marginEnd="5dp"
+        android:src="@drawable/toolbar_btn_redo"
+        android:text="Redo"
+        android:textAlignment="center" />
+
+</LinearLayout>

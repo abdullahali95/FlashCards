@@ -65,7 +65,7 @@ public class DeckAdapter extends RecyclerView.Adapter<DeckAdapter.DeckViewHolder
     public DeckViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.main_rec_deck, parent, false);
 
-        return new DeckViewHolder(view, model, context);
+        return new DeckViewHolder(view, context);
     }
 
     @Override
@@ -82,29 +82,33 @@ public class DeckAdapter extends RecyclerView.Adapter<DeckAdapter.DeckViewHolder
         holder.cardCount.setText(totalCard);
 
         // Set time since last tested
-        Date convertedDate = new Date();
+        Date convertedDate;
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd kk:mm:ss");
-        try {
-            convertedDate = dateFormat.parse(decks.get(position).getNextTestDue());
-            String datetime;
+        String nextDue = decks.get(position).getNextTestDue();
+        if (nextDue == null) holder.nextDue.setText("");
+        else {
+            try {
+                convertedDate = dateFormat.parse(nextDue);
+                String datetime;
 
-            if (convertedDate.before(Calendar.getInstance().getTime())) {
-                // If revision due in the past, display 'now'
-                datetime = "Revision due now";
-                holder.cardView.setCardBackgroundColor(context.getResources().getColor(R.color.redBg));
-            } else {
-                PrettyTime p  = new PrettyTime();
-                datetime= p.format(convertedDate);
-                datetime = "Revision due " + datetime;
-                holder.cardView.setCardBackgroundColor(context.getResources().getColor(R.color.colorAccent));
+                if (convertedDate.before(Calendar.getInstance().getTime())) {
+                    // If revision due in the past, display 'now'
+                    datetime = "Revision due now";
+                    holder.cardView.setCardBackgroundColor(context.getResources().getColor(R.color.redBg));
+                } else {
+                    PrettyTime p = new PrettyTime();
+                    datetime = p.format(convertedDate);
+                    datetime = "Revision due " + datetime;
+                    holder.cardView.setCardBackgroundColor(context.getResources().getColor(R.color.colorAccent));
+                }
+
+                holder.nextDue.setText(datetime);
+
+            } catch (ParseException e) {
+                holder.nextDue.setText(currentDeck.getLastUsed());
+            } catch (Exception e) {
+                holder.nextDue.setText("");
             }
-
-            holder.nextDue.setText(datetime);
-
-        } catch (ParseException e) {
-            holder.nextDue.setText(currentDeck.getLastUsed());
-        } catch (Exception e) {
-            holder.nextDue.setText("");
         }
 
 
@@ -250,17 +254,15 @@ public class DeckAdapter extends RecyclerView.Adapter<DeckAdapter.DeckViewHolder
         private TextView cardCount;
         private ImageButton popupButton;
         private Deck deck;
-        private MainModel model;
         private Context context;
 
-        public DeckViewHolder(View itemView, MainModel model, Context context) {
+        public DeckViewHolder(View itemView, Context context) {
             super(itemView);
             deckName = (TextView) itemView.findViewById(R.id.title_rec_deck);
             nextDue = (TextView) itemView.findViewById(R.id.days_rec_deck);
             cardCount = (TextView) itemView.findViewById(R.id.cards_rec_deck);
             popupButton = (ImageButton) itemView.findViewById(R.id.popup_options_btn);
             cardView = (CardView) itemView.findViewById(R.id.main_rec_deck);
-            this.model = model;
             this.context = context;
 
             itemView.setOnClickListener(this);

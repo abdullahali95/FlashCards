@@ -284,10 +284,10 @@ public class Deck {
             long diff = nextDue.getTimeInMillis() - dateLastUsed.getTimeInMillis();
 
             // Get half of the difference in hours
-            // (1000 * 60) * 2 = 120000: Conversion from ms --> minutes, halfed
-            int diffHourHalf = (int)  ((double) diff / (120000));
+            // (1000 * 60 * 60) * 2 = 7200000: Conversion from ms --> hours, halfed
+            int diffHourHalf = (int)  ((double) diff / (7200000));
             Calendar half = dateLastUsed;
-            half.add(Calendar.MINUTE, diffHourHalf);
+            half.add(Calendar.HOUR, diffHourHalf);
 
             Log.d("last used", lastUsed);
             Log.d("Next due", nextTestDue);
@@ -346,7 +346,7 @@ public class Deck {
         lastUsed = (sf.format(Calendar.getInstance().getTime()));
 
         Calendar nextDue = Calendar.getInstance();
-        nextDue.add(Calendar.MINUTE, interval);
+        nextDue.add(Calendar.HOUR, interval);
         nextTestDue = (sf.format(nextDue.getTime()));
 
         Log.d("ef: ", String.valueOf(ef));

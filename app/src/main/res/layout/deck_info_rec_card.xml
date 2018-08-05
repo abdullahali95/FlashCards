@@ -1,18 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:minHeight="50dp"
+<android.support.v7.widget.CardView android:minHeight="50dp"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:gravity="center"
-    android:background="@color/cardBackground"
-    android:layout_margin="5dp">
+    app:cardBackgroundColor="@color/cardBackground"
+    android:layout_margin="5dp"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <WebView
-        android:id="@+id/wv_card_info_question"
-        android:layout_margin="8dp"
-        android:transitionName="card_transition"
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:background="@color/cardBackground"
+        >
+
+        <TextView
+            android:id="@+id/wv_card_info_question"
+            android:layout_margin="8dp"
+            android:textSize="16sp"
+            android:transitionName="card_transition"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
 
 
-</LinearLayout>
+    </LinearLayout>
+
+</android.support.v7.widget.CardView>

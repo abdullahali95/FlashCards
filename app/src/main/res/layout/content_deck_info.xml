@@ -10,6 +10,7 @@
     android:orientation="vertical">
 
     <android.support.constraint.ConstraintLayout
+        android:id="@+id/deck_info_header"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/colorAccent"
@@ -21,7 +22,6 @@
             android:id="@+id/progress_text_deck_info"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
             android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
@@ -38,7 +38,7 @@
             style="@android:style/Widget.ProgressBar.Horizontal"
             android:layout_width="0dp"
             android:layout_height="8dp"
-            android:layout_marginBottom="16dp"
+            android:layout_marginBottom="32dp"
             android:layout_marginLeft="15dp"
             android:layout_marginRight="15dp"
             android:max="100"
@@ -73,6 +73,7 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:text="@string/btn_revise_deck_info"
+            android:textColor="@color/white"
             android:theme="@style/AppTheme.Button"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -84,10 +85,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
-            android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
+            android:backgroundTint="@color/colorPrimaryDark"
             android:text="@string/btn_test_deck_info"
-            android:theme="@style/AppTheme.Button"
+            android:theme="@style/Widget.AppCompat.Button"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@id/btn_revise_deck_info"
             app:layout_constraintTop_toBottomOf="@+id/tv_info_deck"
@@ -101,7 +102,7 @@
             android:layout_marginStart="8dp"
             android:text="@string/tv_info_deck"
             android:textColor="@color/white_teal"
-            android:textSize="18sp"
+            android:textSize="14sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_deck_name" />
 
@@ -113,8 +114,7 @@
         android:background="@color/colorBackground"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
+        android:layout_margin="8dp"
         android:orientation="vertical"
         android:paddingBottom="48dp"
         android:clipToPadding="false">

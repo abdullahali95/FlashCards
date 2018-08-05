@@ -11,6 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.flashcards.android.flashcards.R;
@@ -24,19 +25,17 @@ public class CardEditActivity extends AppCompatActivity {
     RichEditor editor;
     TextView titleText;
 
-    Button boldButton;
-    Button italicButton;
-    Button underlineButton;
+    ImageButton boldButton;
+    ImageButton italicButton;
+    ImageButton underlineButton;
     Button blackButton;
     Button blueButton;
     Button greenButton;
-    Button undoButton;
-    Button redoButton;
+    ImageButton undoButton;
+    ImageButton redoButton;
+    ImageButton ulButton;
     FloatingActionButton flipButton;
-
-    Deck deck;
-    Card currentCard;
-    boolean qSide;      // Indicates which side is being viewed (true = question, false = answer)
+    ImageButton strikeThroughButton;
 
     EditModel model;
 
@@ -67,18 +66,18 @@ public class CardEditActivity extends AppCompatActivity {
         model.getCard(cardId, deckId).observe(this, new Observer<Card>() {
             @Override
             public void onChanged(@Nullable Card card) {
-                if (currentCard == null) {
-                    currentCard = card;
+                if (model.getCurrentCard() == null) {
+                    model.setCurrentCard(card);
                     editor.setPlaceholder("Please Enter Question Here");
-                    if (currentCard.getQuestion() != null) {
-                        editor.setHtml(currentCard.getQuestion());
+                    if (model.getCurrentCard().getQuestion() != null) {
+                        editor.setHtml(model.getCurrentCard().getQuestion());
                     } else {
                         editor.setHtml("");
                     }
                     titleText.setText("Question");
-                    qSide = true;
+                    model.setQside(true);
                 } else {
-                    currentCard = card;
+                    model.setCurrentCard(card);
                 }
             }
         });
@@ -88,40 +87,65 @@ public class CardEditActivity extends AppCompatActivity {
         editor.setOnTextChangeListener(new RichEditor.OnTextChangeListener() {
             @Override
             public void onTextChange(String text) {
-                if (qSide) {
+                if (model.isQside()) {
                     model.updateQuestion(text);
-                } else if (!qSide) {
+                } else {
                     model.updateAnswer(text);
                 }
             }
         });
     }
 
+    /**
+     * This method is overridden to handle orientation changes gracefully
+     */
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (model.isQside()) {
+            // Question side was active
+            if (model.getCurrentCard() != null && model.getCurrentCard().getQuestion() != null) {
+                editor.setHtml(model.getCurrentCard().getQuestion());
+            } else {
+                editor.setHtml("");
+            }
+            titleText.setText("Question");
+        } else {
+            // Answer side was active
+            if (model.getCurrentCard() != null && model.getCurrentCard().getAnswer() != null) {
+                editor.setHtml(model.getCurrentCard().getAnswer());
+            } else {
+                editor.setHtml("");
+            }
+            titleText.setText("Answer");
+        }
+    }
+
     private void initFlipButton() {
         flipButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (qSide) {
+                if (model.isQside()) {
                     editor.setPlaceholder("Please Enter Answer Here");
-                    if (currentCard.getAnswer() != null) {
-                        editor.setHtml(currentCard.getAnswer());
+                    if (model.getCurrentCard().getAnswer() != null) {
+                        editor.setHtml(model.getCurrentCard().getAnswer());
                     } else {
                         editor.setHtml("");
 
                     }
 
                     titleText.setText("Answer");
-                    qSide = false;
+                    model.setQside(false);
 
-                } else if (!qSide) {
+                } else if (!model.isQside()) {
                     editor.setPlaceholder("Please Enter Question Here");
-                    if (currentCard.getQuestion() != null) {
-                        editor.setHtml(currentCard.getQuestion());
+                    if (model.getCurrentCard().getQuestion() != null) {
+                        editor.setHtml(model.getCurrentCard().getQuestion());
                     } else {
                         editor.setHtml("");
                     }
                     titleText.setText("Question");
-                    qSide = true;
+                    model.setQside(true);
                 }
             }
         });
@@ -131,21 +155,23 @@ public class CardEditActivity extends AppCompatActivity {
     private void initLayout() {
         titleText = (TextView) findViewById(R.id.tv_edit_title);
 
-        boldButton = (Button) findViewById(R.id.question_btn_bold);
-        italicButton = (Button) findViewById(R.id.question_btn_italic);
-        underlineButton = (Button) findViewById(R.id.question_btn_underline);
+        boldButton = (ImageButton) findViewById(R.id.question_btn_bold);
+        italicButton = (ImageButton) findViewById(R.id.question_btn_italic);
+        underlineButton = (ImageButton) findViewById(R.id.question_btn_underline);
         blackButton = (Button) findViewById(R.id.question_btn_color_black);
         blueButton = (Button) findViewById(R.id.question_btn_color_blue);
         greenButton = (Button) findViewById(R.id.question_btn_color_green);
-        undoButton = (Button) findViewById(R.id.question_btn_undo);
-        redoButton = (Button) findViewById(R.id.question_btn_redo);
+        undoButton = (ImageButton) findViewById(R.id.question_btn_undo);
+        redoButton = (ImageButton) findViewById(R.id.question_btn_redo);
         flipButton = (FloatingActionButton) findViewById(R.id.btn_edit_flip);
+        ulButton = (ImageButton) findViewById(R.id.question_btn_unordered_list);
+        strikeThroughButton = (ImageButton) findViewById(R.id.question_btn_strikethrough);
     }
 
     private void initEditor() {
         //TODO: Add justify, strikethrough, highlight buttons
 
-        editor = (RichEditor) findViewById(R.id.question_editor_module);
+        editor = (RichEditor) findViewById(R.id.question_editor);
         editor.setPadding(20,20,20,20);
         editor.setBackgroundColor(getResources().getColor(R.color.cardBackground));
         editor.setEditorFontSize(24);
@@ -206,6 +232,20 @@ public class CardEditActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 editor.setTextColor(getResources().getColor(R.color.green));
+            }
+        });
+
+        ulButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                editor.setBullets();
+            }
+        });
+
+        strikeThroughButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                editor.setStrikeThrough();
             }
         });
     }
