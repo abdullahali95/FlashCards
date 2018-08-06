@@ -44,7 +44,8 @@ public class NotificationService extends JobService {
 
     @Override
     public boolean onStopJob(JobParameters jobParameters) {
-        return false;
+        jobFinished(jobParameters, true);
+        return true;
     }
 
     public class NotificationTask extends AsyncTask<JobParameters, Void, Boolean> {

@@ -10,14 +10,12 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.flashcards.android.flashcards.R;
 import com.flashcards.android.flashcards.ViewModel.EditModel;
 import com.flashcards.android.flashcards.lib.model.Card;
-import com.flashcards.android.flashcards.lib.model.Deck;
 
 import jp.wasabeef.richeditor.RichEditor;
 
@@ -28,17 +26,21 @@ public class CardEditActivity extends AppCompatActivity {
     ImageButton boldButton;
     ImageButton italicButton;
     ImageButton underlineButton;
-    Button blackButton;
-    Button blueButton;
-    Button greenButton;
+    ImageButton redButton;
+    ImageButton blueButton;
+    ImageButton greenButton;
     ImageButton undoButton;
     ImageButton redoButton;
     ImageButton ulButton;
-    FloatingActionButton flipButton;
     ImageButton strikeThroughButton;
+    ImageButton blueHighlightButton;
+    ImageButton greenHighlightButton;
+    ImageButton clearFormatButton;
+    ImageButton redHighlightButton;
+
+    FloatingActionButton flipButton;
 
     EditModel model;
-
 
 
     @Override
@@ -158,14 +160,19 @@ public class CardEditActivity extends AppCompatActivity {
         boldButton = (ImageButton) findViewById(R.id.question_btn_bold);
         italicButton = (ImageButton) findViewById(R.id.question_btn_italic);
         underlineButton = (ImageButton) findViewById(R.id.question_btn_underline);
-        blackButton = (Button) findViewById(R.id.question_btn_color_black);
-        blueButton = (Button) findViewById(R.id.question_btn_color_blue);
-        greenButton = (Button) findViewById(R.id.question_btn_color_green);
+        redButton = (ImageButton) findViewById(R.id.question_btn_color_red);
+        blueButton = (ImageButton) findViewById(R.id.question_btn_color_blue);
+        greenButton = (ImageButton) findViewById(R.id.question_btn_color_green);
         undoButton = (ImageButton) findViewById(R.id.question_btn_undo);
         redoButton = (ImageButton) findViewById(R.id.question_btn_redo);
         flipButton = (FloatingActionButton) findViewById(R.id.btn_edit_flip);
         ulButton = (ImageButton) findViewById(R.id.question_btn_unordered_list);
         strikeThroughButton = (ImageButton) findViewById(R.id.question_btn_strikethrough);
+        redHighlightButton = (ImageButton) findViewById(R.id.question_btn_highlight_red);
+        greenHighlightButton = (ImageButton) findViewById(R.id.question_btn_highlight_green);
+        blueHighlightButton = (ImageButton) findViewById(R.id.question_btn_highlight_blue);
+        clearFormatButton = (ImageButton) findViewById(R.id.question_btn_clear_formatting);
+
     }
 
     private void initEditor() {
@@ -200,10 +207,10 @@ public class CardEditActivity extends AppCompatActivity {
             }
         });
 
-        blackButton.setOnClickListener(new View.OnClickListener() {
+        redButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                editor.setTextColor(Color.BLACK);
+                editor.setTextColor(getResources().getColor(R.color.red));
             }
         });
 
@@ -246,6 +253,34 @@ public class CardEditActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 editor.setStrikeThrough();
+            }
+        });
+
+        redHighlightButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                editor.setTextBackgroundColor(getResources().getColor(R.color.red_highlight));
+            }
+        });
+
+        blueHighlightButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                editor.setTextBackgroundColor(getResources().getColor(R.color.blue_highlight));
+            }
+        });
+
+        greenHighlightButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                editor.setTextBackgroundColor(getResources().getColor(R.color.green_highlight));
+            }
+        });
+
+        clearFormatButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                editor.removeFormat();
             }
         });
     }

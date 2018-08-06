@@ -88,6 +88,19 @@ public class MainModel extends AndroidViewModel{
         }
     }
 
+    public void renameDeck(Deck deck) {
+        RenameDeckTask task = new RenameDeckTask();
+        task.execute(deck);
+
+    }
+    private class RenameDeckTask extends AsyncTask<Deck, Void, Void> {
+        @Override
+        protected Void doInBackground(Deck... decks) {
+            repo.updateDeck(decks[0]);
+            return null;
+        }
+    }
+
     public LiveData<Integer> getDeckSize (String deckId) {
         return repo.getDeckSize(deckId);
     }

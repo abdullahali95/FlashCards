@@ -53,4 +53,7 @@ public class MainRepo {
         deckDAO.setDeckSize(deckId, newDeckSize);
     }
 
+    public void updateDeck(Deck deck) {
+        deckDAO.setName(deck.getDeckId(), deck.getName());
+    }
 }

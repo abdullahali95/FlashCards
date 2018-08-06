@@ -12,10 +12,12 @@ import android.support.v4.util.Pair;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.PopupMenu;
 import android.widget.TextView;
@@ -132,6 +134,9 @@ public class DeckAdapter extends RecyclerView.Adapter<DeckAdapter.DeckViewHolder
                         } else if (id == R.id.action_export) {
                             export(currentDeck);
 
+                        } else if (id == R.id.action_rename) {
+                            rename(currentDeck);
+
                         } else if (id == R.id.action_delete) {
                             delete(currentDeck);
 
@@ -212,6 +217,41 @@ public class DeckAdapter extends RecyclerView.Adapter<DeckAdapter.DeckViewHolder
         }
     }
 
+    private void rename(final Deck currentDeck) {
+        final String[] deckName = {currentDeck.getName()};
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setTitle("Create a new Deck");
+
+        // Set up the input
+        final EditText input = new EditText(context);
+        input.setHint(deckName[0]);
+        input.setInputType(InputType.TYPE_CLASS_TEXT);
+        builder.setView(input);
+
+
+        // Set up the buttons
+        builder.setPositiveButton("Rename", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                deckName[0] = input.getText().toString();
+                currentDeck.setName(deckName[0]);
+                model.renameDeck(currentDeck);
+
+                // TODO: this should show up as a confirmation from Room db
+                String alert = "Deck renamed";
+                Toast.makeText(context, alert, Toast.LENGTH_SHORT).show();
+            }
+        });
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+
+        builder.show();
+    }
 
     public void delete(final Deck deck) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);

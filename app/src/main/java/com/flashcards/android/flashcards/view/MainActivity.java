@@ -185,19 +185,34 @@ public class MainActivity extends AppCompatActivity {
         this.decks = decks;
     }
 
+    /**
+     * This method uses jobScheduler to schedule notifications 24 hours after the app is used,
+     * if there are outstanding decks of cards that need to be revised.
+     *
+     * The notification interval is set to 24 hours, so that notifications appear roughly at the time,
+     * the user is most likely to use the app.
+     *
+     * If the user uses the app within 24 hours, the timer resets
+     * (ie: the notifications only appear if it has been longer then 24 hours since last app use)
+     */
     public void scheduleNotifications () {
-        long delay = (24*60*60*1000);      // 1 Day in ms.
+        // Sets the delay (in ms) between notifications.
+        long delay = (24*60*60*1000);      // 24 Hour in ms.
 
         ComponentName componentName = new ComponentName(this, NotificationService.class);
         JobInfo info = new JobInfo.Builder(2121, componentName)
-                .setPeriodic(delay)
+                .setMinimumLatency(delay)
                 .setPersisted(true)
+                .setBackoffCriteria(delay, JobInfo.BACKOFF_POLICY_LINEAR)
                 .build();
 
         JobScheduler scheduler = (JobScheduler) getSystemService(JOB_SCHEDULER_SERVICE);
         scheduler.schedule(info);
     }
 
+    /**
+     * This method can be called if the notifications job needs to be cancelled.
+     */
     public void cancelJob() {
         JobScheduler scheduler = (JobScheduler) getSystemService(JOB_SCHEDULER_SERVICE);
         scheduler.cancel(2121);
@@ -209,4 +224,5 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
         recyclerView.getAdapter().notifyDataSetChanged();
     }
+
 }
