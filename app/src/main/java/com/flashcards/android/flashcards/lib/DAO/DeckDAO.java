@@ -58,7 +58,8 @@ public interface DeckDAO {
     @Query("SELECT deckSize FROM Deck WHERE deckId = :deckId")
     public LiveData<Integer> getDeckSize(String deckId);
 
-    @Query("SELECT nextTestDue FROM Deck")
+    //TODO: test if the ls condition is working
+    @Query("SELECT nextTestDue FROM Deck WHERE ls > 2")
     public List<String> getAllNextDue ();
 
 }

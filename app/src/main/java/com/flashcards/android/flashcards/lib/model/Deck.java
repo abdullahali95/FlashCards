@@ -257,13 +257,10 @@ public class Deck {
      *
      */
     public void setNextInterval () {
-        if (interval == 0) {
+        if (interval == 0) {    // If the deck has not been revised before
             // Initialising to be tested a day later.
-            // Should be 24. 25 Purely so that the date for 'Revision due' is displayed as 'a day from now'
-            // As opposed to '24 hours from now'
-            interval = 25;
+            interval = 24;
             ef = 2.5;
-            Log.d("interval were 0", "setNextInterval: ");
             setDates();
         } else {
             Date date = null;
@@ -289,22 +286,15 @@ public class Deck {
             Calendar half = dateLastUsed;
             half.add(Calendar.HOUR, diffHourHalf);
 
-            Log.d("last used", lastUsed);
-            Log.d("Next due", nextTestDue);
-            Log.d("half", (sf.format(half.getTime())));
-            Log.d("now", (sf.format(now.getTime())));
-
             if (now.before(half)) {
-                Log.d("before half", "setNextInterval: ");
+                // If the deck is revised more then half the time before it was due to be revised.
                 // Updates the interval with the new EF, but doesn't exponentially grow the interval to next session.
                 double efNew = ef - 0.8 + (0.28*ls) - (0.02*ls*ls);
                 double efDiff = efNew / ef;
-                Log.d("Reps before: ", String.valueOf(interval));
 
                 interval = (int) (interval * efDiff);
-                Log.d("Reps After: ", String.valueOf(interval));
-                if (interval <= 25) {
-                    interval = 25;
+                if (interval <= 24) {
+                    interval = 24;
                     setDates();
                     return;
                 }
@@ -313,9 +303,9 @@ public class Deck {
                 ef = efNew;
                 return;
 
-            // TODO: this should only apply if EF has decreased.
             } else if (ls < 2) {
-                Log.d("ls < 2", "setNextInterval: ");
+                // If the deck's Learnt Score falls too low,
+                // the interval to repeat revision resets to 24 hours
                 double efNew = ef - 0.8 + (0.28*ls) - (0.02*ls*ls);
 
                 // If ls is low but EF is increasing (person learning the deck, this shouldn't reset)
@@ -324,7 +314,8 @@ public class Deck {
                     setDates();
                 }
             } else {
-                Log.d("got to last stage", "setNextInterval: ");
+                // Grows the interval based on EF, calculated using the Average Learnt Score
+                // EF stays between 1.3 - 2.5
                 if (ef == 0) ef = 2.5;      //Initialise ef at 2.5
                 ef = ef - 0.8 + (0.28*ls) - (0.02*ls*ls);
                 if (ef < 1.3) ef = 1.3;     // ef shouldn't fall below 1.3
@@ -348,11 +339,6 @@ public class Deck {
         Calendar nextDue = Calendar.getInstance();
         nextDue.add(Calendar.HOUR, interval);
         nextTestDue = (sf.format(nextDue.getTime()));
-
-        Log.d("ef: ", String.valueOf(ef));
-        Log.d("interval: ", String.valueOf(interval));
-        Log.d("lastUsed: ", String.valueOf(lastUsed));
-        Log.d("nextTestDue: ", String.valueOf(nextTestDue));
 
     }
 

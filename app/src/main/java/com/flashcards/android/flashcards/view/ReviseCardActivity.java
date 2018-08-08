@@ -8,9 +8,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.widget.Button;
+import android.widget.ProgressBar;
 
 import com.flashcards.android.flashcards.R;
 import com.flashcards.android.flashcards.ViewModel.ReviseModel;
+import com.flashcards.android.flashcards.lib.misc.ProgressTransition;
 import com.transitionseverywhere.ChangeBounds;
 import com.transitionseverywhere.ChangeText;
 import com.transitionseverywhere.Recolor;
@@ -32,6 +34,7 @@ public class ReviseCardActivity extends AppCompatActivity {
     String question;
     String answer;
 
+    ProgressBar progressBar;
     Button skipButton;
     Button flipButton;
     View cardView;
@@ -86,6 +89,8 @@ public class ReviseCardActivity extends AppCompatActivity {
             }
         });
 
+        updateProgress();
+
     }
 
     /**
@@ -96,6 +101,7 @@ public class ReviseCardActivity extends AppCompatActivity {
         skipButton = (Button) findViewById(R.id.btn_skip_revise);
         flipButton = (Button) findViewById(R.id.btn_flip_revise);
         cardView = (View) findViewById(R.id.ll_card_revise);
+        progressBar = (ProgressBar) findViewById(R.id.progressBar);
 
         //TODO: Test if WebView scrolls
         card = (WebView) findViewById(R.id.tv_question_revise);
@@ -103,20 +109,6 @@ public class ReviseCardActivity extends AppCompatActivity {
         // Set Editor
         card.setBackgroundColor(getResources().getColor(cardBackground));
         card.getSettings().setTextZoom(200);
-
-    }
-
-    /**
-     * Loads a new card from the model, and displays its question,
-     * Used for skip, correct, and incorrect buttons
-     */
-    public void getNewCard () {
-
-        // TODO: Add slide animation for card
-        question = model.getNewCard().getQuestion();
-        card.loadUrl("about:blank");
-        card.getSettings().setTextZoom(200);
-        card.loadData(question, "text/html", "utf-8");
 
     }
 
@@ -140,6 +132,7 @@ public class ReviseCardActivity extends AppCompatActivity {
         card.loadUrl("about:blank");
         card.getSettings().setTextZoom(200);
         card.loadData(question, "text/html", "utf-8");
+        updateProgress();
         flipToQuestion();
     }
 
@@ -151,6 +144,7 @@ public class ReviseCardActivity extends AppCompatActivity {
         card.loadUrl("about:blank");
         card.getSettings().setTextZoom(200);
         card.loadData(question, "text/html", "utf-8");
+        updateProgress();
         flipToQuestion();
     }
 
@@ -274,14 +268,11 @@ public class ReviseCardActivity extends AppCompatActivity {
 
         // Change Skip --> Correct Button
         TransitionManager.beginDelayedTransition(transitionsContainer, new TransitionSet()
-                .addTransition(new ChangeText().setChangeBehavior(ChangeText.CHANGE_BEHAVIOR_OUT_IN))
                 .addTransition(new Recolor())
-                .addTransition(new ChangeBounds()));
-
+                .addTransition(new ChangeBounds())
+                .addTransition(new ChangeText().setChangeBehavior(ChangeText.CHANGE_BEHAVIOR_IN)));
 
         skipButton.setText(R.string.correct_btn_text);
-
-        TransitionManager.beginDelayedTransition(transitionsContainer, new Recolor());
         skipButton.setBackgroundColor(getResources().getColor(green));
         skipButton.setTextColor(getResources().getColor(white));
 
@@ -297,6 +288,11 @@ public class ReviseCardActivity extends AppCompatActivity {
         });
 
 
+    }
+
+    public void updateProgress() {
+        TransitionManager.beginDelayedTransition(transitionsContainer, new ProgressTransition());
+        progressBar.setProgress(model.getPercentageLearnt());
     }
 
     // Clean up methods

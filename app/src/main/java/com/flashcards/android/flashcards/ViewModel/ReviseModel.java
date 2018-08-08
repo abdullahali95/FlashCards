@@ -17,11 +17,9 @@ import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.PriorityBlockingQueue;
 
-
 /*
  * Created by Abdullah Ali
  */
-
 
 public class ReviseModel extends AndroidViewModel {
 
@@ -55,10 +53,9 @@ public class ReviseModel extends AndroidViewModel {
         try {
             task.execute(deckId).get();
         } catch (InterruptedException | ExecutionException e) {
-            e.printStackTrace();
-//            Log.e("Test Model: ",
-//                    "Error: There was a problem while trying to obtain the cards from the database",
-//                    e);
+            Log.e("Test Model: ",
+                    "Error: There was a problem while trying to obtain the cards from the database",
+                    e);
         }
 
     }
@@ -67,17 +64,16 @@ public class ReviseModel extends AndroidViewModel {
 
         @Override
         protected Void doInBackground(String... strings) {
-
             currentDeck = repo.getDeckNow(strings[0]);
             List<Card> allCards = repo.getAllDeckCards(strings[0]);
             int size = allCards.size();
 
             for(Card card: allCards) {
                 aveAttempts += card.getAttempts();
-                aveLeitnerScore += Progress.leitnerScore(card);
+                aveLeitnerScore += Progress.correctFromLastFive(card);
             }
             aveAttempts = aveAttempts/size;
-            aveLeitnerScore = aveLeitnerScore/ (double) size;
+            aveLeitnerScore = aveLeitnerScore/ (double) (size * 5);
 
             for(Card card: allCards) {
                 card.getLearntScore(size, aveAttempts, aveLeitnerScore);
@@ -159,7 +155,7 @@ public class ReviseModel extends AndroidViewModel {
     private void incCounter() {
         counter++;
 
-        if (counter > 5) {
+        if (counter > 3) {
 
             // Recalculate attempts and leitner score
             int size = 0;
@@ -168,11 +164,11 @@ public class ReviseModel extends AndroidViewModel {
             aveLeitnerScore = 0;
             for(Card card: testQueue) {
                 aveAttempts += card.getAttempts();
-                aveLeitnerScore += Progress.leitnerScore(card);
+                aveLeitnerScore += Progress.correctFromLastFive(card);
                 size++;
             }
             aveAttempts = (int) Math.round(aveAttempts/ (double) size);
-            aveLeitnerScore = aveLeitnerScore/ (double) size;
+            aveLeitnerScore = aveLeitnerScore/ (double) (size * 5);
 
 
             // Periodic reshuffle of cards
@@ -222,14 +218,8 @@ public class ReviseModel extends AndroidViewModel {
         protected Void doInBackground(Void... voids) {
             // If the deck has been revised, update the Easiness Factor of the deck.
             double ls;
-            if (aveAttempts >= 2) {
                 ls = aveLeitnerScore * 5;
                 Log.d(String.valueOf(ls), "ls: ");
-            } else {
-                // Gives a more accurate value as the deck has not been learnt well
-                // Yet the LeitnerScore is initialised at 0.3
-                ls = aveLeitnerScore*2;
-            }
             currentDeck.setLs(ls);
 
             // Update last used date
@@ -246,6 +236,9 @@ public class ReviseModel extends AndroidViewModel {
         return deckId;
     }
 
+    public int getPercentageLearnt() {
+        return (int) Math.round(aveLeitnerScore * 100);
+    }
 
     // LiveData stuff
 

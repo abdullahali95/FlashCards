@@ -87,7 +87,10 @@ public class DeckAdapter extends RecyclerView.Adapter<DeckAdapter.DeckViewHolder
         Date convertedDate;
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd kk:mm:ss");
         String nextDue = decks.get(position).getNextTestDue();
-        if (nextDue == null) holder.nextDue.setText("");
+        double ls = decks.get(position).getLs();
+
+        // If the deck has not been revised or not yet learnt, don't show info about next revision due.
+        if (nextDue == null || ls<2) holder.nextDue.setText("");
         else {
             try {
                 convertedDate = dateFormat.parse(nextDue);
@@ -221,7 +224,7 @@ public class DeckAdapter extends RecyclerView.Adapter<DeckAdapter.DeckViewHolder
         final String[] deckName = {currentDeck.getName()};
 
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setTitle("Create a new Deck");
+        builder.setTitle("Rename Deck");
 
         // Set up the input
         final EditText input = new EditText(context);
@@ -237,10 +240,6 @@ public class DeckAdapter extends RecyclerView.Adapter<DeckAdapter.DeckViewHolder
                 deckName[0] = input.getText().toString();
                 currentDeck.setName(deckName[0]);
                 model.renameDeck(currentDeck);
-
-                // TODO: this should show up as a confirmation from Room db
-                String alert = "Deck renamed";
-                Toast.makeText(context, alert, Toast.LENGTH_SHORT).show();
             }
         });
         builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -258,7 +257,7 @@ public class DeckAdapter extends RecyclerView.Adapter<DeckAdapter.DeckViewHolder
         builder.setTitle("Are you sure you want to delete the deck: " + deck.getName() + "?");
 
         // Set up the buttons
-        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+        builder.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 model.deleteDeck(deck);
@@ -275,7 +274,10 @@ public class DeckAdapter extends RecyclerView.Adapter<DeckAdapter.DeckViewHolder
             }
         });
 
-        builder.show();
+        AlertDialog alert = builder.show();
+
+        alert.getButton(DialogInterface.BUTTON_POSITIVE).setBackgroundColor(context.getResources().getColor(R.color.redBg));
+        alert.getButton(DialogInterface.BUTTON_POSITIVE).setTextColor(context.getResources().getColor(R.color.white));
     }
 
 
@@ -318,7 +320,10 @@ public class DeckAdapter extends RecyclerView.Adapter<DeckAdapter.DeckViewHolder
             if(v.getId() == popupButton.getId()) {
                 return;
 
-            } else {
+            }
+
+            else {
+
                 Intent intent = new Intent(this.context, DeckInfoActivity.class);
                 intent.putExtra("Deck", deck.getDeckId());
 

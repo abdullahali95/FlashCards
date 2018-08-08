@@ -44,6 +44,9 @@ public interface CardsDAO {
     @Query("SELECT * FROM Card WHERE deckId = :deckId")
     public List<Card> getAllDeckCards (String deckId);
 
+    @Query("SELECT * FROM Card WHERE deckId = :deckId ORDER BY cardId DESC LIMIT 1")
+    public Card getLastCard(String deckId);
+
     @Update(onConflict = OnConflictStrategy.REPLACE)
     public void setAllCards(List<Card> allCards);
 
@@ -71,12 +74,10 @@ public interface CardsDAO {
     @Query("UPDATE Card SET correct = correct + 1 WHERE cardId =:cardId AND deckId = :deckId")
     public void incCorrect(int cardId, String deckId);
 
-    //TODO: fix the storage of these
     @Query("UPDATE Card SET lastFive = :lastFive WHERE cardId =:cardId AND deckId = :deckId")
     public void setLastFive(int cardId, String deckId, EvictingQueue<Boolean> lastFive);
 
     @Query("UPDATE Card SET learntScore = :learntScore WHERE cardId =:cardId AND deckId = :deckId")
     public void setLearntScore(int cardId, String deckId, int learntScore);
-
 
 }

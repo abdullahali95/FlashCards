@@ -11,6 +11,7 @@ import com.flashcards.android.flashcards.lib.model.Card;
 import com.flashcards.android.flashcards.lib.model.Deck;
 
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 /**
  * Created by Abdullah Ali on 16/07/2018
@@ -18,7 +19,7 @@ import java.util.List;
 public class DeckInfoModel extends AndroidViewModel {
     private DeckInfoRepo repo;
     private Deck currentDeck;
-    private LiveData<List<Card>> cards;
+    private List<Card> cards;
 
     public DeckInfoModel(@NonNull Application application) {
         super(application);
@@ -37,8 +38,7 @@ public class DeckInfoModel extends AndroidViewModel {
     }
 
     public LiveData<List<Card>> getAllCards (String deckId) {
-        cards = repo.getAllCards(deckId);
-        return cards;
+        return repo.getAllCards(deckId);
     }
 
     public void createCard() {
@@ -81,6 +81,48 @@ public class DeckInfoModel extends AndroidViewModel {
         }
     }
 
+    /**
+     * Checks if the last card is empty
+     * @return last card if it is empty. Else returns a null value.
+     */
+    public Card lastEmptyCard() {
+        //TODO: move this to ASyncTask
+        LastCardTask task = new LastCardTask();
+        Card lastCard = null;
+
+        try {
+            lastCard = task.execute().get();
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+        }
+
+        if (lastCard == null) {
+            return null;
+        } else if (lastCard.getAnswer().equals("") && lastCard.getQuestion().equals("")) {
+            return lastCard;
+        } else return null;
+    }
+
+    private class LastCardTask extends AsyncTask<Void, Void, Card> {
+
+        @Override
+        protected Card doInBackground(Void... voids) {
+            return repo.getLastCard(currentDeck.getDeckId());
+        }
+    }
+
+    public void renameDeck(Deck deck) {
+        RenameDeckTask task = new RenameDeckTask();
+        task.execute(deck);
+
+    }
+    private class RenameDeckTask extends AsyncTask<Deck, Void, Void> {
+        @Override
+        protected Void doInBackground(Deck... decks) {
+            repo.updateDeck(decks[0]);
+            return null;
+        }
+    }
 
     // DAO independant methods
 
@@ -92,11 +134,11 @@ public class DeckInfoModel extends AndroidViewModel {
         this.currentDeck = currentDeck;
     }
 
-    public LiveData<List<Card>> getCards() {
+    public List<Card> getCards() {
         return cards;
     }
 
-    public void setCards(LiveData<List<Card>> cards) {
+    public void setCards(List<Card> cards) {
         this.cards = cards;
     }
 

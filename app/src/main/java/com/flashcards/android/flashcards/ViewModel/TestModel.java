@@ -122,6 +122,13 @@ public class TestModel extends AndroidViewModel {
         return (testQueue.isEmpty())? true : false;
     }
 
+    public int getCorrect() {
+        return correct;
+    }
+
+    public int getTotal() {
+        return total;
+    }
 
     // LiveData stuff
 

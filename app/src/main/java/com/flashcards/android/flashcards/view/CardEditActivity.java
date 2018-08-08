@@ -2,7 +2,6 @@ package com.flashcards.android.flashcards.view;
 
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -20,27 +19,17 @@ import com.flashcards.android.flashcards.lib.model.Card;
 import jp.wasabeef.richeditor.RichEditor;
 
 public class CardEditActivity extends AppCompatActivity {
-    RichEditor editor;
-    TextView titleText;
+    private RichEditor editor;
+    private TextView titleText;
 
-    ImageButton boldButton;
-    ImageButton italicButton;
-    ImageButton underlineButton;
-    ImageButton redButton;
-    ImageButton blueButton;
-    ImageButton greenButton;
-    ImageButton undoButton;
-    ImageButton redoButton;
-    ImageButton ulButton;
-    ImageButton strikeThroughButton;
-    ImageButton blueHighlightButton;
-    ImageButton greenHighlightButton;
-    ImageButton clearFormatButton;
-    ImageButton redHighlightButton;
+    // Buttons for Editing toolbar
+    private ImageButton boldButton, italicButton, underlineButton, redButton, blueButton,
+            greenButton, undoButton, redoButton, ulButton, strikeThroughButton,
+            blueHighlightButton, greenHighlightButton, clearFormatButton, redHighlightButton;
 
-    FloatingActionButton flipButton;
+    private FloatingActionButton flipButton;
 
-    EditModel model;
+    private EditModel model;
 
 
     @Override
@@ -155,30 +144,30 @@ public class CardEditActivity extends AppCompatActivity {
 
 
     private void initLayout() {
-        titleText = (TextView) findViewById(R.id.tv_edit_title);
+        titleText = findViewById(R.id.tv_edit_title);
 
-        boldButton = (ImageButton) findViewById(R.id.question_btn_bold);
-        italicButton = (ImageButton) findViewById(R.id.question_btn_italic);
-        underlineButton = (ImageButton) findViewById(R.id.question_btn_underline);
-        redButton = (ImageButton) findViewById(R.id.question_btn_color_red);
-        blueButton = (ImageButton) findViewById(R.id.question_btn_color_blue);
-        greenButton = (ImageButton) findViewById(R.id.question_btn_color_green);
-        undoButton = (ImageButton) findViewById(R.id.question_btn_undo);
-        redoButton = (ImageButton) findViewById(R.id.question_btn_redo);
-        flipButton = (FloatingActionButton) findViewById(R.id.btn_edit_flip);
-        ulButton = (ImageButton) findViewById(R.id.question_btn_unordered_list);
-        strikeThroughButton = (ImageButton) findViewById(R.id.question_btn_strikethrough);
-        redHighlightButton = (ImageButton) findViewById(R.id.question_btn_highlight_red);
-        greenHighlightButton = (ImageButton) findViewById(R.id.question_btn_highlight_green);
-        blueHighlightButton = (ImageButton) findViewById(R.id.question_btn_highlight_blue);
-        clearFormatButton = (ImageButton) findViewById(R.id.question_btn_clear_formatting);
+        boldButton = findViewById(R.id.question_btn_bold);
+        italicButton = findViewById(R.id.question_btn_italic);
+        underlineButton = findViewById(R.id.question_btn_underline);
+        redButton = findViewById(R.id.question_btn_color_red);
+        blueButton = findViewById(R.id.question_btn_color_blue);
+        greenButton = findViewById(R.id.question_btn_color_green);
+        undoButton = findViewById(R.id.question_btn_undo);
+        redoButton = findViewById(R.id.question_btn_redo);
+        flipButton = findViewById(R.id.btn_edit_flip);
+        ulButton = findViewById(R.id.question_btn_unordered_list);
+        strikeThroughButton = findViewById(R.id.question_btn_strikethrough);
+        redHighlightButton = findViewById(R.id.question_btn_highlight_red);
+        greenHighlightButton = findViewById(R.id.question_btn_highlight_green);
+        blueHighlightButton = findViewById(R.id.question_btn_highlight_blue);
+        clearFormatButton = findViewById(R.id.question_btn_clear_formatting);
 
     }
 
     private void initEditor() {
         //TODO: Add justify, strikethrough, highlight buttons
 
-        editor = (RichEditor) findViewById(R.id.question_editor);
+        editor = findViewById(R.id.question_editor);
         editor.setPadding(20,20,20,20);
         editor.setBackgroundColor(getResources().getColor(R.color.cardBackground));
         editor.setEditorFontSize(24);

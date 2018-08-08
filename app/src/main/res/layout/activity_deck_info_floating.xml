@@ -14,13 +14,10 @@
         android:id="@+id/fab_deck_info"
         android:layout_width="55dp"
         android:layout_height="55dp"
-        android:layout_gravity="top|end"
-        android:layout_marginTop="110dp"
-        android:layout_marginRight="10dp"
-        android:backgroundTint="@color/colorPrimary"
+        android:layout_marginBottom="10dp"
         android:focusable="true"
-        app:layout_anchor="@+id/deck_info_header"
-        app:layout_anchorGravity="right|bottom"
+        app:layout_anchor="@+id/deck_info_rec"
+        app:layout_anchorGravity="center|bottom"
         app:srcCompat="@drawable/fab_add" />
 
 </android.support.design.widget.CoordinatorLayout>

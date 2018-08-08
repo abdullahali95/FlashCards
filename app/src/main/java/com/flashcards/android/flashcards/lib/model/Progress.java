@@ -30,16 +30,12 @@ public class Progress {
      */
     public static double leitnerScore (Card card) {
         int total = card.getAttempts();
-        EvictingQueue<Boolean> lastFive = card.getLastFive();
 
         // Initial value slightly higher then min value (0.2). This is so:
         // Initial incorrect answers can be identified by the slightly lower then average leitner score
         if (total == 0) return 0.3;
         else {
-	        int correct = 0;
-            for (Boolean b : lastFive) {
-                if (b == TRUE) correct++;
-            }
+	        int correct = correctFromLastFive(card);
 	        // With the queue size 5, interval between each deck is 20%
             // Following equation makes this division
 	        double ls = (0.2*(correct-1))+0.2;
@@ -47,6 +43,22 @@ public class Progress {
 	        // If there are no true answers, min value should be 0.2
 	        return (ls >= 0.2)? ls : 0.2;
         }
+    }
+
+    /**
+     * Helper method for leitner score method.
+     * Determines the number of answers correct in the LastFive Queue
+     * @param card Card whose LastFive is to be determined
+     * @return number of correct answers
+     * Postconditions: Returns integer between 0 - 5 inclusive
+     */
+    public static int correctFromLastFive (Card card) {
+        EvictingQueue<Boolean> lastFive = card.getLastFive();
+        int correct = 0;
+        for (Boolean b : lastFive) {
+            if (b == TRUE) correct++;
+        }
+        return correct;
     }
 
 

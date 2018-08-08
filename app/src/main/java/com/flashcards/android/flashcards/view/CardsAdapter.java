@@ -6,14 +6,11 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.WebView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -36,7 +33,7 @@ public class CardsAdapter extends RecyclerView.Adapter<CardsAdapter.CardsViewHol
     private Context context;
     private Activity activity;
 
-    public CardsAdapter(DeckInfoModel model, ArrayList<Card> cards, Context context, Activity activity) {
+    public CardsAdapter(DeckInfoModel model, List<Card> cards, Context context, Activity activity) {
         this.model = model;
         this.cards = cards;
         this.context = context;
@@ -72,9 +69,9 @@ public class CardsAdapter extends RecyclerView.Adapter<CardsAdapter.CardsViewHol
         private Context context;
         private Card card;
 
-        public CardsViewHolder(View itemView, Context context) {
+        private CardsViewHolder(View itemView, Context context) {
             super(itemView);
-            this.cardView = (TextView) itemView.findViewById(R.id.wv_card_info_question);
+            this.cardView = itemView.findViewById(R.id.wv_card_info_question);
 
             itemView.setOnLongClickListener(this);
             itemView.setOnClickListener(this);
@@ -83,9 +80,6 @@ public class CardsAdapter extends RecyclerView.Adapter<CardsAdapter.CardsViewHol
 
         }
 
-
-
-        // TODO: Find a better way to delete then long press.
         @Override
         public void onClick(View view) {
             openEditor();
@@ -98,7 +92,7 @@ public class CardsAdapter extends RecyclerView.Adapter<CardsAdapter.CardsViewHol
             return true;
         }
 
-        public void openEditor() {
+        void openEditor() {
             card = cards.get(getAdapterPosition());
 
             //Switch view
@@ -112,21 +106,18 @@ public class CardsAdapter extends RecyclerView.Adapter<CardsAdapter.CardsViewHol
             this.context.startActivity(intent, options.toBundle());
         }
 
-        public void deleteCard() {
+        void deleteCard() {
             card = cards.get(getAdapterPosition());
 
             AlertDialog.Builder builder = new AlertDialog.Builder(context);
             builder.setTitle("Are you sure you want to delete this card?");
 
             // Set up the buttons
-            builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            builder.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     model.deleteCard(card);
 
-                    // TODO: this should show up as a confirmation from Room db
-                    String alert = "Card deleted";
-                    Toast.makeText(context, alert, Toast.LENGTH_SHORT).show();
                 }
             });
             builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -136,7 +127,11 @@ public class CardsAdapter extends RecyclerView.Adapter<CardsAdapter.CardsViewHol
                 }
             });
 
-            builder.show();
+            AlertDialog alert = builder.show();
+
+            alert.getButton(DialogInterface.BUTTON_POSITIVE).setBackgroundColor(context.getResources().getColor(R.color.redBg));
+            alert.getButton(DialogInterface.BUTTON_POSITIVE).setTextColor(context.getResources().getColor(R.color.white));
+
         }
     }
 }

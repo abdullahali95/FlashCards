@@ -144,6 +144,7 @@ public class TestCardActivity extends AppCompatActivity {
      */
     public void incorrect() {
         if (model.queueEmpty()) {
+            model.markIncorrect();
             endTest();
         } else {
             question = model.markIncorrect().getQuestion();
@@ -159,6 +160,7 @@ public class TestCardActivity extends AppCompatActivity {
      */
     public void correct () {
         if (model.queueEmpty()) {
+            model.markCorrect();
             endTest();
         } else {
             question = model.markCorrect().getQuestion();
@@ -173,6 +175,10 @@ public class TestCardActivity extends AppCompatActivity {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("You scored " + model.getScore()+ "%");
 
+        int correct = model.getCorrect();
+        int total = model.getTotal();
+        builder.setMessage(correct + " out of " + total + " answers were correct.");
+
         // Set up the buttons
         builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
             @Override
@@ -181,7 +187,12 @@ public class TestCardActivity extends AppCompatActivity {
             }
         });
 
-        builder.show();
+        AlertDialog alert = builder.show();
+        alert.setCancelable(false);
+
+
+
+
 
     }
 

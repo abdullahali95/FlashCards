@@ -50,7 +50,16 @@ public class DeckInfoRepo {
         return cardsDAO.getAllCardsLength(deckId);
     }
 
+    public void updateDeck(Deck deck) {
+        deckDAO.setName(deck.getDeckId(), deck.getName());
+    }
+
+
     public void setDeckSize(String deckId, int newDeckSize) {
         deckDAO.setDeckSize(deckId, newDeckSize);
+    }
+
+    public Card getLastCard(String deckId) {
+        return cardsDAO.getLastCard(deckId);
     }
 }
