@@ -2,15 +2,20 @@ package com.flashcards.android.flashcards.view;
 
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.TabLayout;
+import android.support.v4.view.GestureDetectorCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.GestureDetector;
+import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.TextView;
+import android.widget.Toast;
 
 import com.flashcards.android.flashcards.R;
 import com.flashcards.android.flashcards.ViewModel.EditModel;
@@ -18,18 +23,19 @@ import com.flashcards.android.flashcards.lib.model.Card;
 
 import jp.wasabeef.richeditor.RichEditor;
 
-public class CardEditActivity extends AppCompatActivity {
+public class CardEditActivity extends AppCompatActivity implements View.OnTouchListener {
     private RichEditor editor;
-    private TextView titleText;
+    private TabLayout tabs;
+    TabLayout.OnTabSelectedListener listener;
 
     // Buttons for Editing toolbar
     private ImageButton boldButton, italicButton, underlineButton, redButton, blueButton,
             greenButton, undoButton, redoButton, ulButton, strikeThroughButton,
             blueHighlightButton, greenHighlightButton, clearFormatButton, redHighlightButton;
 
-    private FloatingActionButton flipButton;
-
+    private Button addCardButton;
     private EditModel model;
+    private GestureDetectorCompat gestureDetector;
 
 
     @Override
@@ -52,7 +58,8 @@ public class CardEditActivity extends AppCompatActivity {
         initLayout();
         initEditor();
         initToolbar();
-        initFlipButton();
+        initTabButtons();
+        initAddCardButton();
 
         model.getCard(cardId, deckId).observe(this, new Observer<Card>() {
             @Override
@@ -65,7 +72,7 @@ public class CardEditActivity extends AppCompatActivity {
                     } else {
                         editor.setHtml("");
                     }
-                    titleText.setText("Question");
+//                    titleText.setText("Question");
                     model.setQside(true);
                 } else {
                     model.setCurrentCard(card);
@@ -85,6 +92,10 @@ public class CardEditActivity extends AppCompatActivity {
                 }
             }
         });
+
+        gestureDetector = new GestureDetectorCompat(this, new MyGestureListener());
+        editor.setOnTouchListener(this);
+
     }
 
     /**
@@ -93,30 +104,43 @@ public class CardEditActivity extends AppCompatActivity {
     @Override
     public void onResume() {
         super.onResume();
-        if (model.isQside()) {
-            // Question side was active
-            if (model.getCurrentCard() != null && model.getCurrentCard().getQuestion() != null) {
-                editor.setHtml(model.getCurrentCard().getQuestion());
+        if (model.getCurrentCard() != null) {
+            if (model.isQside()) {
+                // Question side was active
+                if (model.getCurrentCard() != null && model.getCurrentCard().getQuestion() != null) {
+                    editor.setHtml(model.getCurrentCard().getQuestion());
+                } else {
+                    editor.setHtml("");
+                }
+                tabs.getTabAt(0).select();
             } else {
-                editor.setHtml("");
+                // Answer side was active
+                if (model.getCurrentCard() != null && model.getCurrentCard().getAnswer() != null) {
+                    editor.setHtml(model.getCurrentCard().getAnswer());
+                } else {
+                    editor.setHtml("");
+                }
+                tabs.getTabAt(1).select();
             }
-            titleText.setText("Question");
-        } else {
-            // Answer side was active
-            if (model.getCurrentCard() != null && model.getCurrentCard().getAnswer() != null) {
-                editor.setHtml(model.getCurrentCard().getAnswer());
-            } else {
-                editor.setHtml("");
-            }
-            titleText.setText("Answer");
         }
     }
 
-    private void initFlipButton() {
-        flipButton.setOnClickListener(new View.OnClickListener() {
+    private void initTabButtons() {
+
+        tabs.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
-            public void onClick(View view) {
-                if (model.isQside()) {
+            public void onTabSelected(TabLayout.Tab tab) {
+                tab.select();
+                if (tab.getText().equals(getResources().getString(R.string.question_tab_title))) {
+                    editor.setPlaceholder("Please Enter Question Here");
+                    if (model.getCurrentCard().getQuestion() != null) {
+                        editor.setHtml(model.getCurrentCard().getQuestion());
+                    } else {
+                        editor.setHtml("");
+                    }
+                    model.setQside(true);
+
+                } else if (tab.getText().equals(getResources().getString(R.string.answer_tab_title))) {
                     editor.setPlaceholder("Please Enter Answer Here");
                     if (model.getCurrentCard().getAnswer() != null) {
                         editor.setHtml(model.getCurrentCard().getAnswer());
@@ -124,28 +148,23 @@ public class CardEditActivity extends AppCompatActivity {
                         editor.setHtml("");
 
                     }
-
-                    titleText.setText("Answer");
                     model.setQside(false);
-
-                } else if (!model.isQside()) {
-                    editor.setPlaceholder("Please Enter Question Here");
-                    if (model.getCurrentCard().getQuestion() != null) {
-                        editor.setHtml(model.getCurrentCard().getQuestion());
-                    } else {
-                        editor.setHtml("");
-                    }
-                    titleText.setText("Question");
-                    model.setQside(true);
                 }
             }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {}
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab){}
         });
+
     }
 
 
     private void initLayout() {
-        titleText = findViewById(R.id.tv_edit_title);
-
+        tabs = findViewById(R.id.edit_card_tabs);
+        addCardButton = findViewById(R.id.btn_add_card);
         boldButton = findViewById(R.id.question_btn_bold);
         italicButton = findViewById(R.id.question_btn_italic);
         underlineButton = findViewById(R.id.question_btn_underline);
@@ -154,7 +173,6 @@ public class CardEditActivity extends AppCompatActivity {
         greenButton = findViewById(R.id.question_btn_color_green);
         undoButton = findViewById(R.id.question_btn_undo);
         redoButton = findViewById(R.id.question_btn_redo);
-        flipButton = findViewById(R.id.btn_edit_flip);
         ulButton = findViewById(R.id.question_btn_unordered_list);
         strikeThroughButton = findViewById(R.id.question_btn_strikethrough);
         redHighlightButton = findViewById(R.id.question_btn_highlight_red);
@@ -165,8 +183,6 @@ public class CardEditActivity extends AppCompatActivity {
     }
 
     private void initEditor() {
-        //TODO: Add justify, strikethrough, highlight buttons
-
         editor = findViewById(R.id.question_editor);
         editor.setPadding(20,20,20,20);
         editor.setBackgroundColor(getResources().getColor(R.color.cardBackground));
@@ -272,6 +288,72 @@ public class CardEditActivity extends AppCompatActivity {
                 editor.removeFormat();
             }
         });
+    }
+
+    public void initAddCardButton () {
+        addCardButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                model.createCard();
+                Card newCard = model.lastEmptyCard();
+
+                if (newCard != null) {
+                    //Switch view
+                    Intent intent = new Intent(CardEditActivity.this, CardEditActivity.class);
+                    intent.putExtra("cardId", newCard.getCardId());
+                    intent.putExtra("deckId", newCard.getDeckId());
+                    startActivity(intent);
+                    finish();
+                }
+            }
+        });
+
+    }
+
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event){
+        this.gestureDetector.onTouchEvent(event);
+        return super.onTouchEvent(event);
+    }
+
+    @Override
+    public boolean onTouch(View v, MotionEvent event) {
+        this.gestureDetector.onTouchEvent(event);
+        return super.onTouchEvent(event);
+    }
+
+    class MyGestureListener extends GestureDetector.SimpleOnGestureListener {
+        @Override
+        public boolean onDown(MotionEvent e) {
+            return true;
+        }
+
+        @Override
+        public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+            float dist = e2.getX() - e1.getX();
+            if (velocityX < -4000 && dist < -100 && tabs.getTabAt(0).isSelected()) {
+                editor.setPlaceholder("Please Enter Answer Here");
+                if (model.getCurrentCard().getAnswer() != null) {
+                    editor.setHtml(model.getCurrentCard().getAnswer());
+                } else {
+                    editor.setHtml("");
+
+                }
+                tabs.getTabAt(1).select();
+                model.setQside(false);
+            } else if (velocityX > 4000 && dist > 100 && tabs.getTabAt(1).isSelected()) {
+                editor.setPlaceholder("Please Enter Question Here");
+                if (model.getCurrentCard().getQuestion() != null) {
+                    editor.setHtml(model.getCurrentCard().getQuestion());
+                } else {
+                    editor.setHtml("");
+                }
+                tabs.getTabAt(0).select();
+                model.setQside(true);
+            }
+            return true;
+        }
     }
 
 }

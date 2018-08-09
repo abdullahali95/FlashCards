@@ -8,6 +8,8 @@ import android.os.AsyncTask;
 import com.flashcards.android.flashcards.data.repo.CardEditRepo;
 import com.flashcards.android.flashcards.lib.model.Card;
 
+import java.util.concurrent.ExecutionException;
+
 /**
  * Created by Abdullah Ali on 12/07/2018
  */
@@ -26,25 +28,30 @@ public class EditModel extends AndroidViewModel {
 
     // Methods dependant of repo
 
-
-    public void addCard(Card card) {
-        Card newCard = card;
-        AddCardTask task = new AddCardTask();
-        task.execute(newCard);
-    }
-
     public LiveData<Card> getCard(int cardId, String deckId) {
         return repo.getCard(cardId, deckId);
     }
 
-    private class AddCardTask extends AsyncTask<Card, Void, Void> {
 
-            @Override
-            protected Void doInBackground(Card... cards) {
-                repo.createCard(cards[0]);
-                return null;
-            }
+    public void createCard() {
+        String deckId = currentCard.getDeckId();
+        CreateCardTask task = new CreateCardTask();
+        task.execute(deckId);
+    }
+
+    private class CreateCardTask extends AsyncTask<String, Void, Long> {
+
+        @Override
+        protected Long doInBackground(String... strings) {
+            Card newCard = new Card(strings[0]);
+            repo.createCard(newCard);
+
+            //Update deck size
+            int newDeckSize = repo.getAllCardsLength(newCard.getDeckId());
+            repo.setDeckSize(newCard.getDeckId(), newDeckSize);
+            return null;
         }
+    }
 
     public void updateQuestion(String question) {
         currentCard.setQuestion(question);
@@ -80,6 +87,36 @@ public class EditModel extends AndroidViewModel {
                 return null;
             }
         }
+
+    /**
+     * Checks if the last card is empty
+     * @return last card if it is empty. Else returns a null value.
+     */
+    public Card lastEmptyCard() {
+        //TODO: move this to ASyncTask
+        LastCardTask task = new LastCardTask();
+        Card lastCard = null;
+
+        try {
+            lastCard = task.execute().get();
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+        }
+
+        if (lastCard == null) {
+            return null;
+        } else if (lastCard.getAnswer().equals("") && lastCard.getQuestion().equals("")) {
+            return lastCard;
+        } else return null;
+    }
+
+    private class LastCardTask extends AsyncTask<Void, Void, Card> {
+
+        @Override
+        protected Card doInBackground(Void... voids) {
+            return repo.getLastCard(currentCard.getDeckId());
+        }
+    }
 
 
     // Methods independant of repo

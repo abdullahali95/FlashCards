@@ -28,4 +28,6 @@
     <string name="tv_info_deck">Created: 5 Days Ago</string>
     <string name="rename_action_main_rec">Rename</string>
     <string name="tv_cards_tested">1</string>
+    <string name="question_tab_title">Question</string>
+    <string name="answer_tab_title">Answer</string>
 </resources>

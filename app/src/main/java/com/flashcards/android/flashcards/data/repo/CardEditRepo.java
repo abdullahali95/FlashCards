@@ -47,6 +47,10 @@ public class CardEditRepo {
         return cardsDAO.getAllCards(deckId);
     }
 
+    public int getAllCardsLength(String deckId) {
+        return cardsDAO.getAllCardsLength(deckId);
+    }
+
     public LiveData<Card> getCard (int cardId, String deckId) {
         return cardsDAO.getCard(cardId, deckId);
     }
@@ -57,6 +61,14 @@ public class CardEditRepo {
 
     public void deleteCard (Card card) {
         cardsDAO.deleteCard(card);
+    }
+
+    public void setDeckSize(String deckId, int newDeckSize) {
+        deckDAO.setDeckSize(deckId, newDeckSize);
+    }
+
+    public Card getLastCard(String deckId) {
+        return cardsDAO.getLastCard(deckId);
     }
 
 }

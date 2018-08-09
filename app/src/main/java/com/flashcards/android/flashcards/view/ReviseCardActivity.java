@@ -79,7 +79,6 @@ public class ReviseCardActivity extends AppCompatActivity {
         }
 
         gestureDetector = new GestureDetectorCompat(this, new MyGestureListener());
-
         initQButtons();
         updateProgress();
 

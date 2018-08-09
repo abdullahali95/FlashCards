@@ -2,8 +2,8 @@
 <resources>
     <color name="colorPrimary">#450058</color>
     <color name="colorPrimaryDark">#22002c</color>
-    <color name="colorAccent">#287785</color>
-    <color name="redBg">#8e2e25</color>
+    <color name="colorAccent">#008ca4</color>
+    <color name="redBg">#9e190c</color>
     <color name="accentGreyed">#b7c0c2</color>
     <color name="colorBackground">#f0f0f5</color>
     <color name="cardBackground">#f6f5d1</color>

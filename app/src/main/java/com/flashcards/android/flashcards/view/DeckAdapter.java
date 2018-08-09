@@ -199,7 +199,7 @@ public class DeckAdapter extends RecyclerView.Adapter<DeckAdapter.DeckViewHolder
             Toast.makeText(context, "Deck saved", Toast.LENGTH_LONG).show();
 
             Intent share = new Intent(Intent.ACTION_SEND);
-            share.setType("text/json");
+            share.setType("application/deck");
             share.putExtra(Intent.EXTRA_STREAM, Uri.parse("file://" + file.getAbsolutePath()));
 
             context.startActivity(Intent.createChooser(share, "Share flash cards deck"));

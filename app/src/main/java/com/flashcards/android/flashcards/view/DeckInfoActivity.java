@@ -221,7 +221,7 @@ public class DeckInfoActivity extends AppCompatActivity {
 
         if (newCard != null) {
             //Switch view
-            Intent intent = new Intent(this.context, CardEditActivity.class);
+            Intent intent = new Intent(DeckInfoActivity.this, CardEditActivity.class);
             intent.putExtra("cardId", newCard.getCardId());
             intent.putExtra("deckId", newCard.getDeckId());
             startActivity(intent);

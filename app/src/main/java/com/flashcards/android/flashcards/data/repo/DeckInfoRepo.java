@@ -37,8 +37,6 @@ public class DeckInfoRepo {
     public Long createCard(Card card) {
         String isNull = String.valueOf((card == null));
         Log.d(isNull, "New Card is Null: ");
-
-
         return cardsDAO.createCard(card);
     }
 
