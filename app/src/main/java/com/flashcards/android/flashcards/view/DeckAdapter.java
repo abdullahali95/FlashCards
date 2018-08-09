@@ -88,31 +88,34 @@ public class DeckAdapter extends RecyclerView.Adapter<DeckAdapter.DeckViewHolder
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd kk:mm:ss");
         String nextDue = decks.get(position).getNextTestDue();
         double ls = decks.get(position).getLs();
+        String infoText = "";
 
         // If the deck has not been revised or not yet learnt, don't show info about next revision due.
-        if (nextDue == null || ls<2) holder.nextDue.setText("");
-        else {
+        if (nextDue == null || ls < 2) {
+            infoText = "Deck learnt: " + Math.round(ls*20) + "%";
+            holder.nextDue.setText(infoText);
+        } else {
             try {
                 convertedDate = dateFormat.parse(nextDue);
-                String datetime;
+
 
                 if (convertedDate.before(Calendar.getInstance().getTime())) {
                     // If revision due in the past, display 'now'
-                    datetime = "Revision due now";
+                    infoText = "Revision due now";
                     holder.cardView.setCardBackgroundColor(context.getResources().getColor(R.color.redBg));
                 } else {
                     PrettyTime p = new PrettyTime();
-                    datetime = p.format(convertedDate);
-                    datetime = "Revision due " + datetime;
+                    infoText = p.format(convertedDate);
+                    infoText = "Revision due " + infoText;
                     holder.cardView.setCardBackgroundColor(context.getResources().getColor(R.color.colorAccent));
                 }
 
-                holder.nextDue.setText(datetime);
+                holder.nextDue.setText(infoText);
 
             } catch (ParseException e) {
                 holder.nextDue.setText(currentDeck.getLastUsed());
             } catch (Exception e) {
-                holder.nextDue.setText("");
+                holder.nextDue.setText(infoText);
             }
         }
 

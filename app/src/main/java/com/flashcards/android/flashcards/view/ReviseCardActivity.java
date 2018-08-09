@@ -1,14 +1,21 @@
 package com.flashcards.android.flashcards.view;
 
 import android.arch.lifecycle.ViewModelProviders;
+import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
+import android.support.v4.view.GestureDetectorCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.view.GestureDetector;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.ProgressBar;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.flashcards.android.flashcards.R;
 import com.flashcards.android.flashcards.ViewModel.ReviseModel;
@@ -33,6 +40,7 @@ public class ReviseCardActivity extends AppCompatActivity {
     WebView card;
     String question;
     String answer;
+    boolean aDisplayed;
 
     ProgressBar progressBar;
     Button skipButton;
@@ -42,15 +50,14 @@ public class ReviseCardActivity extends AppCompatActivity {
     Button correctButton;
     Button incorrectButton;
 
+    GestureDetectorCompat gestureDetector;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         ActionBar actionBar = getSupportActionBar();
         actionBar.hide();
-
         setContentView(R.layout.activity_revise_card);
-
         loadViews();
 
         // Get info of clicked deck
@@ -58,37 +65,22 @@ public class ReviseCardActivity extends AppCompatActivity {
         String deckId = bundle.getString("deckId");
 
         model = ViewModelProviders.of(ReviseCardActivity.this).get(ReviseModel.class);
-
         if (model.currentDeckId() == null || !model.currentDeckId().equals(deckId)) {
-
             model.initQueue(deckId);
             question = model.getCurrentCard().getQuestion();
             card.loadUrl("about:blank");
             card.loadData(question, "text/html", "utf-8");
-
-        } else {
-            // TODO: ensure screen stays on answerView when orientation is changed.
-
+        } else if (!model.isaSide()) {
             question = model.getCurrentCard().getQuestion();
             card.loadUrl("about:blank");
             card.loadData(question, "text/html", "utf-8");
+        } else {
+            flipToAnswer();
         }
 
-        // Add Event listeners to buttons
-        skipButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                skip();
-            }
-        });
+        gestureDetector = new GestureDetectorCompat(this, new MyGestureListener());
 
-        flipButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                flipToAnswer();
-            }
-        });
-
+        initQButtons();
         updateProgress();
 
     }
@@ -97,14 +89,12 @@ public class ReviseCardActivity extends AppCompatActivity {
      * Loads layout components
      */
     public void loadViews() {
-        transitionsContainer = (ViewGroup) findViewById(R.id.root_revise);
-        skipButton = (Button) findViewById(R.id.btn_skip_revise);
-        flipButton = (Button) findViewById(R.id.btn_flip_revise);
-        cardView = (View) findViewById(R.id.ll_card_revise);
-        progressBar = (ProgressBar) findViewById(R.id.progressBar);
-
-        //TODO: Test if WebView scrolls
-        card = (WebView) findViewById(R.id.tv_question_revise);
+        transitionsContainer = findViewById(R.id.root_revise);
+        skipButton = findViewById(R.id.btn_skip_revise);
+        flipButton = findViewById(R.id.btn_flip_revise);
+        cardView = findViewById(R.id.ll_card_revise);
+        progressBar = findViewById(R.id.progressBar);
+        card = findViewById(R.id.tv_question_revise);
 
         // Set Editor
         card.setBackgroundColor(getResources().getColor(cardBackground));
@@ -113,10 +103,30 @@ public class ReviseCardActivity extends AppCompatActivity {
     }
 
     /**
+     * Sets listeners for Question side buttons if questions side is being viewed.
+     */
+    public void initQButtons() {
+        if (!model.isaSide()) {
+            // Add Event listeners to buttons
+            skipButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    skip();
+                }
+            });
+            flipButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    flipToAnswer();
+                }
+            });
+        }
+    }
+
+    /**
      * Gets a new card from the model
      */
     public void skip () {
-
         question = model.skip().getQuestion();
         card.loadUrl("about:blank");
         card.getSettings().setTextZoom(200);
@@ -158,6 +168,9 @@ public class ReviseCardActivity extends AppCompatActivity {
      */
     public void flipToQuestion() {
 
+        model.setaSide(false);
+        aDisplayed = false;
+
         // Change Incorrect --> FLIP Button
         TransitionManager.beginDelayedTransition(transitionsContainer, new TransitionSet()
                 .addTransition(new ChangeText().setChangeBehavior(ChangeText.CHANGE_BEHAVIOR_OUT_IN))
@@ -166,21 +179,11 @@ public class ReviseCardActivity extends AppCompatActivity {
 
 
         incorrectButton.setText(R.string.flip_btn_text);
-
-        TransitionManager.beginDelayedTransition(transitionsContainer, new Recolor());
         incorrectButton.setBackgroundColor(getResources().getColor(colorAccent));
 
         flipButton = incorrectButton;
         incorrectButton.setOnClickListener(null);
         incorrectButton = null;
-
-        flipButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                flipToAnswer();
-            }
-        });
-
 
         // Change Correct --> SKIP Button
         TransitionManager.beginDelayedTransition(transitionsContainer, new TransitionSet()
@@ -190,57 +193,36 @@ public class ReviseCardActivity extends AppCompatActivity {
 
 
         correctButton.setText(R.string.skip_btn_text);
-
-        TransitionManager.beginDelayedTransition(transitionsContainer, new Recolor());
-        correctButton.setBackgroundColor(getResources().getColor(white_teal));
         correctButton.setTextColor(getResources().getColor(colorAccent));
+        correctButton.setBackgroundColor(getResources().getColor(white_teal));
 
         skipButton = correctButton;
         correctButton.setOnClickListener(null);
         correctButton = null;
+        initQButtons();
 
-        skipButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                skip();
-            }
-        });
+        // A bug in Android framework occasionally caused the skip button text colour change to not work.
+        // This therefore forces the button to be redrawn and repainted.
+        // This seems to fix the issue.
+        skipButton.invalidate();
+        skipButton.setTextColor(getResources().getColor(colorAccent));
 
     }
 
+    public void flipToAnswer() {
+        flipToAnswer(1);
+    }
 
     /**
      *  Flips the view from question to answer.
      */
-    public void flipToAnswer() {
+    public void flipToAnswer(int axis) {
 
-        final View cardView = (findViewById(R.id.ll_card_revise));
+//        final View cardView = (findViewById(R.id.ll_card_revise));
+        model.setaSide(true);
 
         // Change Answer
-
-        cardView.setCameraDistance(10000);
-        cardView.animate().withLayer()
-                .rotationY(90)
-                .setDuration(200)
-                .withEndAction(
-                        new Runnable() {
-                            @Override public void run() {
-
-                                answer = model.getCurrentCard().getAnswer();
-                                card.loadUrl("about:blank");
-                                card.getSettings().setTextZoom(150);
-                                card.loadData(answer, "text/html", "utf-8");
-
-                                // second quarter turn
-                                cardView.setRotationY(-90);
-                                cardView.animate().withLayer()
-                                        .rotationY(0)
-                                        .setDuration(200)
-                                        .start();
-                            }
-                        }
-                ).start();
-
+        animateFlip(axis);
 
         // Change Flip --> Incorrect Button
         TransitionManager.beginDelayedTransition(transitionsContainer, new TransitionSet()
@@ -250,8 +232,6 @@ public class ReviseCardActivity extends AppCompatActivity {
 
 
         flipButton.setText(R.string.incorrect_btn_text);
-
-        TransitionManager.beginDelayedTransition(transitionsContainer, new Recolor());
         flipButton.setBackgroundColor(getResources().getColor(red));
 
         incorrectButton = flipButton;
@@ -290,6 +270,52 @@ public class ReviseCardActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * This causes the card to do a flip animation and swap the display with question/answer.
+     * @param axis The direction of the flip. 1 = left to right, -1 = right to left
+     */
+    public void animateFlip(int axis) {
+        final int rotation = 90 * axis;
+        final String cardText;
+
+        if (aDisplayed){
+            question = model.getCurrentCard().getQuestion();
+            cardText = question;
+            aDisplayed = false;
+        } else {
+            answer = model.getCurrentCard().getAnswer();
+            cardText = answer;
+            aDisplayed = true;
+        }
+
+        // Phones can't seem to handle the graphics of moving a card as large as one in landscape
+        // When rotating. To make rotation easier in that case, camera is moved further,
+        // To reduce complexity of animation.
+        boolean isPortrait = (getResources().getConfiguration().orientation == 1);
+        int camDistance = (isPortrait) ? 20000 : 50000;
+        cardView.setCameraDistance(camDistance);
+        cardView.animate().withLayer()
+                .rotationY(rotation)
+                .setDuration(200)
+                .withEndAction(
+                        new Runnable() {
+                            @Override public void run() {
+                                card.loadUrl("about:blank");
+                                card.loadData(cardText, "text/html", "utf-8");
+                                if (aDisplayed) card.getSettings().setTextZoom(150);
+                                else card.getSettings().setTextZoom(200);
+
+                                // second quarter turn
+                                cardView.setRotationY(rotation * -1);
+                                cardView.animate().withLayer()
+                                        .rotationY(0)
+                                        .setDuration(200)
+                                        .start();
+                            }
+                        }
+                ).start();
+    }
+
     public void updateProgress() {
         TransitionManager.beginDelayedTransition(transitionsContainer, new ProgressTransition());
         progressBar.setProgress(model.getPercentageLearnt());
@@ -301,17 +327,53 @@ public class ReviseCardActivity extends AppCompatActivity {
         model.finish();
         finish();
     }
-
     @Override
     protected void onStop() {
         super.onStop();
         model.finish();
     }
-
     @Override
     public void onDestroy() {
         super.onDestroy();
         model.finish();
     }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event){
+        this.gestureDetector.onTouchEvent(event);
+        return super.onTouchEvent(event);
+    }
+
+    class MyGestureListener extends GestureDetector.SimpleOnGestureListener {
+        @Override
+        public boolean onDown(MotionEvent e) {
+            return true;
+        }
+
+        @Override
+        public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+            float dist = e2.getX() - e1.getX();
+            boolean triggered = false;
+            int axis = 1;
+            if (velocityX < -4000 && dist < -100) {
+                axis = -1;
+                triggered = true;
+            } else if (velocityX > 4000 && dist > 100) {
+                axis = 1;
+                triggered = true;
+            }
+
+            if (triggered) {
+                if (!model.isaSide()) {
+                    flipToAnswer(axis);
+                } else {
+                    animateFlip(axis);
+                }
+            }
+            return true;
+        }
+    }
+
+
 
 }

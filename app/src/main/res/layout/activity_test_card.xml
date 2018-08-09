@@ -9,6 +9,34 @@
     tools:context=".view.TestCardActivity">
 
 
+    <TextView
+        android:id="@+id/tv_cards_tested"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="@string/tv_cards_tested"
+        android:textColor="@color/white_teal"
+        android:textSize="21sp"
+        app:layout_constraintEnd_toStartOf="@id/tv_cards_total"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_cards_total"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="/ 15"
+        android:textColor="@color/white_teal"
+        android:textSize="21sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <Button
         android:id="@+id/btn_skip_test"
         android:layout_width="wrap_content"
@@ -48,14 +76,14 @@
         android:layout_marginBottom="24dp"
         android:layout_marginEnd="24dp"
         android:layout_marginStart="24dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="8dp"
         app:cardBackgroundColor="@color/cardBackground"
         app:cardCornerRadius="12dp"
         app:contentPadding="15dp"
+        app:layout_constraintBottom_toTopOf="@id/btn_skip_test"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/btn_skip_test">
+        app:layout_constraintTop_toBottomOf="@id/tv_cards_tested">
 
         <LinearLayout
             android:layout_width="match_parent"

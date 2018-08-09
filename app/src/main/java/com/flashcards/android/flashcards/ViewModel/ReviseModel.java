@@ -33,6 +33,7 @@ public class ReviseModel extends AndroidViewModel {
     private int counter;
     private int aveAttempts;
     private double aveLeitnerScore;
+    private boolean aSide;      // Marks if the current side being viewed is the Answer Side
 
     public ReviseModel(@NonNull Application application) {
         super(application);
@@ -238,6 +239,14 @@ public class ReviseModel extends AndroidViewModel {
 
     public int getPercentageLearnt() {
         return (int) Math.round(aveLeitnerScore * 100);
+    }
+
+    public boolean isaSide() {
+        return aSide;
+    }
+
+    public void setaSide(boolean aSide) {
+        this.aSide = aSide;
     }
 
     // LiveData stuff

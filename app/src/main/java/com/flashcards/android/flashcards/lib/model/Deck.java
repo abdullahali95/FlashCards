@@ -159,97 +159,6 @@ public class Deck {
     }
 
 
-//    /**
-//     * This method applies a modified version of SuperMemo 2 algorithm
-//     * to determine the interval to next revision session.
-//     * This methods appropriately sets the dateLastUsed, nextTestDue, and increments interval
-//     *
-//     */
-//    public void setDates() {
-//        Date date = null;
-//        Calendar dateLastUsed = Calendar.getInstance();
-//        Calendar nextDue = Calendar.getInstance();
-//        Calendar now = Calendar.getInstance();
-//        SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd kk:mm:ss");
-//
-//        try {
-//            date = sf.parse(lastUsed);
-//            dateLastUsed.setTime(date);
-//        } catch (ParseException e) {
-//            e.printStackTrace();
-//        }
-//
-//        // After first revision, set the next revision time for 1 day later
-//        if (interval == 0) {
-//            interval++;
-//            ef = 2.5;
-//            setLastUsed(sf.format(now.getTime()));
-//            nextDue = now;
-//            nextDue.add(Calendar.MINUTE, 24);
-//            setNextTestDue(sf.format(nextDue.getTime()));
-//            Log.d("3 ", "setDates: ");
-//
-//            return;
-//
-//        } else {
-//
-//            try {
-//                date = sf.parse(nextTestDue);
-//                nextDue.setTime(date);
-//            } catch (ParseException e) {
-//                e.printStackTrace();
-//            }
-//
-//            long diff = nextDue.getTimeInMillis() - dateLastUsed.getTimeInMillis();
-//            // Get half of the difference in hours
-//            int diffHourHalf = (int)  ((double) diff / (1000 * 3600 * 0.5));
-//            Calendar half = dateLastUsed;
-//            half.add(Calendar.HOUR, diffHourHalf);
-//
-//            // If user revises before halfway through revision, disregard it.
-//            if (now.before(half)) {
-//                return;
-//
-//                // If leitner score very low, start with smaller increments again.
-//                // This condition should be checked for after the one above,
-//            } else if (ls < 2.5) {
-//                Log.d("2 ", "setDates: ");
-//
-//                interval = 1;
-//                ef = 2.5;
-//                setLastUsed(sf.format(now.getTime()));
-//                nextDue = now;
-//                nextDue.add(Calendar.MINUTE, 24);
-//                setNextTestDue(sf.format(nextDue.getTime()));
-//                return;
-//
-//                // Sets the next date to be between 1.3 - 2.5 x the interval of the last interval
-//                // The interval factor is ef (Easiness Factor)
-//            } else {
-//                Log.d("1 ", "setDates: ");
-//                interval++;
-//                if (ef == 0) ef = 2.5;      //Initialise ef at 2.5
-//                ef = ef - 0.8 + (0.28*ls) - (0.02*ls*ls);
-//                Log.d(String.valueOf(ef), "setDatesEF: ");
-//
-//                if (ef < 1.3) ef = 1.3;     // ef shouldn't fall below 1.3
-//
-//                setLastUsed(sf.format(now.getTime()));
-//                nextDue = now;
-//                int hours = (int) Math.round(diffHourHalf * 2 * ef);
-//                //TODO: FIX THIS! returning 0!!!
-//                Log.d(String.valueOf(hours), "setDatesHours: ");
-//
-//                nextDue.add(Calendar.HOUR, hours);
-//                setNextTestDue(sf.format(nextDue.getTime()));
-//                Log.d("now setDates: ", sf.format(now.getTime()));
-//                Log.d("nextDue setDates: ", sf.format(nextDue.getTime()));
-//
-//                return;
-//            }
-//        }
-//
-//    }
 
     /**
      * This method applies a modified version of SuperMemo 2 algorithm
@@ -310,7 +219,7 @@ public class Deck {
 
                 // If ls is low but EF is increasing (person learning the deck, this shouldn't reset)
                 if (efNew < ef) {
-                    interval = 25;
+                    interval = 24;
                     setDates();
                 }
             } else {

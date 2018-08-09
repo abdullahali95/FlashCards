@@ -27,4 +27,5 @@
     <string name="txt_progress_deck_info">Deck Learnt: 0%</string>
     <string name="tv_info_deck">Created: 5 Days Ago</string>
     <string name="rename_action_main_rec">Rename</string>
+    <string name="tv_cards_tested">1</string>
 </resources>

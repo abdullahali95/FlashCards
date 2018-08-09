@@ -10,6 +10,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.widget.Button;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.flashcards.android.flashcards.R;
 import com.flashcards.android.flashcards.ViewModel.TestModel;
@@ -35,13 +37,9 @@ public class TestCardActivity extends AppCompatActivity {
     WebView card;
     String question;
     String answer;
-
-    Button skipButton;
-    Button flipButton;
     View cardView;
-
-    Button correctButton;
-    Button incorrectButton;
+    Button skipButton, flipButton, correctButton, incorrectButton;
+    TextView cardsTested, cardsTotal;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,28 +66,27 @@ public class TestCardActivity extends AppCompatActivity {
             card.loadUrl("about:blank");
             card.loadData(question, "text/html", "utf-8");
 
-        } else {
-            // TODO: ensure screen stays on answerView when orientation is changed.
-
+            String cTotal = "/ " + model.getDeckSize();
+            cardsTotal.setText(cTotal);
+        } else if (!model.isaSide()) {
             question = model.getCurrentCard().getQuestion();
             card.loadUrl("about:blank");
             card.loadData(question, "text/html", "utf-8");
+
+            String cTested = String.valueOf(model.getTotalAttempted() + 1);
+            cardsTested.setText(cTested);
+            String cTotal = "/ " + model.getDeckSize();
+            cardsTotal.setText(cTotal);
+        } else {
+            flipToAnswer();
+            String cTested = String.valueOf(model.getTotalAttempted() + 1);
+            cardsTested.setText(cTested);
+            String cTotal = "/ " + model.getDeckSize();
+            cardsTotal.setText(cTotal);
+
         }
 
-        // Add Event listeners to buttons
-        skipButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                skip();
-            }
-        });
-
-        flipButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                flipToAnswer();
-            }
-        });
+        initQButtons();
 
     }
 
@@ -101,9 +98,9 @@ public class TestCardActivity extends AppCompatActivity {
         skipButton = findViewById(R.id.btn_skip_test);
         flipButton = findViewById(R.id.btn_flip_test);
         cardView = findViewById(R.id.ll_card_test);
-
-        //TODO: Test if WebView scrolls
         card = findViewById(R.id.tv_question_test);
+        cardsTested = findViewById(R.id.tv_cards_tested);
+        cardsTotal = findViewById(R.id.tv_cards_total);
 
         // Set Editor
         card.setBackgroundColor(getResources().getColor(cardBackground));
@@ -111,18 +108,22 @@ public class TestCardActivity extends AppCompatActivity {
 
     }
 
-    /**
-     * Loads a new card from the model, and displays its question,
-     * Used for skip, correct, and incorrect buttons
-     */
-    public void getNewCard () {
-
-        // TODO: Add slide animation for card
-        question = model.getNewCard().getQuestion();
-        card.loadUrl("about:blank");
-        card.getSettings().setTextZoom(200);
-        card.loadData(question, "text/html", "utf-8");
-
+    public void initQButtons () {
+        if (!model.isaSide()) {
+            // Add Event listeners to buttons
+            skipButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    skip();
+                }
+            });
+            flipButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    flipToAnswer();
+                }
+            });
+        }
     }
 
     /**
@@ -130,7 +131,7 @@ public class TestCardActivity extends AppCompatActivity {
      */
     public void skip () {
         if (model.queueEmpty()) {
-            endTest();
+            Toast.makeText(this, "Last card cannot be skipped", Toast.LENGTH_LONG).show();
         } else {
             question = model.skip().getQuestion();
             card.loadUrl("about:blank");
@@ -176,7 +177,7 @@ public class TestCardActivity extends AppCompatActivity {
         builder.setTitle("You scored " + model.getScore()+ "%");
 
         int correct = model.getCorrect();
-        int total = model.getTotal();
+        int total = model.getTotalAttempted();
         builder.setMessage(correct + " out of " + total + " answers were correct.");
 
         // Set up the buttons
@@ -190,10 +191,6 @@ public class TestCardActivity extends AppCompatActivity {
         AlertDialog alert = builder.show();
         alert.setCancelable(false);
 
-
-
-
-
     }
 
 
@@ -205,7 +202,7 @@ public class TestCardActivity extends AppCompatActivity {
      * and we are resestting the view for a new question
      */
     public void flipToQuestion() {
-
+        model.setaSide(false);
         // Change Incorrect --> FLIP Button
         TransitionManager.beginDelayedTransition(transitionsContainer, new TransitionSet()
                 .addTransition(new ChangeText().setChangeBehavior(ChangeText.CHANGE_BEHAVIOR_OUT_IN))
@@ -214,21 +211,11 @@ public class TestCardActivity extends AppCompatActivity {
 
 
         incorrectButton.setText(R.string.flip_btn_text);
-
-        TransitionManager.beginDelayedTransition(transitionsContainer, new Recolor());
         incorrectButton.setBackgroundColor(getResources().getColor(colorAccent));
 
         flipButton = incorrectButton;
         incorrectButton.setOnClickListener(null);
         incorrectButton = null;
-
-        flipButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                flipToAnswer();
-            }
-        });
-
 
         // Change Correct --> SKIP Button
         TransitionManager.beginDelayedTransition(transitionsContainer, new TransitionSet()
@@ -238,21 +225,17 @@ public class TestCardActivity extends AppCompatActivity {
 
 
         correctButton.setText(R.string.skip_btn_text);
-
-        TransitionManager.beginDelayedTransition(transitionsContainer, new Recolor());
         correctButton.setBackgroundColor(getResources().getColor(colorPrimary));
 
         skipButton = correctButton;
         correctButton.setOnClickListener(null);
         correctButton = null;
 
-        skipButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                skip();
-            }
-        });
+        initQButtons();
 
+        // Update cardsTested
+        String cTested = String.valueOf(model.getTotalAttempted() + 1);
+        cardsTested.setText(cTested);
     }
 
 
@@ -260,12 +243,15 @@ public class TestCardActivity extends AppCompatActivity {
      *  Flips the view from question to answer.
      */
     public void flipToAnswer() {
-
+        model.setaSide(true);
         final View cardView = (findViewById(R.id.ll_card_test));
 
-        // Change Answer
-
-        cardView.setCameraDistance(10000);
+        // Phones can't seem to handle the graphics of moving a card as large as one in landscape
+        // When rotating. To make rotation easier in that case, camera is moved further,
+        // To reduce complexity of animation.
+        boolean isPortrait = (getResources().getConfiguration().orientation == 1);
+        int camDistance = (isPortrait) ? 20000 : 50000;
+        cardView.setCameraDistance(camDistance);
         cardView.animate().withLayer()
             .rotationY(90)
             .setDuration(200)
@@ -297,8 +283,6 @@ public class TestCardActivity extends AppCompatActivity {
 
 
         flipButton.setText(R.string.incorrect_btn_text);
-
-        TransitionManager.beginDelayedTransition(transitionsContainer, new Recolor());
         flipButton.setBackgroundColor(getResources().getColor(red));
 
         incorrectButton = flipButton;
@@ -321,8 +305,6 @@ public class TestCardActivity extends AppCompatActivity {
 
 
         skipButton.setText(R.string.correct_btn_text);
-
-        TransitionManager.beginDelayedTransition(transitionsContainer, new Recolor());
         skipButton.setBackgroundColor(getResources().getColor(green));
 
         correctButton = skipButton;
@@ -335,7 +317,6 @@ public class TestCardActivity extends AppCompatActivity {
                 correct();
             }
         });
-
 
     }
 

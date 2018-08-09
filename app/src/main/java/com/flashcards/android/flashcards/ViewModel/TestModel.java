@@ -26,16 +26,17 @@ public class TestModel extends AndroidViewModel {
     private String deckId;
     private static PriorityBlockingQueue<Card> testQueue;
     private Card currentCard;
-    private Card lastCard;
     private int correct;
-    private int total;
+    private int totalAttempted;
+    private int deckSize;
+    private boolean aSide;      // Marks if the current side being viewed is the Answer Side
 
     public TestModel(@NonNull Application application) {
         super(application);
         this.repo = new TestRepo(application);
         testQueue = new PriorityBlockingQueue<Card>();
         correct = 0;
-        total = 0;
+        totalAttempted = 0;
     }
 
     public void initQueue(String deckId) {
@@ -48,7 +49,6 @@ public class TestModel extends AndroidViewModel {
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
         }
-
     }
 
     public class GetCardsTask extends AsyncTask<String, Void, Void> {
@@ -61,7 +61,7 @@ public class TestModel extends AndroidViewModel {
             for(Card card: allCards) {
                 testQueue.add(card);
             }
-
+            deckSize = testQueue.size();
             return null;
         }
     }
@@ -80,21 +80,21 @@ public class TestModel extends AndroidViewModel {
     }
 
     public Card skip() {
-        lastCard = currentCard;
+        Card lastCard = currentCard;
         currentCard = getNewCard();
         testQueue.add(lastCard);
         return currentCard;
     }
 
     public Card markIncorrect() {
-        total++;
+        totalAttempted++;
         currentCard = getNewCard();
         return currentCard;
     }
 
     public Card markCorrect() {
         correct++;
-        total++;
+        totalAttempted++;
         currentCard = getNewCard();
         return currentCard;
     }
@@ -105,9 +105,9 @@ public class TestModel extends AndroidViewModel {
      */
     public int getScore () {
         Log.d(String.valueOf(correct), "correct: ");
-        Log.d(String.valueOf(total), "total: ");
+        Log.d(String.valueOf(totalAttempted), "totalAttempted: ");
 
-        double score = ((double) correct)/total;
+        double score = ((double) correct)/ totalAttempted;
         return (int) Math.round(score * 100);
     }
 
@@ -119,15 +119,31 @@ public class TestModel extends AndroidViewModel {
     }
 
     public boolean queueEmpty () {
-        return (testQueue.isEmpty())? true : false;
+        return testQueue.isEmpty();
     }
 
     public int getCorrect() {
         return correct;
     }
 
-    public int getTotal() {
-        return total;
+    public int getTotalAttempted() {
+        return totalAttempted;
+    }
+
+    public boolean isaSide() {
+        return aSide;
+    }
+
+    public void setaSide(boolean aSide) {
+        this.aSide = aSide;
+    }
+
+    public int getDeckSize() {
+        return deckSize;
+    }
+
+    public void setDeckSize(int deckSize) {
+        this.deckSize = deckSize;
     }
 
     // LiveData stuff
