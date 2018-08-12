@@ -86,7 +86,6 @@ public class DeckInfoModel extends AndroidViewModel {
      * @return last card if it is empty. Else returns a null value.
      */
     public Card lastEmptyCard() {
-        //TODO: move this to ASyncTask
         LastCardTask task = new LastCardTask();
         Card lastCard = null;
 
@@ -104,7 +103,6 @@ public class DeckInfoModel extends AndroidViewModel {
     }
 
     private class LastCardTask extends AsyncTask<Void, Void, Card> {
-
         @Override
         protected Card doInBackground(Void... voids) {
             return repo.getLastCard(currentDeck.getDeckId());
@@ -114,8 +112,8 @@ public class DeckInfoModel extends AndroidViewModel {
     public void renameDeck(Deck deck) {
         RenameDeckTask task = new RenameDeckTask();
         task.execute(deck);
-
     }
+
     private class RenameDeckTask extends AsyncTask<Deck, Void, Void> {
         @Override
         protected Void doInBackground(Deck... decks) {
@@ -126,18 +124,12 @@ public class DeckInfoModel extends AndroidViewModel {
 
     // DAO independant methods
 
-    public Deck getCurrentDeck() {
-        return currentDeck;
-    }
-
     public void setCurrentDeck(Deck currentDeck) {
         this.currentDeck = currentDeck;
     }
-
     public List<Card> getCards() {
         return cards;
     }
-
     public void setCards(List<Card> cards) {
         this.cards = cards;
     }

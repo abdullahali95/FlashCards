@@ -20,46 +20,46 @@ import java.util.List;
 public interface DeckDAO {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    public void addDeck(Deck deck);
+    void addDeck(Deck deck);
 
     @Delete
-    public void deleteDeck(Deck deck);
+    void deleteDeck(Deck deck);
 
     @Update(onConflict = OnConflictStrategy.REPLACE)
-    public void setDeck(Deck deck);
+    void setDeck(Deck deck);
 
     @Query("UPDATE Deck SET deckId = :newUuid WHERE deckId =:oldUuid")
-    public void setUuid(String oldUuid, String newUuid);
+    void setUuid(String oldUuid, String newUuid);
 
     @Query("SELECT * FROM Deck")
-    public LiveData<List<Deck>> getAllDecks ();
+    LiveData<List<Deck>> getAllDecks();
 
     @Query("SELECT * FROM Deck WHERE deckId = :deckId")
-    public LiveData<Deck> getDeck (String deckId);
+    LiveData<Deck> getDeck(String deckId);
 
     @Query("SELECT * FROM Deck WHERE deckId = :deckId")
-    public Deck getDeckNow (String deckId);
+    Deck getDeckNow(String deckId);
 
     @Query("SELECT name FROM Deck WHERE deckId = :deckId")
-    public LiveData<String> getName(String deckId);
+    LiveData<String> getName(String deckId);
 
     @Query("UPDATE Deck SET name = :name WHERE deckId =:deckId")
-    public void setName(String deckId, String name);
+    void setName(String deckId, String name);
 
     @Query("UPDATE Deck SET lastUsed = :lastUsed WHERE deckId =:deckId")
-    public void setLastUsed(String deckId, String lastUsed);
+    void setLastUsed(String deckId, String lastUsed);
 
     @Query("UPDATE Deck SET ef = :ef WHERE deckId =:deckId")
-    public void setEf(String deckId, double ef);
+    void setEf(String deckId, double ef);
 
     @Query("UPDATE Deck SET deckSize = :size WHERE deckId =:deckId")
-    public void setDeckSize(String deckId, int size);
+    void setDeckSize(String deckId, int size);
 
     @Query("SELECT deckSize FROM Deck WHERE deckId = :deckId")
-    public LiveData<Integer> getDeckSize(String deckId);
+    LiveData<Integer> getDeckSize(String deckId);
 
     //TODO: test if the ls condition is working
     @Query("SELECT nextTestDue FROM Deck WHERE ls > 2")
-    public List<String> getAllNextDue ();
+    List<String> getAllNextDue();
 
 }

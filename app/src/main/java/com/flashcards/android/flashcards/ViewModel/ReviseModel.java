@@ -48,8 +48,6 @@ public class ReviseModel extends AndroidViewModel {
 
     public void initQueue(String deckId) {
         this.deckId = deckId;
-
-       // TODO: run the ASYNCTASK properly
         GetCardsTask task = new GetCardsTask();
         try {
             task.execute(deckId).get();
@@ -204,7 +202,6 @@ public class ReviseModel extends AndroidViewModel {
 
 
     public void finish() {
-        // TODO: Save changes
         SaveChangesTask task = new SaveChangesTask();
         task.execute();
 

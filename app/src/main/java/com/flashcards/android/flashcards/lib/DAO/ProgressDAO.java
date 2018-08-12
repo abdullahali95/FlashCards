@@ -21,37 +21,37 @@ import java.util.List;
 public interface ProgressDAO {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    public void addProgress(Progress progress);
+    void addProgress(Progress progress);
 
     @Delete
-    public void deleteProgress (Progress progress);
+    void deleteProgress(Progress progress);
 
     @Query("SELECT * FROM Progress WHERE deckId =:deckId ")
     LiveData<List<Progress>> getAllProgress(String deckId);
 
     @Query("SELECT * FROM Progress WHERE cardId = :cardId AND deckId = :deckId")
-    public LiveData<Progress> getProgress(int cardId, String deckId);
+    LiveData<Progress> getProgress(int cardId, String deckId);
 
     @Query("UPDATE Card SET deckId = :newDeckId WHERE cardId =:cardId AND deckId = :oldDeckId")
-    public void setDeckId(int cardId, String oldDeckId, String newDeckId);
+    void setDeckId(int cardId, String oldDeckId, String newDeckId);
 
     @Query("UPDATE Progress SET attempts = :attempts WHERE cardId =:cardId AND deckId = :deckId")
-    public void setAttempts(int cardId, String deckId, int attempts);
+    void setAttempts(int cardId, String deckId, int attempts);
 
     @Query("UPDATE Progress SET attempts = attempts + 1 WHERE cardId =:cardId AND deckId = :deckId")
-    public void incAttempts(int cardId, String deckId);
+    void incAttempts(int cardId, String deckId);
 
     @Query("UPDATE Progress SET correct = :correct WHERE cardId =:cardId AND deckId = :deckId")
-    public void setCorrect(int cardId, String deckId, int correct);
+    void setCorrect(int cardId, String deckId, int correct);
 
     @Query("UPDATE Progress SET correct = correct + 1 WHERE cardId =:cardId AND deckId = :deckId")
-    public void incCorrect(int cardId, String deckId);
+    void incCorrect(int cardId, String deckId);
 
     @Update(onConflict = OnConflictStrategy.REPLACE)
-    public void setProgress(Progress progress);
+    void setProgress(Progress progress);
 
     //TODO: fix the storage of these
     @Query("UPDATE Progress SET lastTen = :lastTen WHERE cardId =:cardId AND deckId = :deckId")
-    public void setLastTen(int cardId, String deckId, EvictingQueue<Boolean> lastTen);
+    void setLastTen(int cardId, String deckId, EvictingQueue<Boolean> lastTen);
 
 }

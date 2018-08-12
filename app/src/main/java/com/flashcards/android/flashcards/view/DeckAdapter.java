@@ -40,8 +40,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-;
-
 /**
  * Created by Abdullah Ali on 09/07/2018
  */
@@ -51,7 +49,7 @@ public class DeckAdapter extends RecyclerView.Adapter<DeckAdapter.DeckViewHolder
     private Context context;
     private Activity activity;
 
-    public DeckAdapter(List<Deck> decks, MainModel mainModel, Context context, Activity activity) {
+    DeckAdapter(List<Deck> decks, MainModel mainModel, Context context, Activity activity) {
         this.decks = decks;
         this.model = mainModel;
         this.context = context;
@@ -94,11 +92,10 @@ public class DeckAdapter extends RecyclerView.Adapter<DeckAdapter.DeckViewHolder
         if (nextDue == null || ls < 2) {
             infoText = "Deck learnt: " + Math.round(ls*20) + "%";
             holder.nextDue.setText(infoText);
+            holder.cardView.setCardBackgroundColor(context.getResources().getColor(R.color.colorAccent));
         } else {
             try {
                 convertedDate = dateFormat.parse(nextDue);
-
-
                 if (convertedDate.before(Calendar.getInstance().getTime())) {
                     // If revision due in the past, display 'now'
                     infoText = "Revision due now";
@@ -190,9 +187,7 @@ public class DeckAdapter extends RecyclerView.Adapter<DeckAdapter.DeckViewHolder
             ExportDeckTask task = new ExportDeckTask();
             task.execute(deck);
 
-            // TODO: Add progress updater
             String parsed = task.get();
-
             output = new BufferedWriter(new FileWriter(file));
             output.write(parsed);
             output.close();
@@ -201,7 +196,6 @@ public class DeckAdapter extends RecyclerView.Adapter<DeckAdapter.DeckViewHolder
             Intent share = new Intent(Intent.ACTION_SEND);
             share.setType("application/deck");
             share.putExtra(Intent.EXTRA_STREAM, Uri.parse("file://" + file.getAbsolutePath()));
-
             context.startActivity(Intent.createChooser(share, "Share flash cards deck"));
 
             //TODO: add background task to delete cache files
@@ -264,8 +258,6 @@ public class DeckAdapter extends RecyclerView.Adapter<DeckAdapter.DeckViewHolder
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 model.deleteDeck(deck);
-
-                // TODO: this should show up as a confirmation from Room db
                 String alert = "Deck: " + deck.getName() + " deleted";
                 Toast.makeText(context, alert, Toast.LENGTH_SHORT).show();
             }
@@ -301,13 +293,13 @@ public class DeckAdapter extends RecyclerView.Adapter<DeckAdapter.DeckViewHolder
         private Deck deck;
         private Context context;
 
-        public DeckViewHolder(View itemView, Context context) {
+        DeckViewHolder(View itemView, Context context) {
             super(itemView);
-            deckName = (TextView) itemView.findViewById(R.id.title_rec_deck);
-            nextDue = (TextView) itemView.findViewById(R.id.days_rec_deck);
-            cardCount = (TextView) itemView.findViewById(R.id.cards_rec_deck);
-            popupButton = (ImageButton) itemView.findViewById(R.id.popup_options_btn);
-            cardView = (CardView) itemView.findViewById(R.id.main_rec_deck);
+            deckName = itemView.findViewById(R.id.title_rec_deck);
+            nextDue = itemView.findViewById(R.id.days_rec_deck);
+            cardCount = itemView.findViewById(R.id.cards_rec_deck);
+            popupButton = itemView.findViewById(R.id.popup_options_btn);
+            cardView = itemView.findViewById(R.id.main_rec_deck);
             this.context = context;
 
             itemView.setOnClickListener(this);
@@ -318,25 +310,14 @@ public class DeckAdapter extends RecyclerView.Adapter<DeckAdapter.DeckViewHolder
         @Override
         public void onClick(View v) {
             deck = decks.get(getAdapterPosition());
-
             //Switch view
-            if(v.getId() == popupButton.getId()) {
-                return;
-
-            }
-
-            else {
-
+            if(v.getId() != popupButton.getId()) {
                 Intent intent = new Intent(this.context, DeckInfoActivity.class);
                 intent.putExtra("Deck", deck.getDeckId());
-
-                Pair<View, String> p1 = Pair.create((View) itemView, "deck_item_transition");
-
+                Pair<View, String> p1 = Pair.create(itemView, "deck_item_transition");
                 ActivityOptionsCompat options = ActivityOptionsCompat.
                         makeSceneTransitionAnimation(activity, p1);
-
                 this.context.startActivity(intent, options.toBundle());
-
             }
 
         }
@@ -344,9 +325,7 @@ public class DeckAdapter extends RecyclerView.Adapter<DeckAdapter.DeckViewHolder
         @Override
         public boolean onLongClick(View view) {
             deck = decks.get(getAdapterPosition());
-
             delete(deck);
-
             return true;
         }
     }

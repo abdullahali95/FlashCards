@@ -3,7 +3,6 @@ package com.flashcards.android.flashcards.lib.model;
 import android.util.Log;
 
 import com.google.common.collect.EvictingQueue;
-
 import static java.lang.Boolean.TRUE;
 
 /**
@@ -71,11 +70,8 @@ public class Progress {
      */
     public static double reflexScore(Card card, int aveAttempts, double aveLeitnerScore) {
         int attempts = card.getAttempts();
-
         double center = 2 - (2*aveLeitnerScore);
-
         double attemptsDiff = attempts - aveAttempts;
-
         double rs;
         if (attemptsDiff < center-1.05 || attemptsDiff > center+1.05) {
             rs = 1;
@@ -87,16 +83,11 @@ public class Progress {
 
     private static double random(Card card, int aveAttempts) {
         int attempts = card.getAttempts();
-        Log.d(card.toString(), "random: ");
         double attemptsDiff = attempts - aveAttempts;
-        Log.d(String.valueOf(attemptsDiff), "attempts Diff: ");
-
         double rand = Math.random();
-
         if (attemptsDiff > -1) {
             return rand;
         } else {
-            Log.d("", "extreme rand diff found ");
             double randBias = 0.1 - (1.0/(attemptsDiff-0.1));
             return rand * randBias;
         }
@@ -114,12 +105,6 @@ public class Progress {
         // Once deck is mostly learnt, ordering should be primarily random
         if (aveLeitnerScore > 0.8) randWeight = 0.6;
         else randWeight = (1.0 / sizeOfDeck) + 0.4;
-
-        Log.d(String.valueOf(aveAttempts), "aveAttempts: ");
-        Log.d("aveLeitnerScore: ", String.valueOf(aveLeitnerScore));
-        Log.d(String.valueOf(r), "randomScore: ");
-        Log.d("reflexScore: ", String.valueOf(m));
-        Log.d("leitnerScore: ", String.valueOf(l));
 
 //        double combinedScore = ((l * m * (1-randWeight)) + (r * randWeight))/2;
         double combinedScore = (l + m + r)/3.0;

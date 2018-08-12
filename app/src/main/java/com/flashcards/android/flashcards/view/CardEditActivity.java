@@ -50,17 +50,18 @@ public class CardEditActivity extends AppCompatActivity implements View.OnTouchL
         Bundle bundle = getIntent().getExtras();
         int cardId = bundle.getInt("cardId");
         String deckId = bundle.getString("deckId");
-        Log.d(String.valueOf(cardId), "CardEditActivity: ");
-        Log.d(deckId, "CardEditActivity: ");
 
+        // Set view model
         model = ViewModelProviders.of(this).get(EditModel.class);
 
+        // Initialise view
         initLayout();
         initEditor();
         initToolbar();
         initTabButtons();
         initAddCardButton();
 
+        // Observe for changes to card
         model.getCard(cardId, deckId).observe(this, new Observer<Card>() {
             @Override
             public void onChanged(@Nullable Card card) {
@@ -72,7 +73,6 @@ public class CardEditActivity extends AppCompatActivity implements View.OnTouchL
                     } else {
                         editor.setHtml("");
                     }
-//                    titleText.setText("Question");
                     model.setQside(true);
                 } else {
                     model.setCurrentCard(card);
@@ -80,8 +80,7 @@ public class CardEditActivity extends AppCompatActivity implements View.OnTouchL
             }
         });
 
-
-        // TODO: save changes to edited card
+        // Save changes
         editor.setOnTextChangeListener(new RichEditor.OnTextChangeListener() {
             @Override
             public void onTextChange(String text) {
@@ -93,6 +92,7 @@ public class CardEditActivity extends AppCompatActivity implements View.OnTouchL
             }
         });
 
+        // Add gestures support for switching between questions and answers
         gestureDetector = new GestureDetectorCompat(this, new MyGestureListener());
         editor.setOnTouchListener(this);
 

@@ -53,8 +53,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        recyclerView = (RecyclerView) findViewById(R.id.rec_main_activity);
-        addButton = (FloatingActionButton) findViewById(R.id.fab_add_main);
+        recyclerView = findViewById(R.id.rec_main_activity);
+        addButton = findViewById(R.id.fab_add_main);
         context = this;
 
         // Link View with ViewModel
@@ -70,6 +70,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        // Setup recycler view
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         adapter = new DeckAdapter(decks, mainModel, this, this);
         recyclerView.setAdapter(adapter);
@@ -93,6 +94,12 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * Import deck method
+     * Takes an address of a JSon file of extension .deck
+     * Converts the simpleDeck and simpleCard
+     * @param uri Location of the file to be imported
+     */
     private void importDeck(Uri uri) {
         try {
             InputStream is = getContentResolver().openInputStream(uri);
@@ -155,7 +162,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    public void setDecks(List<Deck> decks) {
+    private void setDecks(List<Deck> decks) {
         this.decks = decks;
     }
 

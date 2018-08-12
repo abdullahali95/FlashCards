@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
@@ -33,7 +34,7 @@ public class CardsAdapter extends RecyclerView.Adapter<CardsAdapter.CardsViewHol
     private Context context;
     private Activity activity;
 
-    public CardsAdapter(DeckInfoModel model, List<Card> cards, Context context, Activity activity) {
+    CardsAdapter(DeckInfoModel model, List<Card> cards, Context context, Activity activity) {
         this.model = model;
         this.cards = cards;
         this.context = context;
@@ -44,15 +45,16 @@ public class CardsAdapter extends RecyclerView.Adapter<CardsAdapter.CardsViewHol
         this.cards = cards;
     }
 
+    @NonNull
     @Override
-    public CardsAdapter.CardsViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public CardsAdapter.CardsViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.deck_info_rec_card, parent, false);
     //    cardQuestion = (WebView) view.findViewById(R.id.wv_card_info_question);
         return new CardsViewHolder(view, context);
     }
 
     @Override
-    public void onBindViewHolder(CardsAdapter.CardsViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull CardsAdapter.CardsViewHolder holder, int position) {
         String question = cards.get(position).getQuestion();
         holder.cardView.setText(Html.fromHtml(question));
 
@@ -72,12 +74,9 @@ public class CardsAdapter extends RecyclerView.Adapter<CardsAdapter.CardsViewHol
         private CardsViewHolder(View itemView, Context context) {
             super(itemView);
             this.cardView = itemView.findViewById(R.id.wv_card_info_question);
-
             itemView.setOnLongClickListener(this);
             itemView.setOnClickListener(this);
-
             this.context = context;
-
         }
 
         @Override

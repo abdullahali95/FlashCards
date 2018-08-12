@@ -14,6 +14,7 @@ import java.util.Date;
 import java.util.UUID;
 
 /**
+ * A simpler version of Deck objects, used for importing/exporting cards and decks
  * Created by Abdullah Ali
  */
 
