@@ -5,57 +5,30 @@
     android:id="@+id/root_revise"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorBackground"
     tools:context=".view.ReviseCardActivity">
 
-
-    <Button
-        android:id="@+id/btn_skip_revise"
-        android:layout_width="wrap_content"
-        android:layout_height="65dp"
-        android:layout_marginBottom="16dp"
-        android:background="@color/white_teal"
-        android:textColor="@color/colorAccent"
-        android:padding="15dp"
-        android:text="@string/skip_btn_text"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/btn_flip_revise"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <Button
-        android:id="@+id/btn_flip_revise"
-        android:layout_width="wrap_content"
-        android:layout_height="65dp"
-        android:layout_marginBottom="16dp"
-        android:background="@color/colorAccent"
-        android:padding="15dp"
-        android:text="@string/flip_btn_text"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/btn_skip_revise" />
-
-
-    <ProgressBar
-        android:id="@+id/progressBar"
-        style="?android:attr/progressBarStyleHorizontal"
+    <LinearLayout
+        android:id="@+id/progress_container"
         android:layout_width="match_parent"
-        android:layout_height="16dp"
-        android:layout_marginEnd="24dp"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="8dp"
-        android:layout_weight="1"
-        android:max="100"
-        android:min="0"
-        android:progressTint="@color/colorPrimary"
+        android:layout_height="15dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent">
+        <ProgressBar
+            android:id="@+id/progressBar"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginEnd="24dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="8dp"
+            android:layout_weight="1"
+            android:max="100"
+            android:min="0"
+            android:progressTint="@color/colorPrimary"
+            />
+
+    </LinearLayout>
 
 
     <android.support.v7.widget.CardView
@@ -70,9 +43,9 @@
         app:cardCornerRadius="12dp"
         app:contentPadding="15dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@id/progressBar"
+        app:layout_constraintStart_toEndOf="@id/progress_container"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/btn_skip_revise">
+        app:layout_constraintBottom_toTopOf="@id/buttons_container_revise">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -89,5 +62,54 @@
 
         </LinearLayout>
     </android.support.v7.widget.CardView>
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/buttons_container_revise"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <Button
+            android:id="@+id/btn_skip_revise"
+            android:layout_width="wrap_content"
+            android:layout_height="65dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:background="@color/white_teal"
+            android:padding="15dp"
+            android:text="@string/skip_btn_text"
+            android:textColor="@color/colorAccent"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/btn_flip_revise"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/btn_flip_revise"
+            android:layout_width="wrap_content"
+            android:layout_height="65dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginTop="8dp"
+            android:background="@color/colorAccent"
+            android:padding="15dp"
+            android:text="@string/flip_btn_text"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/btn_skip_revise"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </android.support.constraint.ConstraintLayout>
 
 </android.support.constraint.ConstraintLayout>

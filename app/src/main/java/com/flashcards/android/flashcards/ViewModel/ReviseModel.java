@@ -192,8 +192,7 @@ public class ReviseModel extends AndroidViewModel {
         protected Void doInBackground(Void... voids) {
 
             // Save Card info
-            List<Card> allCards = new ArrayList<Card>();
-            allCards.addAll(testQueue);
+            List<Card> allCards = new ArrayList<Card>(testQueue);
             repo.setAllCards(allCards);
 
             return null;
@@ -238,8 +237,8 @@ public class ReviseModel extends AndroidViewModel {
         return (int) Math.round(aveLeitnerScore * 100);
     }
 
-    public boolean isaSide() {
-        return aSide;
+    public boolean isQSide() {
+        return !aSide;
     }
 
     public void setaSide(boolean aSide) {

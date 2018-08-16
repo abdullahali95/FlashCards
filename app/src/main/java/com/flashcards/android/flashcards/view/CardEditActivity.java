@@ -41,10 +41,6 @@ public class CardEditActivity extends AppCompatActivity implements View.OnTouchL
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-//        ActionBar actionBar = getSupportActionBar();
-//        actionBar.hide();
-
         setContentView(R.layout.activity_edit_card);
 
         Bundle bundle = getIntent().getExtras();

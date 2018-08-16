@@ -30,7 +30,6 @@ public class NotificationService extends JobService {
     NotificationCompat.Builder notification;
     private static final int UNIQUEID = 21213;
     private static final String CHANNEL_ID = "21213";
-    private NotificationRepo repo;
 
     @Override
     public boolean onStartJob(JobParameters jobParameters) {
@@ -52,7 +51,6 @@ public class NotificationService extends JobService {
 
         @Override
         protected Boolean doInBackground(JobParameters... params) {
-            Log.d("running background task", "doInBackground: ");
             if (revisionDue()) {
                 createNotificationChannel();
                 checkNotifications();
@@ -63,36 +61,24 @@ public class NotificationService extends JobService {
         }
     }
 
-
-
-
     /**
      * @return true if one or more decks are due for revision.
      */
     private boolean revisionDue() {
-        repo = new NotificationRepo(getApplication());
+        NotificationRepo repo = new NotificationRepo(getApplication());
         List<String> nextDue = repo.getAllNextDue();
 
         // If no decks have been created, return false
-
-        Log.d("found decks", String.valueOf(nextDue == null));
-        Log.d("found decks", nextDue.get(0) + " ");
         if (nextDue == null) return false;
 
-        Log.d("found decks", "revisionDue: ");
         Date convertedDate;
         Date now = Calendar.getInstance().getTime();
         boolean revisionDue = false;
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd kk:mm:ss");
 
-        Log.d("revisionDue: ", nextDue.toString());
-        Log.d("revisionDue: ", String.valueOf(nextDue.isEmpty()));
-        Log.d("revisionDue: ", String.valueOf(nextDue.size()));
         for (String date : nextDue) {
             // If Deck has not been tested, move to next.
             if (date == null) continue;
-
-            Log.d(date, "revisionDue: ");
             try {
                 convertedDate = dateFormat.parse(date);
                 if (convertedDate.before(now)) {
@@ -118,12 +104,13 @@ public class NotificationService extends JobService {
 
             // Register the channel with the system;
             NotificationManager notificationManager = getSystemService(NotificationManager.class);
-            notificationManager.createNotificationChannel(channel);
+            if (notificationManager != null) {
+                notificationManager.createNotificationChannel(channel);
+            }
         }
     }
 
     private void checkNotifications() {
-        Log.d("Background work started", "checkNotifications: ");
 
         Intent intent = new Intent(this, MainActivity.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, 0);

@@ -57,10 +57,7 @@ public class TestModel extends AndroidViewModel {
         protected Void doInBackground(String... strings) {
 
             List<Card> allCards = repo.getAllDeckCards(strings[0]);
-
-            for(Card card: allCards) {
-                testQueue.add(card);
-            }
+            testQueue.addAll(allCards);
             deckSize = testQueue.size();
             return null;
         }
@@ -74,7 +71,7 @@ public class TestModel extends AndroidViewModel {
         return currentCard;
     }
 
-    public Card getNewCard() {
+    private Card getNewCard() {
         if (testQueue.isEmpty()) return null;
         return testQueue.poll();
     }
@@ -130,8 +127,8 @@ public class TestModel extends AndroidViewModel {
         return totalAttempted;
     }
 
-    public boolean isaSide() {
-        return aSide;
+    public boolean isQSide() {
+        return !aSide;
     }
 
     public void setaSide(boolean aSide) {

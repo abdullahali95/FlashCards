@@ -131,21 +131,29 @@ public class DeckAdapter extends RecyclerView.Adapter<DeckAdapter.DeckViewHolder
                     @Override
                     public boolean onMenuItemClick(MenuItem item) {
                         int id = item.getItemId();
-                        if (id == R.id.action_test) {
-                            test(currentDeck);
 
-                        } else if (id == R.id.action_revise) {
-                            revise(currentDeck);
+                        // Switch statements more efficient then nested if
+                        switch (id) {
+                            case R.id.action_test:
+                                test(currentDeck);
 
-                        } else if (id == R.id.action_export) {
-                            export(currentDeck);
+                                break;
+                            case R.id.action_revise:
+                                revise(currentDeck);
 
-                        } else if (id == R.id.action_rename) {
-                            rename(currentDeck);
+                                break;
+                            case R.id.action_export:
+                                export(currentDeck);
 
-                        } else if (id == R.id.action_delete) {
-                            delete(currentDeck);
+                                break;
+                            case R.id.action_rename:
+                                rename(currentDeck);
 
+                                break;
+                            case R.id.action_delete:
+                                delete(currentDeck);
+
+                                break;
                         }
                         return false;
                     }
@@ -172,7 +180,7 @@ public class DeckAdapter extends RecyclerView.Adapter<DeckAdapter.DeckViewHolder
     public void revise(Deck deck) {
         if (deck.getDeckSize() < 2) {
             // Error message
-            Toast.makeText(context, "The deck must have atleast 2 cards for the Revise mode", Toast.LENGTH_LONG).show();
+            Toast.makeText(context, "The deck must have atleast 2 cards for the evise mode", Toast.LENGTH_LONG).show();
         } else {
             Intent intent = new Intent(context, ReviseCardActivity.class);
             intent.putExtra("deckId", deck.getDeckId());
@@ -217,9 +225,7 @@ public class DeckAdapter extends RecyclerView.Adapter<DeckAdapter.DeckViewHolder
 
         @Override
         protected String doInBackground(Deck... decks) {
-            String parsed = JsonParser.wrtieJson(decks[0], context);
-
-            return parsed;
+            return JsonParser.wrtieJson(decks[0], context);
         }
     }
 

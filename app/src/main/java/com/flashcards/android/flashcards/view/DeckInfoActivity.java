@@ -71,10 +71,6 @@ public class DeckInfoActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//
-//        ActionBar actionBar = getSupportActionBar();
-//        actionBar.hide();
-
         setContentView(R.layout.activity_deck_info_floating);
 
         context = this;
@@ -149,7 +145,7 @@ public class DeckInfoActivity extends AppCompatActivity {
             public void onClick(View view) {
                 if (deck.getDeckSize() < 2) {
                     // Error message
-                    Toast.makeText(context, "The deck must have atleast 2 cards for the test mode", Toast.LENGTH_LONG).show();
+                    Toast.makeText(context, "The deck must have atleast 2 cards for the revise mode", Toast.LENGTH_LONG).show();
                 } else {
                     Intent intent = new Intent(DeckInfoActivity.this, ReviseCardActivity.class);
                     intent.putExtra("deckId", deck.getDeckId());
@@ -193,9 +189,7 @@ public class DeckInfoActivity extends AppCompatActivity {
 
     public void setDeck(Deck deck) {
         this.deck = deck;
-        if (this.deck == null) {
-            return;
-        } else {
+        if (this.deck != null) {
             deckInfoModel.setCurrentDeck(deck);
             deckName.setText(deck.getName());
 
@@ -209,7 +203,7 @@ public class DeckInfoActivity extends AppCompatActivity {
                 datetime = "Created: " + datetime;
                 deckInfo.setText(datetime);
 
-            } catch (ParseException e) {
+            } catch (ParseException ignored) {
 
             }
         }

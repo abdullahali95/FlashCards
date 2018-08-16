@@ -3,7 +3,6 @@ package com.flashcards.android.flashcards.view;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -68,7 +67,7 @@ public class TestCardActivity extends AppCompatActivity {
 
             String cTotal = "/ " + model.getDeckSize();
             cardsTotal.setText(cTotal);
-        } else if (!model.isaSide()) {
+        } else if (model.isQSide()) {
             question = model.getCurrentCard().getQuestion();
             card.loadUrl("about:blank");
             card.loadData(question, "text/html", "utf-8");
@@ -109,7 +108,7 @@ public class TestCardActivity extends AppCompatActivity {
     }
 
     public void initQButtons () {
-        if (!model.isaSide()) {
+        if (model.isQSide()) {
             // Add Event listeners to buttons
             skipButton.setOnClickListener(new View.OnClickListener() {
                 @Override

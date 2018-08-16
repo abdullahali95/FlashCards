@@ -1,11 +1,9 @@
 package com.flashcards.android.flashcards.view;
 
 import android.arch.lifecycle.ViewModelProviders;
-import android.graphics.Color;
-import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.view.GestureDetectorCompat;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
@@ -14,8 +12,6 @@ import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.ProgressBar;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.flashcards.android.flashcards.R;
 import com.flashcards.android.flashcards.ViewModel.ReviseModel;
@@ -55,8 +51,6 @@ public class ReviseCardActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        ActionBar actionBar = getSupportActionBar();
-//        actionBar.hide();
         setContentView(R.layout.activity_revise_card);
         loadViews();
 
@@ -70,7 +64,7 @@ public class ReviseCardActivity extends AppCompatActivity {
             question = model.getCurrentCard().getQuestion();
             card.loadUrl("about:blank");
             card.loadData(question, "text/html", "utf-8");
-        } else if (!model.isaSide()) {
+        } else if (model.isQSide()) {
             question = model.getCurrentCard().getQuestion();
             card.loadUrl("about:blank");
             card.loadData(question, "text/html", "utf-8");
@@ -88,7 +82,7 @@ public class ReviseCardActivity extends AppCompatActivity {
      * Loads layout components
      */
     public void loadViews() {
-        transitionsContainer = findViewById(R.id.root_revise);
+        transitionsContainer = findViewById(R.id.buttons_container_revise);
         skipButton = findViewById(R.id.btn_skip_revise);
         flipButton = findViewById(R.id.btn_flip_revise);
         cardView = findViewById(R.id.ll_card_revise);
@@ -105,7 +99,7 @@ public class ReviseCardActivity extends AppCompatActivity {
      * Sets listeners for Question side buttons if questions side is being viewed.
      */
     public void initQButtons() {
-        if (!model.isaSide()) {
+        if (model.isQSide()) {
             // Add Event listeners to buttons
             skipButton.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -170,27 +164,25 @@ public class ReviseCardActivity extends AppCompatActivity {
         model.setaSide(false);
         aDisplayed = false;
 
-        incorrectButton.setText(R.string.flip_btn_text);
-        incorrectButton.setBackgroundColor(getResources().getColor(colorAccent));
-
-        flipButton = incorrectButton;
         incorrectButton.setOnClickListener(null);
-        incorrectButton = null;
+        correctButton.setOnClickListener(null);
 
-        correctButton.setText(R.string.skip_btn_text);
-        correctButton.setTextColor(getResources().getColor(colorAccent));
-        correctButton.setBackgroundColor(getResources().getColor(white_teal));
+        // If a transition is happening, end it
+        TransitionManager.endTransitions(transitionsContainer);
+
+        // Change Flip --> Incorrect Button
+        flipButton = incorrectButton;
+        flipButton.setText(R.string.flip_btn_text);
+        flipButton.setBackgroundColor(getResources().getColor(colorAccent));
 
         skipButton = correctButton;
-        correctButton.setOnClickListener(null);
+        skipButton.setText(R.string.skip_btn_text);
+        skipButton.setTextColor(getResources().getColor(colorAccent));
+        skipButton.setBackgroundColor(getResources().getColor(white_teal));
+
+        incorrectButton = null;
         correctButton = null;
         initQButtons();
-
-        // A bug in Android framework occasionally caused the skip button text colour change to not work.
-        // This therefore forces the button to be redrawn and repainted.
-        // This seems to fix the issue.
-        skipButton.invalidate();
-        skipButton.setTextColor(getResources().getColor(R.color.colorAccent));
 
     }
 
@@ -229,7 +221,6 @@ public class ReviseCardActivity extends AppCompatActivity {
                 incorrect();
             }
         });
-
 
         // Change Skip --> Correct Button
         TransitionManager.beginDelayedTransition(transitionsContainer, new TransitionSet()
@@ -302,8 +293,10 @@ public class ReviseCardActivity extends AppCompatActivity {
     }
 
     public void updateProgress() {
-        TransitionManager.beginDelayedTransition(transitionsContainer, new ProgressTransition());
+        final ViewGroup progressContainer = findViewById(R.id.progress_container);
+        TransitionManager.beginDelayedTransition(progressContainer, new ProgressTransition());
         progressBar.setProgress(model.getPercentageLearnt());
+
     }
 
     // Clean up methods
@@ -349,7 +342,7 @@ public class ReviseCardActivity extends AppCompatActivity {
             }
 
             if (triggered) {
-                if (!model.isaSide()) {
+                if (model.isQSide()) {
                     flipToAnswer(axis);
                 } else {
                     animateFlip(axis);

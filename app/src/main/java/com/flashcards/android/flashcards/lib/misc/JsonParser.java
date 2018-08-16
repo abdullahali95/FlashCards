@@ -19,9 +19,7 @@ import java.util.List;
 public class JsonParser {
 
     public static SimpleDeck readJson (String input) {
-        SimpleDeck deck = new Gson().fromJson(input, SimpleDeck.class);
-
-        return deck;
+        return new Gson().fromJson(input, SimpleDeck.class);
     }
 
     public static String wrtieJson (Deck deck, Context context) {
@@ -35,7 +33,7 @@ public class JsonParser {
         SimpleDeck sd = new SimpleDeck(deck.getName());
         SimpleCard sc;
 
-        List<SimpleCard> simpleCards = new ArrayList<SimpleCard>();
+        List<SimpleCard> simpleCards = new ArrayList<>();
 
         for (Card card : cards) {
             sc = new SimpleCard(card.getQuestion(), card.getAnswer());

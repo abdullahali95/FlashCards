@@ -22,16 +22,11 @@
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
                 <data
                     android:host="*"
-                    android:pathPattern=".*\\.deck" />
-                <data android:pathPattern=".*\\.deck" />
-                <data android:pathPattern=".*\\..*\\.deck" />
-                <data android:pathPattern=".*\\..*\\..*\\.deck" />
-                <data android:pathPattern=".*\\..*\\..*\\..*\\.deck" />
-                <data android:pathPattern=".*\\..*\\..*\\..*\\..*\\.deck" />
-                <data android:pathPattern=".*\\..*\\..*\\..*\\..*\\..*\\.deck" />
-                <data android:mimeType="application/octet-stream" />
+                    android:pathPattern=".*\\.deck"
+                    android:mimeType="application/octet-stream"/>
             </intent-filter>
         </activity>
         <activity
@@ -44,7 +39,7 @@
         <activity
             android:name=".view.DeckInfoActivity"
             android:exported="true" />
-        <activity android:name=".view.ReviseCardActivity"></activity>
+        <activity android:name=".view.ReviseCardActivity" />
 
         <service android:name=".lib.misc.NotificationService"
             android:permission="android.permission.BIND_JOB_SERVICE" />

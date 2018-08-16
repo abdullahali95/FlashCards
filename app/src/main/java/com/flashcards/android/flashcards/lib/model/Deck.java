@@ -4,7 +4,6 @@ import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
 import android.support.annotation.NonNull;
-import android.util.Log;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -69,9 +68,10 @@ public class Deck {
         lastUsed = date;
     }
 
+    @NonNull
     public String getDeckId() { return deckId; }
 
-    public void setDeckId(String deckId) { this.deckId = deckId; }
+    public void setDeckId(@NonNull String deckId) { this.deckId = deckId; }
 
     public String getName() {
         return name;
@@ -154,9 +154,8 @@ public class Deck {
         this.ls = ls;
     }
 
-    public boolean addCard (Card card) {
+    public void addCard (Card card) {
         cards.add(card);
-        return true;
     }
 
 
@@ -211,7 +210,6 @@ public class Deck {
 
                 setDates();
                 ef = efNew;
-                return;
 
             } else if (ls < 2) {
                 // If the deck's Learnt Score falls too low,

@@ -37,15 +37,15 @@ public class Converters {
 
     @TypeConverter
     public static String QueueToString (EvictingQueue<Boolean> b) {
-        String s = "";
-        if (b == null) return s;
+        StringBuilder s = new StringBuilder();
+        if (b == null) return s.toString();
         for (Boolean current : b) {
             if (current.equals(Boolean.TRUE)) {
-                s += "t";
+                s.append("t");
             } else if (current.equals(Boolean.FALSE)) {
-                s += "f";
+                s.append("f");
             }
         }
-        return s;
+        return s.toString();
     }
 }
