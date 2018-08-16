@@ -67,6 +67,8 @@ public class MainActivity extends AppCompatActivity {
                 setDecks(decks);
                 adapter.setDecks(decks);
                 adapter.notifyDataSetChanged();
+                mainModel.setDecks(decks);
+                checkForImports();
             }
         });
 
@@ -82,14 +84,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        final Intent intent = getIntent();
-        final String action = intent.getAction();
-
-        if(Intent.ACTION_VIEW.equals(action)) {
-            Uri filePath = intent.getData();
-            importDeck(filePath);
-        }
-
         scheduleNotifications();
 
     }
@@ -98,29 +92,38 @@ public class MainActivity extends AppCompatActivity {
      * Import deck method
      * Takes an address of a JSon file of extension .deck
      * Converts the simpleDeck and simpleCard
-     * @param uri Location of the file to be imported
      */
-    private void importDeck(Uri uri) {
-        try {
-            InputStream is = getContentResolver().openInputStream(uri);
-            int size = is.available();
-            byte[] buffer = new byte[size];
-            is.read(buffer);
-            is.close();
-            String json = new String(buffer, "UTF-8");
-            SimpleDeck deck = JsonParser.readJson(json);
-            Deck newDeck = new Deck(deck.getName());
+    private void checkForImports() {
+        final Intent intent = getIntent();
+        final String action = intent.getAction();
 
-            mainModel.insertDeck(newDeck);
-            mainModel.insertSimpleCards(newDeck, deck.getCards());
-            Toast.makeText(this, "Deck imported", Toast.LENGTH_LONG).show();
+        if(Intent.ACTION_VIEW.equals(action) && !mainModel.deckImported()) {
+            Uri uri = intent.getData();
+            try {
+                InputStream is = getContentResolver().openInputStream(uri);
+                int size = is.available();
+                byte[] buffer = new byte[size];
+                is.read(buffer);
+                is.close();
+                String json = new String(buffer, "UTF-8");
+                SimpleDeck deck = JsonParser.readJson(json);
 
-        } catch (IOException ex) {
-            Toast.makeText(this, "File not found", Toast.LENGTH_LONG).show();
-            ex.printStackTrace();
-        } catch (Exception e) {
-            Toast.makeText(this, "File could not be imported", Toast.LENGTH_LONG).show();
-            e.printStackTrace();
+                String name = mainModel.validateName(deck.getName());
+                Deck newDeck = new Deck(name);
+
+                mainModel.insertDeck(newDeck);
+                mainModel.insertSimpleCards(newDeck, deck.getCards());
+                Toast.makeText(this, "Deck imported", Toast.LENGTH_SHORT).show();
+
+            } catch (IOException ex) {
+                Toast.makeText(this, "File not found", Toast.LENGTH_LONG).show();
+                ex.printStackTrace();
+            } catch (Exception e) {
+                Toast.makeText(this, "File could not be imported", Toast.LENGTH_LONG).show();
+                e.printStackTrace();
+            }
+            mainModel.setDeckImported(true);
+
         }
 
     }
@@ -144,11 +147,13 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 deckName[0] = input.getText().toString();
-                Deck newDeck = new Deck(deckName[0]);
+
+                String validName = mainModel.validateName(deckName[0]);
+                Deck newDeck = new Deck(validName);
                 mainModel.insertDeck(newDeck);
 
                 // TODO: this should show up as a confirmation from Room db
-                String alert = "Deck " + deckName[0] + " created";
+                String alert = validName + " deck created";
                 Toast.makeText(context, alert, Toast.LENGTH_SHORT).show();
             }
         });

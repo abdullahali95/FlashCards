@@ -17,8 +17,12 @@ public class TestCards {
     private static PriorityQueue<Card> testQueue = new PriorityQueue<Card>();
 
     public static void main(String[] args) {
-        Card c1 = new Card("1", "card1", "Answer 1");
-        Card c2 = new Card("1", "card2", "Answer 2");
+        Card c1 = new Card("1");
+        c1.setQuestion("card1");
+        c1.setAnswer("Answer 1");
+        Card c2 = new Card("1");
+        c2.setQuestion("card2");
+        c2.setAnswer("Answer 2");
 
         testQueue.add(c1);
         testQueue.add(c2);

@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v4.content.FileProvider;
 import android.support.v4.util.Pair;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
@@ -23,6 +24,7 @@ import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.flashcards.android.flashcards.BuildConfig;
 import com.flashcards.android.flashcards.R;
 import com.flashcards.android.flashcards.ViewModel.MainModel;
 import com.flashcards.android.flashcards.lib.misc.JsonParser;
@@ -42,6 +44,7 @@ import java.util.List;
 
 /**
  * Created by Abdullah Ali on 09/07/2018
+ * This is a Recycler View adapter for the list of decks displayed on the home page of the app.
  */
 public class DeckAdapter extends RecyclerView.Adapter<DeckAdapter.DeckViewHolder> {
     private List<Deck> decks;
@@ -191,14 +194,17 @@ public class DeckAdapter extends RecyclerView.Adapter<DeckAdapter.DeckViewHolder
             output = new BufferedWriter(new FileWriter(file));
             output.write(parsed);
             output.close();
-            Toast.makeText(context, "Deck saved", Toast.LENGTH_LONG).show();
 
             Intent share = new Intent(Intent.ACTION_SEND);
             share.setType("application/deck");
-            share.putExtra(Intent.EXTRA_STREAM, Uri.parse("file://" + file.getAbsolutePath()));
+            Uri exportedFile = FileProvider.getUriForFile(context,
+                    BuildConfig.APPLICATION_ID + ".provider",
+                    file);
+
+            share.putExtra(Intent.EXTRA_STREAM, exportedFile);
+            share.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
             context.startActivity(Intent.createChooser(share, "Share flash cards deck"));
 
-            //TODO: add background task to delete cache files
 
         } catch (Exception e) {
             Toast.makeText(context, e.getMessage(), Toast.LENGTH_LONG).show();

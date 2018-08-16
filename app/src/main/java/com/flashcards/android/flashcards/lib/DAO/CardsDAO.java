@@ -79,5 +79,4 @@ public interface CardsDAO {
 
     @Query("UPDATE Card SET learntScore = :learntScore WHERE cardId =:cardId AND deckId = :deckId")
     void setLearntScore(int cardId, String deckId, int learntScore);
-
 }

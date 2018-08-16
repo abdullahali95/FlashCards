@@ -55,8 +55,8 @@ public class ReviseCardActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.hide();
+//        ActionBar actionBar = getSupportActionBar();
+//        actionBar.hide();
         setContentView(R.layout.activity_revise_card);
         loadViews();
 
@@ -170,26 +170,12 @@ public class ReviseCardActivity extends AppCompatActivity {
         model.setaSide(false);
         aDisplayed = false;
 
-        // Change Incorrect --> FLIP Button
-        TransitionManager.beginDelayedTransition(transitionsContainer, new TransitionSet()
-                .addTransition(new ChangeText().setChangeBehavior(ChangeText.CHANGE_BEHAVIOR_OUT_IN))
-                .addTransition(new Recolor())
-                .addTransition(new ChangeBounds()));
-
-
         incorrectButton.setText(R.string.flip_btn_text);
         incorrectButton.setBackgroundColor(getResources().getColor(colorAccent));
 
         flipButton = incorrectButton;
         incorrectButton.setOnClickListener(null);
         incorrectButton = null;
-
-        // Change Correct --> SKIP Button
-        TransitionManager.beginDelayedTransition(transitionsContainer, new TransitionSet()
-                .addTransition(new ChangeText().setChangeBehavior(ChangeText.CHANGE_BEHAVIOR_OUT_IN))
-                .addTransition(new Recolor())
-                .addTransition(new ChangeBounds()));
-
 
         correctButton.setText(R.string.skip_btn_text);
         correctButton.setTextColor(getResources().getColor(colorAccent));
@@ -204,7 +190,7 @@ public class ReviseCardActivity extends AppCompatActivity {
         // This therefore forces the button to be redrawn and repainted.
         // This seems to fix the issue.
         skipButton.invalidate();
-        skipButton.setTextColor(getResources().getColor(colorAccent));
+        skipButton.setTextColor(getResources().getColor(R.color.colorAccent));
 
     }
 

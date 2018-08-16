@@ -4,6 +4,7 @@ import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.LiveData;
 import android.os.AsyncTask;
+import android.util.Log;
 
 import com.flashcards.android.flashcards.data.repo.CardEditRepo;
 import com.flashcards.android.flashcards.lib.model.Card;
@@ -74,19 +75,30 @@ public class EditModel extends AndroidViewModel {
             }
         }
 
-    public void deleteCard (Card card) {
-        DeleteCardTask task = new DeleteCardTask();
-        task.execute(card);
+    public void deleteIfEmpty() {
+        boolean empty = (currentCard != null &&
+                currentCard.getQuestion().equals("") &&
+                currentCard.getAnswer().equals(""));
+
+        if (empty){
+            DeleteCardTask task = new DeleteCardTask();
+            task.execute();
+        }
     }
 
-        private class DeleteCardTask extends AsyncTask<Card, Void, Void> {
+    private class DeleteCardTask extends AsyncTask<Void, Void, Void> {
 
-            @Override
-            protected Void doInBackground(Card... cards) {
-                repo.deleteCard(cards[0]);
-                return null;
-            }
+        @Override
+        protected Void doInBackground(Void... voids) {
+            repo.deleteCard(currentCard);
+
+            //Update deck size
+            int newDeckSize = repo.getAllCardsLength(currentCard.getDeckId());
+            repo.setDeckSize(currentCard.getDeckId(), newDeckSize);
+
+            return null;
         }
+    }
 
     /**
      * Checks if the last card is empty

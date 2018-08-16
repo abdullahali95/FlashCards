@@ -42,8 +42,8 @@ public class CardEditActivity extends AppCompatActivity implements View.OnTouchL
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.hide();
+//        ActionBar actionBar = getSupportActionBar();
+//        actionBar.hide();
 
         setContentView(R.layout.activity_edit_card);
 
@@ -310,7 +310,6 @@ public class CardEditActivity extends AppCompatActivity implements View.OnTouchL
 
     }
 
-
     @Override
     public boolean onTouchEvent(MotionEvent event){
         this.gestureDetector.onTouchEvent(event);
@@ -354,6 +353,24 @@ public class CardEditActivity extends AppCompatActivity implements View.OnTouchL
             }
             return true;
         }
+    }
+
+
+    // Clean up methods
+    @Override
+    public void onBackPressed() {
+        model.deleteIfEmpty();
+        finish();
+    }
+    @Override
+    protected void onStop() {
+        super.onStop();
+        model.deleteIfEmpty();
+    }
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        model.deleteIfEmpty();
     }
 
 }
