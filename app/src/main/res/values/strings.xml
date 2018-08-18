@@ -13,11 +13,11 @@
     <string name="days_last_used">last used: 10 days ago</string>
     <string name="btn_test_deck_info">Test</string>
     <string name="action_import">Import</string>
+    <string name="action_import_sample">Import Sample Deck</string>
     <string name="test_action_main_rec">Test</string>
     <string name="export_action_main_rec">Export</string>
     <string name="delete_action_main_rec">Delete</string>
     <string name="popup_options_button">Options Button</string>
-    <string name="action_multiplayer">Multiplayer</string>
     <string name="revise_action_main_rec">Revise</string>
     <string name="flip_btn_text">FLIP</string>
     <string name="skip_btn_text">SKIP</string>

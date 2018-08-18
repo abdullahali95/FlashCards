@@ -46,6 +46,7 @@
                                             <option name="values">
                                               <map>
                                                 <entry key="paddingPercent" value="-10" />
+                                                <entry key="trimmed" value="true" />
                                               </map>
                                             </option>
                                           </PersistentState>
@@ -55,10 +56,11 @@
                                   </option>
                                   <option name="values">
                                     <map>
-                                      <entry key="imageAsset" value="C:\Users\abdul\Downloads\ic_action_more_vert (1)\res\drawable-xxxhdpi\ic_action_more_vert.png" />
-                                      <entry key="outputName" value="add_card_btn" />
+                                      <entry key="assetType" value="IMAGE" />
+                                      <entry key="imageAsset" value="C:\Users\abdul\Documents\ComputerScience\Final Project\Design\hi_res_icon.png" />
+                                      <entry key="outputName" value="app_logo" />
                                       <entry key="theme" value="CUSTOM" />
-                                      <entry key="themeColor" value="450058" />
+                                      <entry key="themeColor" value="fff59d" />
                                     </map>
                                   </option>
                                 </PersistentState>

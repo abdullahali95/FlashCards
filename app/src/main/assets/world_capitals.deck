@@ -1,0 +1,65 @@
+{
+  "name": "World Capitals",
+  "cards": [
+    {
+      "question": "Capital of Albania",
+      "answer": "Tirana"
+    },
+    {
+      "question": "Capital of Lebanon",
+      "answer": "Beirut"
+    },
+    {
+      "question": "Capital of Turkey",
+      "answer": "Ankara"
+    },
+    {
+      "question": "Capital of Sweden",
+      "answer": "Stockholm"
+    },
+    {
+      "question": "Capital of Taiwan",
+      "answer": "Taipei"
+    },
+    {
+      "question": "Capital of Ethiopia",
+      "answer": "Addis Ababa"
+    },
+    {
+      "question": "Capital of Tunisia",
+      "answer": "Tunis"
+    },
+    {
+      "question": "Capital of Ghana",
+      "answer": "Accra"
+    },
+    {
+      "question": "Capital of Ukraine",
+      "answer": "Kiev"
+    },
+    {
+      "question": "Capital of Nigeria",
+      "answer": "Abuja"
+    },
+    {
+      "question": "Capital of Paraguay",
+      "answer": "Asuncion"
+    },
+    {
+      "question": "Capital of Peru",
+      "answer": "Lima"
+    },
+    {
+      "question": "Capital of Romania",
+      "answer": "Bucharest"
+    },
+    {
+      "question": "Capital of Sudan",
+      "answer": "Khartoum"
+    },
+    {
+      "question": "Capital of Syria",
+      "answer": "Damascus"
+    }
+  ]
+}

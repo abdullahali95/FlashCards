@@ -13,11 +13,15 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.InputType;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -29,13 +33,14 @@ import com.flashcards.android.flashcards.lib.misc.NotificationService;
 import com.flashcards.android.flashcards.lib.model.Deck;
 import com.flashcards.android.flashcards.lib.model.SimpleDeck;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 
 /**
  * Created by Abdullah Ali
- *
  * This is the view class of the Home page, which displays the decks created by the user.
  */
 
@@ -51,6 +56,10 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setTitle("My Flashcard Decks");
+        getSupportActionBar().setDisplayUseLogoEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setIcon(R.drawable.app_logo);
         setContentView(R.layout.activity_main);
 
         recyclerView = findViewById(R.id.rec_main_activity);
@@ -86,6 +95,27 @@ public class MainActivity extends AppCompatActivity {
 
         scheduleNotifications();
 
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main_actionbar, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_import_sample_deck:
+                importSample();
+                return true;
+
+            default:
+                // If we got here, the user's action was not recognized.
+                // Invoke the superclass to handle it.
+                return super.onOptionsItemSelected(item);
+
+        }
     }
 
     /**
@@ -128,6 +158,32 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    private void importSample() {
+        try {
+            InputStream is = getResources().getAssets().open("world_capitals.deck");
+            int size = is.available();
+            byte[] buffer = new byte[size];
+            is.read(buffer);
+            is.close();
+            String json = new String(buffer, "UTF-8");
+            SimpleDeck deck = JsonParser.readJson(json);
+
+            String name = mainModel.validateName(deck.getName());
+            Deck newDeck = new Deck(name);
+
+            mainModel.insertDeck(newDeck);
+            mainModel.insertSimpleCards(newDeck, deck.getCards());
+            Toast.makeText(this, "Deck imported", Toast.LENGTH_SHORT).show();
+
+        } catch (IOException ex) {
+            Toast.makeText(this, "File not found", Toast.LENGTH_LONG).show();
+            ex.printStackTrace();
+        } catch (Exception e) {
+            Toast.makeText(this, "File could not be imported", Toast.LENGTH_LONG).show();
+            e.printStackTrace();
+        }
+    }
+
 
     private void addDeck() {
         final String[] deckName = new String[1];
@@ -151,8 +207,6 @@ public class MainActivity extends AppCompatActivity {
                 String validName = mainModel.validateName(deckName[0]);
                 Deck newDeck = new Deck(validName);
                 mainModel.insertDeck(newDeck);
-
-                // TODO: this should show up as a confirmation from Room db
                 String alert = validName + " deck created";
                 Toast.makeText(context, alert, Toast.LENGTH_SHORT).show();
             }
