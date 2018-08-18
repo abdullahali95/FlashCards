@@ -1,0 +1,80 @@
+{
+  "cards": [
+    {
+      "answer": "Tirana",
+      "hint": "What\u0027s Tera naa?",
+      "question": "Capital of Albania"
+    },
+    {
+      "answer": "Beirut",
+      "hint": "Just another hint",
+      "question": "Capital of Lebanon"
+    },
+    {
+      "answer": "Ankara",
+      "hint": "",
+      "question": "Capital of Turkey"
+    },
+    {
+      "answer": "Stockholm",
+      "hint": "",
+      "question": "Capital of Sweden"
+    },
+    {
+      "answer": "Taipei",
+      "hint": "",
+      "question": "Capital of Taiwan"
+    },
+    {
+      "answer": "Addis Ababa",
+      "hint": "",
+      "question": "Capital of Ethiopia"
+    },
+    {
+      "answer": "Tunis",
+      "hint": "",
+      "question": "Capital of Tunisia"
+    },
+    {
+      "answer": "Accra",
+      "hint": "",
+      "question": "Capital of Ghana"
+    },
+    {
+      "answer": "Kiev",
+      "hint": "",
+      "question": "Capital of Ukraine"
+    },
+    {
+      "answer": "Abuja",
+      "hint": "",
+      "question": "Capital of Nigeria"
+    },
+    {
+      "answer": "Asuncion",
+      "hint": "",
+      "question": "Capital of Paraguay"
+    },
+    {
+      "answer": "Lima",
+      "hint": "",
+      "question": "Capital of Peru"
+    },
+    {
+      "answer": "Bucharest",
+      "hint": "",
+      "question": "Capital of Romania"
+    },
+    {
+      "answer": "Khartoum",
+      "hint": "",
+      "question": "Capital of Sudan"
+    },
+    {
+      "answer": "Damascus",
+      "hint": "",
+      "question": "Capital of Syria"
+    }
+  ],
+  "name": "World Capitals"
+}

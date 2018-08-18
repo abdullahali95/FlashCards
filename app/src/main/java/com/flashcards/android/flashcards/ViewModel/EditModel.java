@@ -4,7 +4,6 @@ import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.LiveData;
 import android.os.AsyncTask;
-import android.util.Log;
 
 import com.flashcards.android.flashcards.data.repo.CardEditRepo;
 import com.flashcards.android.flashcards.lib.model.Card;
@@ -19,7 +18,7 @@ public class EditModel extends AndroidViewModel {
     private String question;
     private String answer;
     private CardEditRepo repo;
-    private boolean qside; // Indicates which side is being viewed (true = question, false = answer)
+    private int tabSelected; // 0: Question, 1: Answer, 2: Hint
 
     public EditModel (Application application) {
         super(application);
@@ -66,6 +65,12 @@ public class EditModel extends AndroidViewModel {
         task.execute();
     }
 
+    public void updateHint (String hint) {
+        currentCard.setHint(hint);
+        UpdateCardTask task = new UpdateCardTask();
+        task.execute();
+    }
+
         private class UpdateCardTask extends AsyncTask<Void, Void, Void> {
 
             @Override
@@ -78,8 +83,8 @@ public class EditModel extends AndroidViewModel {
     public void deleteIfEmpty() {
         boolean empty = (currentCard != null &&
                 currentCard.getQuestion().equals("") &&
-                currentCard.getAnswer().equals(""));
-
+                currentCard.getAnswer().equals("") &&
+                currentCard.getHint().equals(""));
         if (empty){
             DeleteCardTask task = new DeleteCardTask();
             task.execute();
@@ -157,11 +162,11 @@ public class EditModel extends AndroidViewModel {
         this.currentCard = currentCard;
     }
 
-    public boolean isQside() {
-        return qside;
+    public int getTabSelected() {
+        return tabSelected;
     }
 
-    public void setQside(boolean qside) {
-        this.qside = qside;
+    public void setTabSelected(int tabSelected) {
+        this.tabSelected = tabSelected;
     }
 }

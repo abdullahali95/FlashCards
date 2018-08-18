@@ -54,6 +54,7 @@ public class MainModel extends AndroidViewModel{
 
         for(SimpleCard simpleCard : simpleCards) {
             card = new Card(deckId, simpleCard.getQuestion(), simpleCard.getAnswer());
+            card.setHint(simpleCard.getHint());
             cards.add(card);
         }
         InsertCardsTask task = new InsertCardsTask();

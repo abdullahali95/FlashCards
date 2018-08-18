@@ -29,6 +29,7 @@ public class Card implements Comparable<Card> {
     private String deckId;
     private String question;
     private String answer;
+    private String hint;
 
     private int attempts;   //Invariant: must always stay positive
     private int correct;
@@ -60,6 +61,7 @@ public class Card implements Comparable<Card> {
         this.deckId = deckId;
         this.question = "";
         this.answer = "";
+        this.hint = "";
         this.attempts = 0;
         this.correct = 0;
         this.lastFive = EvictingQueue.create(5);
@@ -99,6 +101,14 @@ public class Card implements Comparable<Card> {
 
     public void setAnswer(String answer) {
         this.answer = answer;
+    }
+
+    public String getHint() {
+        return hint;
+    }
+
+    public void setHint(String hint) {
+        this.hint = hint;
     }
 
     public int getAttempts() {
