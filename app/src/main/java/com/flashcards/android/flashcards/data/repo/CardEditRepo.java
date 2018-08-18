@@ -31,22 +31,6 @@ public class CardEditRepo {
         cardsDAO.createCard(card);
     }
 
-    public LiveData<Deck> getDeck (String deckId) {
-        return deckDAO.getDeck(deckId);
-    }
-
-    public void updateQuestion(int cardId, String deckId, String question) {
-        cardsDAO.setQuestion(cardId, deckId, question);
-    }
-
-    public void updateAnswer(int cardId, String deckId, String answer) {
-        cardsDAO.setAnswer(cardId, deckId, answer);
-    }
-
-    public LiveData<List<Card>> getAllCards (String deckId) {
-        return cardsDAO.getAllCards(deckId);
-    }
-
     public int getAllCardsLength(String deckId) {
         return cardsDAO.getAllCardsLength(deckId);
     }

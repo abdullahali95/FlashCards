@@ -7,11 +7,19 @@ package com.flashcards.android.flashcards.lib.model;
 public class SimpleCard {
     private String question;
     private String answer;
+    private String hint;
 
-    public SimpleCard(String question, String answer) {
+    public SimpleCard(String question, String answer, String hint) {
         this.question = question;
         this.answer = answer;
+        this.hint = hint;
     }
+//
+//    public SimpleCard(String question, String answer) {
+//        this.question = question;
+//        this.answer = answer;
+//        this.hint = "";
+//    }
 
     public String getQuestion() {
         return question;
@@ -24,5 +32,11 @@ public class SimpleCard {
     }
     public void setAnswer(String answer) {
         this.answer = answer;
+    }
+    public String getHint() {
+        return hint;
+    }
+    public void setHint(String hint) {
+        this.hint = hint;
     }
 }

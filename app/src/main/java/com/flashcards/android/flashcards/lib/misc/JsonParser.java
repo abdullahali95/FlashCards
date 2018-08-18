@@ -29,14 +29,17 @@ public class JsonParser {
 
         List<Card> cards = cardsDAO.getAllDeckCards(deck.getDeckId());
 
-
         SimpleDeck sd = new SimpleDeck(deck.getName());
         SimpleCard sc;
 
         List<SimpleCard> simpleCards = new ArrayList<>();
 
         for (Card card : cards) {
-            sc = new SimpleCard(card.getQuestion(), card.getAnswer());
+            if (card.getHint() != null && !card.getHint().equals("")) {
+                sc = new SimpleCard(card.getQuestion(), card.getAnswer(), card.getHint());
+            } else {
+                sc = new SimpleCard(card.getQuestion(), card.getAnswer(), "");
+            }
             simpleCards.add(sc);
         }
 

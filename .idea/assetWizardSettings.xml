@@ -34,7 +34,7 @@
                                           <PersistentState>
                                             <option name="values">
                                               <map>
-                                                <entry key="url" value="jar:file:/C:/Program%20Files/Android/Android%20Studio/plugins/android/lib/android.jar!/images/material_design_icons/av/ic_library_add_black_24dp.xml" />
+                                                <entry key="url" value="jar:file:/C:/Program%20Files/Android/Android%20Studio/plugins/android/lib/android.jar!/images/material_design_icons/action/ic_lightbulb_outline_black_24dp.xml" />
                                               </map>
                                             </option>
                                           </PersistentState>
@@ -45,7 +45,6 @@
                                           <PersistentState>
                                             <option name="values">
                                               <map>
-                                                <entry key="paddingPercent" value="-10" />
                                                 <entry key="trimmed" value="true" />
                                               </map>
                                             </option>
@@ -57,10 +56,10 @@
                                   <option name="values">
                                     <map>
                                       <entry key="assetType" value="IMAGE" />
-                                      <entry key="imageAsset" value="C:\Users\abdul\Documents\ComputerScience\Final Project\Design\hi_res_icon.png" />
-                                      <entry key="outputName" value="app_logo" />
+                                      <entry key="imageAsset" value="C:\Users\abdul\Documents\ComputerScience\Final Project\Study\hint_btn_on.png" />
+                                      <entry key="outputName" value="hint_btn_on" />
                                       <entry key="theme" value="CUSTOM" />
-                                      <entry key="themeColor" value="fff59d" />
+                                      <entry key="themeColor" value="bdbf1d" />
                                     </map>
                                   </option>
                                 </PersistentState>
@@ -99,7 +98,6 @@
                                     <map>
                                       <entry key="backgroundImage" value="C:\Users\abdul\Documents\ComputerScience\Final Project\Design\bg-Adaptive.png" />
                                       <entry key="foregroundImage" value="C:\Users\abdul\Documents\ComputerScience\Final Project\Design\foreground-Adaptive.png" />
-                                      <entry key="previewDensity" value="XXHIGH" />
                                     </map>
                                   </option>
                                 </PersistentState>

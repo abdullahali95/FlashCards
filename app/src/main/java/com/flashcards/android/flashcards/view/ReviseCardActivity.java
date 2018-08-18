@@ -1,5 +1,6 @@
 package com.flashcards.android.flashcards.view;
 
+import android.annotation.SuppressLint;
 import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.os.Handler;
@@ -11,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ProgressBar;
 
 import com.flashcards.android.flashcards.R;
@@ -34,17 +36,13 @@ public class ReviseCardActivity extends AppCompatActivity {
     ViewGroup transitionsContainer;
     ReviseModel model;
     WebView card;
-    String question;
-    String answer;
+    String question, answer, hint;
     boolean aDisplayed;
 
     ProgressBar progressBar;
-    Button skipButton;
-    Button flipButton;
+    Button skipButton, flipButton, correctButton, incorrectButton;
+    ImageButton hintButton;
     View cardView;
-
-    Button correctButton;
-    Button incorrectButton;
 
     GestureDetectorCompat gestureDetector;
 
@@ -64,12 +62,15 @@ public class ReviseCardActivity extends AppCompatActivity {
             question = model.getCurrentCard().getQuestion();
             card.loadUrl("about:blank");
             card.loadData(question, "text/html", "utf-8");
+            initHint();
         } else if (model.isQSide()) {
             question = model.getCurrentCard().getQuestion();
             card.loadUrl("about:blank");
             card.loadData(question, "text/html", "utf-8");
+            initHint();
         } else {
             flipToAnswer();
+            initHint();
         }
 
         gestureDetector = new GestureDetectorCompat(this, new MyGestureListener());
@@ -85,6 +86,7 @@ public class ReviseCardActivity extends AppCompatActivity {
         transitionsContainer = findViewById(R.id.buttons_container_revise);
         skipButton = findViewById(R.id.btn_skip_revise);
         flipButton = findViewById(R.id.btn_flip_revise);
+        hintButton = findViewById(R.id.hint_btn_revise);
         cardView = findViewById(R.id.ll_card_revise);
         progressBar = findViewById(R.id.progressBar);
         card = findViewById(R.id.tv_question_revise);
@@ -113,6 +115,40 @@ public class ReviseCardActivity extends AppCompatActivity {
                     flipToAnswer();
                 }
             });
+        }
+    }
+
+    @SuppressLint("ClickableViewAccessibility")
+    public void initHint() {
+        if (model.hasHint()) {
+            hintButton.setVisibility(View.VISIBLE);
+            hintButton.setOnTouchListener(new View.OnTouchListener() {
+                 @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    if(event.getAction() == MotionEvent.ACTION_DOWN){
+                        hint = model.getCurrentCard().getHint();
+                        card.loadUrl("about:blank");
+                        card.loadData(hint, "text/html", "utf-8");
+                    }
+                    if(event.getAction() == MotionEvent.ACTION_UP){
+                        if (model.isQSide()) {
+                            question = model.getCurrentCard().getQuestion();
+                            card.loadUrl("about:blank");
+                            card.loadData(question, "text/html", "utf-8");
+                        } else {
+                            answer = model.getCurrentCard().getAnswer();
+                            card.loadUrl("about:blank");
+                            card.loadData(answer, "text/html", "utf-8");
+                        }
+                    }
+                    return true;
+                }
+
+
+            });
+        } else {
+            hintButton.setOnTouchListener(null);
+            hintButton.setVisibility(View.GONE);
         }
     }
 
@@ -163,6 +199,7 @@ public class ReviseCardActivity extends AppCompatActivity {
 
         model.setaSide(false);
         aDisplayed = false;
+        initHint();
 
         incorrectButton.setOnClickListener(null);
         correctButton.setOnClickListener(null);

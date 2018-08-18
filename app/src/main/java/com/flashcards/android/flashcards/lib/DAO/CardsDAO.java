@@ -53,13 +53,6 @@ public interface CardsDAO {
     @Query("SELECT * FROM Card WHERE cardId = :cardId AND deckId = :deckId")
     LiveData<Card> getCard(int cardId, String deckId);
 
-    @Query("UPDATE Card SET question = :question WHERE cardId =:id AND deckId = :deckId")
-    void setQuestion(int id, String deckId, String question);
-
-    @Query("UPDATE Card SET answer = :answer WHERE cardId =:id AND deckId = :deckId")
-    void setAnswer(int id, String deckId, String answer);
-
-
     // Progress related fields
 
     @Query("UPDATE Card SET attempts = :attempts WHERE cardId =:cardId AND deckId = :deckId")

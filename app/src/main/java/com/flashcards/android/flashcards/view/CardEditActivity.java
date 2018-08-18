@@ -7,15 +7,12 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.GestureDetectorCompat;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.Toast;
 
 import com.flashcards.android.flashcards.R;
 import com.flashcards.android.flashcards.ViewModel.EditModel;
@@ -26,7 +23,6 @@ import jp.wasabeef.richeditor.RichEditor;
 public class CardEditActivity extends AppCompatActivity implements View.OnTouchListener {
     private RichEditor editor;
     private TabLayout tabs;
-    TabLayout.OnTabSelectedListener listener;
 
     // Buttons for Editing toolbar
     private ImageButton boldButton, italicButton, underlineButton, redButton, blueButton,
@@ -69,7 +65,7 @@ public class CardEditActivity extends AppCompatActivity implements View.OnTouchL
                     } else {
                         editor.setHtml("");
                     }
-                    model.setQside(true);
+                    model.setTabSelected(0);
                 } else {
                     model.setCurrentCard(card);
                 }
@@ -80,10 +76,12 @@ public class CardEditActivity extends AppCompatActivity implements View.OnTouchL
         editor.setOnTextChangeListener(new RichEditor.OnTextChangeListener() {
             @Override
             public void onTextChange(String text) {
-                if (model.isQside()) {
+                if (model.getTabSelected() == 0) {
                     model.updateQuestion(text);
-                } else {
+                } else if (model.getTabSelected() == 1){
                     model.updateAnswer(text);
+                } else {
+                    model.updateHint(text);
                 }
             }
         });
@@ -101,7 +99,7 @@ public class CardEditActivity extends AppCompatActivity implements View.OnTouchL
     public void onResume() {
         super.onResume();
         if (model.getCurrentCard() != null) {
-            if (model.isQside()) {
+            if (model.getTabSelected() == 0) {
                 // Question side was active
                 if (model.getCurrentCard() != null && model.getCurrentCard().getQuestion() != null) {
                     editor.setHtml(model.getCurrentCard().getQuestion());
@@ -109,7 +107,7 @@ public class CardEditActivity extends AppCompatActivity implements View.OnTouchL
                     editor.setHtml("");
                 }
                 tabs.getTabAt(0).select();
-            } else {
+            } else if (model.getTabSelected() == 1){
                 // Answer side was active
                 if (model.getCurrentCard() != null && model.getCurrentCard().getAnswer() != null) {
                     editor.setHtml(model.getCurrentCard().getAnswer());
@@ -117,6 +115,14 @@ public class CardEditActivity extends AppCompatActivity implements View.OnTouchL
                     editor.setHtml("");
                 }
                 tabs.getTabAt(1).select();
+            } else {
+                // Hint side was active
+                if (model.getCurrentCard() != null && model.getCurrentCard().getHint() != null) {
+                    editor.setHtml(model.getCurrentCard().getHint());
+                } else {
+                    editor.setHtml("");
+                }
+                tabs.getTabAt(2).select();
             }
         }
     }
@@ -127,16 +133,17 @@ public class CardEditActivity extends AppCompatActivity implements View.OnTouchL
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 tab.select();
-                if (tab.getText().equals(getResources().getString(R.string.question_tab_title))) {
+
+                if (tabs.getTabAt(0).isSelected()) {
                     editor.setPlaceholder("Please Enter Question Here");
                     if (model.getCurrentCard().getQuestion() != null) {
                         editor.setHtml(model.getCurrentCard().getQuestion());
                     } else {
                         editor.setHtml("");
                     }
-                    model.setQside(true);
+                    model.setTabSelected(0);
 
-                } else if (tab.getText().equals(getResources().getString(R.string.answer_tab_title))) {
+                } else if (tabs.getTabAt(1).isSelected()) {
                     editor.setPlaceholder("Please Enter Answer Here");
                     if (model.getCurrentCard().getAnswer() != null) {
                         editor.setHtml(model.getCurrentCard().getAnswer());
@@ -144,7 +151,16 @@ public class CardEditActivity extends AppCompatActivity implements View.OnTouchL
                         editor.setHtml("");
 
                     }
-                    model.setQside(false);
+                    model.setTabSelected(1);
+                } else if (tabs.getTabAt(2).isSelected()) {
+                    editor.setPlaceholder("Please Enter Hint here (Optional)");
+                    if (model.getCurrentCard().getHint() != null) {
+                        editor.setHtml(model.getCurrentCard().getHint());
+                    } else {
+                        editor.setHtml("");
+
+                    }
+                    model.setTabSelected(2);
                 }
             }
 
@@ -333,10 +349,19 @@ public class CardEditActivity extends AppCompatActivity implements View.OnTouchL
                     editor.setHtml(model.getCurrentCard().getAnswer());
                 } else {
                     editor.setHtml("");
-
                 }
                 tabs.getTabAt(1).select();
-                model.setQside(false);
+                model.setTabSelected(1);
+            } else if (velocityX < -4000 && dist < -100 && tabs.getTabAt(1).isSelected()) {
+                editor.setPlaceholder("Please Enter Hint Here (Optional)");
+                if (model.getCurrentCard().getHint() != null) {
+                    editor.setHtml(model.getCurrentCard().getHint());
+                } else {
+                    editor.setHtml("");
+
+                }
+                tabs.getTabAt(2).select();
+                model.setTabSelected(2);
             } else if (velocityX > 4000 && dist > 100 && tabs.getTabAt(1).isSelected()) {
                 editor.setPlaceholder("Please Enter Question Here");
                 if (model.getCurrentCard().getQuestion() != null) {
@@ -345,7 +370,17 @@ public class CardEditActivity extends AppCompatActivity implements View.OnTouchL
                     editor.setHtml("");
                 }
                 tabs.getTabAt(0).select();
-                model.setQside(true);
+                model.setTabSelected(0);
+            } else if (velocityX > 4000 && dist > 100 && tabs.getTabAt(2).isSelected()) {
+                editor.setPlaceholder("Please Enter Answer Here");
+                if (model.getCurrentCard().getAnswer() != null) {
+                    editor.setHtml(model.getCurrentCard().getAnswer());
+                } else {
+                    editor.setHtml("");
+
+                }
+                tabs.getTabAt(1).select();
+                model.setTabSelected(1);
             }
             return true;
         }

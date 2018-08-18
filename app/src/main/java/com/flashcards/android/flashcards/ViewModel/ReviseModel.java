@@ -245,6 +245,11 @@ public class ReviseModel extends AndroidViewModel {
         this.aSide = aSide;
     }
 
+    public boolean hasHint() {
+        if (currentCard.getHint() == null || currentCard.getHint().equals("")) return false;
+        else return true;
+    }
+
     // LiveData stuff
 
     public LiveData<Deck> getDeck(String deckId) {

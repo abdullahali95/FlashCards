@@ -10,23 +10,36 @@
     <LinearLayout
         android:id="@+id/progress_container"
         android:layout_width="match_parent"
-        android:layout_height="15dp"
+        android:layout_height="50dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="4dp"
+        android:gravity="center_horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
+
         <ProgressBar
             android:id="@+id/progressBar"
             style="?android:attr/progressBarStyleHorizontal"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginEnd="24dp"
-            android:layout_marginStart="24dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
             android:layout_weight="1"
             android:max="100"
             android:min="0"
-            android:progressTint="@color/colorPrimary"
-            />
+            android:progressTint="@color/colorPrimary" />
+
+        <ImageButton
+            android:id="@+id/hint_btn_revise"
+            style="@style/Widget.AppCompat.ImageButton"
+            android:layout_width="100dp"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            android:backgroundTint="@color/colorBackground"
+            android:visibility="gone"
+            app:srcCompat="@drawable/hint_btn_on" />
 
     </LinearLayout>
 
@@ -35,17 +48,16 @@
         android:id="@+id/ll_card_revise"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginBottom="24dp"
+        android:layout_marginBottom="8dp"
         android:layout_marginEnd="24dp"
         android:layout_marginStart="24dp"
-        android:layout_marginTop="24dp"
         app:cardBackgroundColor="@color/cardBackground"
         app:cardCornerRadius="12dp"
         app:contentPadding="15dp"
+        app:layout_constraintBottom_toTopOf="@id/buttons_container_revise"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/progress_container"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/buttons_container_revise">
+        app:layout_constraintTop_toBottomOf="@id/progress_container">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -56,7 +68,7 @@
             <WebView
                 android:id="@+id/tv_question_revise"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" >
+                android:layout_height="wrap_content">
 
             </WebView>
 
@@ -67,7 +79,7 @@
         android:id="@+id/buttons_container_revise"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
+        android:layout_marginBottom="4dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -106,8 +118,8 @@
             android:textSize="18sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/btn_skip_revise"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/btn_skip_revise"
             app:layout_constraintTop_toTopOf="parent" />
 
     </android.support.constraint.ConstraintLayout>
