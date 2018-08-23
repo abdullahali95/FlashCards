@@ -24,6 +24,10 @@ import java.util.List;
 
 /**
  * Created by Abdullah Ali on 04/08/2018
+ *
+ * This class uses JobScheduler to schedule notification reminders.
+ * This class checks if any decks are overdue for revision every 24 hours.
+ * If so, a notification is displayed.
  */
 public class NotificationService extends JobService {
     private boolean jobCancelled = false;
@@ -33,7 +37,6 @@ public class NotificationService extends JobService {
 
     @Override
     public boolean onStartJob(JobParameters jobParameters) {
-        Log.d("starting job", "onStartJob: ");
         NotificationTask task = new NotificationTask();
         task.execute(jobParameters);
 
@@ -81,9 +84,7 @@ public class NotificationService extends JobService {
             if (date == null) continue;
             try {
                 convertedDate = dateFormat.parse(date);
-                if (convertedDate.before(now)) {
-                    revisionDue = true;
-                }
+                if (convertedDate.before(now)) {revisionDue = true;}
 
             } catch (ParseException e) {
                 e.printStackTrace();

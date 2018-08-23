@@ -15,6 +15,8 @@ import java.util.List;
 
 /**
  * Created by Abdullah Ali on 14/07/2018
+ *
+ * This is the Data Access Object interface for the Card entity
  */
 
 @Dao

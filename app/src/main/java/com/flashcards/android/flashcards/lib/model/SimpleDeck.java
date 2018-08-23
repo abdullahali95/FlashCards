@@ -4,6 +4,8 @@ import java.util.List;
 
 /**
  * Created by Abdullah Ali on 22/07/2018
+ *
+ * A simpler version of Deck objects, used for importing/exporting decks
  */
 public class SimpleDeck {
     private String name;

@@ -20,6 +20,11 @@ import com.flashcards.android.flashcards.lib.model.Card;
 
 import jp.wasabeef.richeditor.RichEditor;
 
+/**
+ * Created by Abdullah Ali
+ *
+ * This is the view class for the Edit Cards Activity
+ */
 public class CardEditActivity extends AppCompatActivity implements View.OnTouchListener {
     private RichEditor editor;
     private TabLayout tabs;

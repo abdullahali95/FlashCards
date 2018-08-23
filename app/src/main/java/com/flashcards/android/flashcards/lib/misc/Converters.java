@@ -8,6 +8,8 @@ import java.util.Date;
 
 /**
  * Created by Abdullah Ali on 19/07/2018
+ *
+ * This is a data convertor class for storing complex objects in the SQLite database
  */
 public class Converters {
 

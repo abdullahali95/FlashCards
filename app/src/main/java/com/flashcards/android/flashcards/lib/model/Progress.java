@@ -8,6 +8,7 @@ import static java.lang.Boolean.TRUE;
 /**
  * Created by Abdullah Ali
  *
+ * This class contains multiple static methods for Card objects
  * Allows the performance of the cards to be measured.
  * Used to calculate the next most appropriate card to test.
  *

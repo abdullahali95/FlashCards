@@ -13,8 +13,9 @@ import java.util.Date;
 import java.util.UUID;
 
 /**
- * A simpler version of Deck objects, used for importing/exporting cards and decks
  * Created by Abdullah Ali
+ *
+ * This is one of the two model classes. It is used to create Deck objects and store them in a Room based database
  */
 
 @Entity

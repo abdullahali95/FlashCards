@@ -1,7 +1,5 @@
 package com.flashcards.android.flashcards.lib.model;
 
-//import android.support.annotation.NonNull;
-
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.ForeignKey;
 import android.arch.persistence.room.Ignore;
@@ -13,6 +11,13 @@ import com.google.common.collect.EvictingQueue;
 import java.util.List;
 
 import static android.arch.persistence.room.ForeignKey.CASCADE;
+
+/**
+ * Created by Abdullah Ali
+ *
+ * This is one of the two model classes. It is used to create Card objects and store them in a Room based database
+ *
+ */
 
 @Entity (foreignKeys = @ForeignKey(entity = Deck.class,
         parentColumns = "deckId",

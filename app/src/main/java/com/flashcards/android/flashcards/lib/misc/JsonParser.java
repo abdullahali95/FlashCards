@@ -15,6 +15,10 @@ import java.util.List;
 
 /**
  * Created by Abdullah Ali on 21/07/2018
+ *
+ * This class is used for the Import/Export function of the app.
+ * This uses the GSon library to parse Deck and Card objects firstly to SimpleDeck and SimpleCard objects,
+ * which are then converted to Json (and vice versa)
  */
 public class JsonParser {
 

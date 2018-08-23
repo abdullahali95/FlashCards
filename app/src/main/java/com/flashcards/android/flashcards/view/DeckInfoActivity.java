@@ -44,6 +44,8 @@ import java.util.List;
 
 /**
  * Created by Abdullah Ali
+ *
+ * This is the view class for the Deck Information Activity
  */
 
 public class DeckInfoActivity extends AppCompatActivity {

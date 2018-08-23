@@ -29,6 +29,7 @@ import static com.flashcards.android.flashcards.R.color.red;
 /**
  * Created by Abdullah Ali *
  *
+ * This is the view class for the Test Cards Activity
  */
 public class TestCardActivity extends AppCompatActivity {
     ViewGroup transitionsContainer;

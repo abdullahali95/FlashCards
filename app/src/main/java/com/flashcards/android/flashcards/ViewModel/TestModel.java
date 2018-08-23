@@ -18,6 +18,8 @@ import java.util.concurrent.PriorityBlockingQueue;
 
 /*
  * Created by Abdullah Ali
+ *
+ * This is the viewmodel for the Test Cards Activity
  */
 
 public class TestModel extends AndroidViewModel {
@@ -42,7 +44,6 @@ public class TestModel extends AndroidViewModel {
     public void initQueue(String deckId) {
         this.deckId = deckId;
 
-       // TODO: run the ASYNCTASK properly
         GetCardsTask task = new GetCardsTask();
         try {
             task.execute(deckId).get();
@@ -101,8 +102,6 @@ public class TestModel extends AndroidViewModel {
      * @return The final score as a Percentage
      */
     public int getScore () {
-        Log.d(String.valueOf(correct), "correct: ");
-        Log.d(String.valueOf(totalAttempted), "totalAttempted: ");
 
         double score = ((double) correct)/ totalAttempted;
         return (int) Math.round(score * 100);
@@ -143,14 +142,5 @@ public class TestModel extends AndroidViewModel {
         this.deckSize = deckSize;
     }
 
-    // LiveData stuff
-
-    public LiveData<Deck> getDeck(String deckId) {
-        return repo.getDeck(deckId);
-    }
-
-    public LiveData<List<Card>> getAllCards(String deckId) {
-        return repo.getAllCards(deckId);
-    }
 
 }

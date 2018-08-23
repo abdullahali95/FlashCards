@@ -14,6 +14,8 @@ import java.util.List;
 
 /**
  * Created by Abdullah Ali on 16/07/2018
+ *
+ * This is the data repository for the Deck Information activity
  */
 public class DeckInfoRepo {
     private final DeckDAO deckDAO;

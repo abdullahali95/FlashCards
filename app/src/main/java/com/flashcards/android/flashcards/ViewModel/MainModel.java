@@ -16,6 +16,8 @@ import java.util.List;
 
 /**
  * Created by Abdullah Ali on 15/07/2018
+ *
+ * This is the viewmodel for the Home Activity
  */
 public class MainModel extends AndroidViewModel{
     private MainRepo repo;

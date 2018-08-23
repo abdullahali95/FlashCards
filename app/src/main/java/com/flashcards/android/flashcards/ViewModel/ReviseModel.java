@@ -19,6 +19,8 @@ import java.util.concurrent.PriorityBlockingQueue;
 
 /*
  * Created by Abdullah Ali
+ *
+ * This is the viewmodel for the Revise Cards Activity
  */
 
 public class ReviseModel extends AndroidViewModel {

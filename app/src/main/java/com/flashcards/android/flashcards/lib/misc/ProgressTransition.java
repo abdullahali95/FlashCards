@@ -12,7 +12,9 @@ import com.transitionseverywhere.utils.IntProperty;
 
 /**
  * Created by Abdullah Ali on 07/08/2018
- * Courtesy of: https://github.com/andkulikov/Transitions-Everywhere
+ *
+ * This class is used for the custom transitions used for displaying the progress bar
+ * Adapted from: https://github.com/andkulikov/Transitions-Everywhere
  */
 public class ProgressTransition extends Transition {
 

@@ -16,6 +16,8 @@ import javax.inject.Inject;
 
 /**
  * Created by Abdullah Ali on 15/07/2018
+ *
+ * This is the data repository for the cards test and revise activities
  */
 public class TestRepo {
     private final CardsDAO cardsDAO;

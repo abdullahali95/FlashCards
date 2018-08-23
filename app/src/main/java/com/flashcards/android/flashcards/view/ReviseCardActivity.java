@@ -31,6 +31,11 @@ import static com.flashcards.android.flashcards.R.color.red;
 import static com.flashcards.android.flashcards.R.color.white;
 import static com.flashcards.android.flashcards.R.color.white_teal;
 
+/**
+ * Created by Abdullah Ali
+ *
+ * This is the view class for the Cards Revise Activity
+ */
 public class ReviseCardActivity extends AppCompatActivity {
 
     ViewGroup transitionsContainer;

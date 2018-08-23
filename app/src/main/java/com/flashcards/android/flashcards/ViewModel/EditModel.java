@@ -12,6 +12,8 @@ import java.util.concurrent.ExecutionException;
 
 /**
  * Created by Abdullah Ali on 12/07/2018
+ *
+ * This is the viewmodel for the Edit Cards Activity
  */
 public class EditModel extends AndroidViewModel {
     private Card currentCard;

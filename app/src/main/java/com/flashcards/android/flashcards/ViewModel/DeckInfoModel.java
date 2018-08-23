@@ -15,6 +15,8 @@ import java.util.concurrent.ExecutionException;
 
 /**
  * Created by Abdullah Ali on 16/07/2018
+ *
+ * This is the viewmodel class for the Deck Information Activity.
  */
 public class DeckInfoModel extends AndroidViewModel {
     private DeckInfoRepo repo;

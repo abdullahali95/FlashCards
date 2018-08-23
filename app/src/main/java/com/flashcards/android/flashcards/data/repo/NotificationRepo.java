@@ -9,6 +9,8 @@ import java.util.List;
 
 /**
  * Created by Abdullah Ali on 04/08/2018
+ *
+ * This is the data repository for the notifications service
  */
 public class NotificationRepo {
     private final DeckDAO deckDAO;

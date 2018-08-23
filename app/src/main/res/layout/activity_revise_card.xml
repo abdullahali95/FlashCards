@@ -33,12 +33,12 @@
 
         <ImageButton
             android:id="@+id/hint_btn_revise"
-            style="@style/Widget.AppCompat.ImageButton"
+            style="?android:attr/borderlessButtonStyle"
             android:layout_width="100dp"
             android:layout_height="50dp"
             android:layout_weight="1"
             android:backgroundTint="@color/colorBackground"
-            android:visibility="gone"
+            android:visibility="visible"
             app:srcCompat="@drawable/hint_btn_on" />
 
     </LinearLayout>
@@ -56,7 +56,7 @@
         app:contentPadding="15dp"
         app:layout_constraintBottom_toTopOf="@id/buttons_container_revise"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/progress_container"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/progress_container">
 
         <LinearLayout
