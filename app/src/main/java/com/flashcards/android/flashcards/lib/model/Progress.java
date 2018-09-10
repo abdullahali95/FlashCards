@@ -99,22 +99,10 @@ public class Progress {
         double m = reflexScore(card, aveAttempts, aveLeitnerScore);
         double l = leitnerScore(card);
 
-        // The effect of random function should vary depending on size of deck
-        // The smaller the deck, the more random the deck should be shuffled.
-        // The effect is determined by function y = (1/x)+0.4
-        double randWeight;
-        // Once deck is mostly learnt, ordering should be primarily random
-        if (aveLeitnerScore > 0.8) randWeight = 0.6;
-        else randWeight = (1.0 / sizeOfDeck) + 0.4;
-
-//        double combinedScore = ((l * m * (1-randWeight)) + (r * randWeight))/2;
         double combinedScore = (l + m + r)/3.0;
-        Log.d("combinedScore: ", String.valueOf(combinedScore));
-
         return combinedScore;
     }
 
-    //TODO: test the learntScore and it's initialisd value
     /** Generates the 'Learnt Score' for the flashcard and updates the local variable
      *
      * @return Learnt score

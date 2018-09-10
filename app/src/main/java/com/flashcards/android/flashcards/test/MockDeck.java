@@ -1,8 +1,11 @@
-package com.flashcards.android.flashcards.data;
+package com.flashcards.android.flashcards.test;
 
 import com.flashcards.android.flashcards.lib.model.Card;
 import com.flashcards.android.flashcards.lib.model.Deck;
 
+/**
+ * Contains a fake deck used for testing
+ */
 public class MockDeck {
 
     public static Deck getFakeDeck() {

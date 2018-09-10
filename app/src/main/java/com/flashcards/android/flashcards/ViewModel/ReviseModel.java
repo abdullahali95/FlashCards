@@ -98,14 +98,10 @@ public class ReviseModel extends AndroidViewModel {
     }
 
     public Card skip() {
-        Log.d(String.valueOf(currentCard.getLearntScore()), "skip: ");
         currentCard.skip(testQueue.size()+1, aveAttempts, aveLeitnerScore);
-        Log.d(String.valueOf(currentCard.getLearntScore()), "skip: ");
 
         lastCard = currentCard;
         currentCard = getNewCard();
-        Log.d("Last Card: ", lastCard.toString());
-        Log.d("Current Card: ", currentCard.toString());
         testQueue.add(lastCard);
 
         incCounter();

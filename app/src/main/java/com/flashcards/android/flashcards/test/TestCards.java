@@ -10,6 +10,7 @@ import java.util.PriorityQueue;
 
 /**
  * Created by Abdullah Ali on 28/07/2018
+ * Creates mock cards, used to test the short-term learning algorithm
  */
 public class TestCards {
 

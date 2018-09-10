@@ -141,8 +141,6 @@ public class MainModel extends AndroidViewModel{
         String newName = name + " " + num;
         for (Deck deck : decks) {
             if (deck.getName().equalsIgnoreCase(newName)) {
-                Log.d(name, "name: ");
-                Log.d(newName, "new Name: ");
                 newName = enumerateName(name, ++num);
             }
         }

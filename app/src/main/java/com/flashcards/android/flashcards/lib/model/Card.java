@@ -124,20 +124,12 @@ public class Card implements Comparable<Card> {
         this.attempts = attempts;
     }
 
-    public void incAttempts() {
-        attempts++;
-    }
-
     public int getCorrect() {
         return correct;
     }
 
     public void setCorrect(int correct) {
         this.correct = correct;
-    }
-
-    public void incCorrect() {
-        correct++;
     }
 
     public EvictingQueue<Boolean> getLastFive() {

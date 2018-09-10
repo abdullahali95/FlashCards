@@ -31,7 +31,7 @@ public class Deck {
     private String nextTestDue;
     private int interval;       // Amount of times the deck is tested
     private double ls;       // Average Leitner Score from last revision session, modified to be between 0 - 5
-    private double ef;      // Easiness factor
+    private double ef;      // Easiness factor (1.3 - 2.5)
 
     @Ignore
     private ArrayList<Card> cards;
